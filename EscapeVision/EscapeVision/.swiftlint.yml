@@ -1,0 +1,29 @@
+disabled_rules: # 기본 활성화된 룰 중에 비활성화할 룰을 지정
+   - trailing_whitespace
+   - function_body_length
+   - function_parameter_count
+   - file_length
+   - cyclomatic_complexity
+  
+opt_in_rules: # 기본(default) 룰이 아닌 룰들을 활성화
+   - empty_count
+   - empty_string
+   - force_cast
+   - force_unwrapping
+   - private_over_fileprivate
+   - redundant_optional_initialization
+   - identifier_name
+   - vertical_whitespace_closing_braces
+   - unused_closure_parameter
+   
+line_length: 120
+
+identifier_name:
+ min_length: 2
+ excluded:
+  - id
+  
+excluded: # swiftlint를 적용하지 않게 설정할 파일 경로, `included`보다 우선순위 높음
+   - Pods
+
+
