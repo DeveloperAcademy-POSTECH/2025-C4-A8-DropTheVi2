@@ -9,9 +9,6 @@ import SwiftUI
 import RealityKit
 
 struct TapGesture: Gesture {
-  
-  @State private var viewModel = RoomViewModel.shared
-  
   @Binding var showPasswordModal: Bool
   
   var body: some Gesture {
@@ -27,7 +24,7 @@ struct TapGesture: Gesture {
       print("비밀번호 입력 패널 클릭됨")
       DispatchQueue.main.async {
         showPasswordModal = true
-        viewModel.playOpenLidAnimation()
+        
         print("모달 상태 변경: \(showPasswordModal)")
       }
     }

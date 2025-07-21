@@ -12,7 +12,10 @@ struct PasswordModalView: View {
   @Binding var isPresented: Bool
   @State private var inputPassword = ""
   @State private var showError = false
+//  @State private var isCorrected = false
   @Environment(\.dismiss) private var dismiss
+  
+  @State private var viewModel = RoomViewModel.shared
   
   private let correctPassword = "1234"
   
@@ -78,6 +81,7 @@ struct PasswordModalView: View {
       // 성공
       isPresented = false
       showError = false
+      NotificationCenter.default.post(name: NSNotification.Name("openBox"), object: nil)
     } else {
       // 실패
       showError = true
