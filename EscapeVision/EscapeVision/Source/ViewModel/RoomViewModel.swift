@@ -43,7 +43,7 @@ final class RoomViewModel {
       setUpLockEntity(in: boxTest)
       print("박스 설정 성공")
     } else {
-      print("테스트 박스 설정 실패")
+      print("테스트 박스 설정 실패") 
     }
     
     anchor.addChild(roomEntity)
@@ -70,7 +70,7 @@ final class RoomViewModel {
     return self.worldAnchor
   }
   
-  // MARK: -  재사용 가능한 인터렉션 설정 함수 (드래그만)
+  // MARK: --  재사용 가능한 인터렉션 설정 함수 (드래그만)
   private func setDragEntity(_ entity: Entity, name: String) {
     entity.components.set(DraggableComponent())
     entity.components.set(InputTargetComponent())
