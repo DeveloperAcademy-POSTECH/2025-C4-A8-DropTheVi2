@@ -43,7 +43,7 @@ final class RoomViewModel {
       setUpLockEntity(in: boxTest)
       print("박스 설정 성공")
     } else {
-      print("테스트 박스 설정 실패")
+      print("테스트 박스 설정 실패") 
     }
     
     anchor.addChild(roomEntity)
