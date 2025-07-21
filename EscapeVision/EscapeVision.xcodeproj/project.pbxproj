@@ -8,11 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		E9641D5A2E225E01008B3661 /* RealityKitContent in Frameworks */ = {isa = PBXBuildFile; productRef = E9641D592E225E01008B3661 /* RealityKitContent */; };
+		E997A1232E2E1CD200869EF6 /* RealityKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E997A1222E2E1CD200869EF6 /* RealityKit.framework */; };
+		E997A1262E2E1D5B00869EF6 /* RealityKitContent in Frameworks */ = {isa = PBXBuildFile; productRef = E997A1252E2E1D5B00869EF6 /* RealityKitContent */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		E9641D542E225E01008B3661 /* EscapeVision.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EscapeVision.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9641D582E225E01008B3661 /* RealityKitContent */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = RealityKitContent; sourceTree = "<group>"; };
+		E997A1222E2E1CD200869EF6 /* RealityKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealityKit.framework; path = System/Library/Frameworks/RealityKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -41,6 +44,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E997A1232E2E1CD200869EF6 /* RealityKit.framework in Frameworks */,
+				E997A1262E2E1D5B00869EF6 /* RealityKitContent in Frameworks */,
 				E9641D5A2E225E01008B3661 /* RealityKitContent in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -53,6 +58,7 @@
 			children = (
 				E9641D562E225E01008B3661 /* EscapeVision */,
 				E9641D572E225E01008B3661 /* Packages */,
+				E997A1212E2E1CD200869EF6 /* Frameworks */,
 				E9641D552E225E01008B3661 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -71,6 +77,14 @@
 				E9641D582E225E01008B3661 /* RealityKitContent */,
 			);
 			path = Packages;
+			sourceTree = "<group>";
+		};
+		E997A1212E2E1CD200869EF6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E997A1222E2E1CD200869EF6 /* RealityKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -95,6 +109,7 @@
 			name = EscapeVision;
 			packageProductDependencies = (
 				E9641D592E225E01008B3661 /* RealityKitContent */,
+				E997A1252E2E1D5B00869EF6 /* RealityKitContent */,
 			);
 			productName = EscapeVision;
 			productReference = E9641D542E225E01008B3661 /* EscapeVision.app */;
@@ -124,6 +139,9 @@
 			);
 			mainGroup = E9641D4B2E225E01008B3661;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				E997A1242E2E1D5B00869EF6 /* XCLocalSwiftPackageReference "Packages/RealityKitContent" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = E9641D552E225E01008B3661 /* Products */;
 			projectDirPath = "";
@@ -373,8 +391,19 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		E997A1242E2E1D5B00869EF6 /* XCLocalSwiftPackageReference "Packages/RealityKitContent" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/RealityKitContent;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		E9641D592E225E01008B3661 /* RealityKitContent */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = RealityKitContent;
+		};
+		E997A1252E2E1D5B00869EF6 /* RealityKitContent */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = RealityKitContent;
 		};
