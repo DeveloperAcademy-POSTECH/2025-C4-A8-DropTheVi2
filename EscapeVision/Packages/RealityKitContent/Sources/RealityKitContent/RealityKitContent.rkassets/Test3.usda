@@ -14,6 +14,7 @@ def Xform "Root" (
     }
 )
 {
+    reorder nameChildren = ["OpenLid", "OpenLidd", "Timeline2"]
     quatf xformOp:orient = (1, 0, 0, 0)
     float3 xformOp:translate = (0, 0.35, 0)
     uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
@@ -121,14 +122,94 @@ def Xform "Root" (
                             token type = "serial"
                         }
                     }
+
+                    def RealityKitComponent "AnimationLibrary"
+                    {
+                        uniform token info:id = "RealityKit.AnimationLibrary"
+                    }
                 }
             }
+
+            def RealityKitComponent "AnimationLibrary"
+            {
+                uniform token info:id = "RealityKit.AnimationLibrary"
+            }
+
+            over "Lid"
+            {
+                over "Plane_002"
+                {
+                    def RealityKitComponent "RCP_BehaviorsContainer"
+                    {
+                        rel behaviors = [
+                            </Root/BoxTest/Box/Lid/Plane_002/OnTap>,
+                            </Root/BoxTest/Box/Lid/Plane_002/OnCollision>,
+                        ]
+                        uniform token info:id = "RCP.BehaviorsContainer"
+                    }
+
+                    def Preliminary_Behavior "OnTap"
+                    {
+                        rel actions = </Root/BoxTest/Box/Lid/Plane_002/OnTap/Action>
+                        uniform bool exclusive
+                        rel triggers = </Root/BoxTest/Box/Lid/Plane_002/OnTap/Trigger>
+
+                        def Preliminary_Trigger "Trigger"
+                        {
+                            rel affectedObjects = </Root/BoxTest/Box/Lid/Plane_002>
+                            token info:id = "TapGesture"
+                        }
+
+                        def Preliminary_Action "Action"
+                        {
+                            rel affectedObjects = </Root>
+                            rel animationLibraryKey = </Root/OpenLidd>
+                            rel animationLibraryKeyOverrideKey = </Root/BoxTest/Box/Lid/Plane_002/OnTap/Trigger>
+                            token info:id = "PlayTimeline"
+                            int loops = 0
+                            int performCount = 1
+                            token type = "serial"
+                        }
+                    }
+
+                    def Preliminary_Behavior "OnCollision"
+                    {
+                        rel actions = </Root/BoxTest/Box/Lid/Plane_002/OnCollision/Action>
+                        uniform bool exclusive
+                        rel triggers = </Root/BoxTest/Box/Lid/Plane_002/OnCollision/Trigger>
+
+                        def Preliminary_Trigger "Trigger"
+                        {
+                            rel affectedObjects = </Root/BoxTest/Box/Lid/Plane_002>
+                            rel colliders = </Root/BoxTest/Box/Lid/Plane_002>
+                            token info:id = "Collide"
+                        }
+
+                        def Preliminary_Action "Action"
+                        {
+                            rel affectedObjects = </Root>
+                            rel animationLibraryKey = </Root/OpenLidd>
+                            rel animationLibraryKeyOverrideKey = </Root/BoxTest/Box/Lid/Plane_002/OnCollision/Trigger>
+                            token info:id = "PlayTimeline"
+                            int loops = 0
+                            int performCount = 1
+                            token type = "serial"
+                        }
+                    }
+                }
+            }
+        }
+
+        def RealityKitComponent "AnimationLibrary"
+        {
+            uniform token info:id = "RealityKit.AnimationLibrary"
         }
     }
 
     def RealityKitTimeline "OpenLid"
     {
-        def RealityKitTrack "Track"
+        reorder nameChildren = ["Track3", "Track"]
+        def RealityKitTrack "Track3"
         {
             def RealityKitAction "Transform_To"
             {
@@ -139,7 +220,7 @@ def Xform "Root" (
                 float3 position = (0, 0, 0)
                 quatf rotation = (0.70710677, 0, 0, -0.70710677)
                 float3 scale = (1, 1, 1)
-                double startTime = 0.012067425034867404
+                double startTime = 0
                 rel target = </Root/BoxTest/Box/Lock/Plane_008>
 
                 def RealityKitStruct "transformMode"
@@ -150,6 +231,64 @@ def Xform "Root" (
 
                 def RealityKitStruct "timingFunction"
                 {
+                    token type = "easeInOut"
+                }
+            }
+        }
+
+        def RealityKitTrack "Track"
+        {
+        }
+    }
+
+    def RealityKitTimeline "OpenLidd"
+    {
+        def RealityKitTrack "Track"
+        {
+            def RealityKitAction "Transform_To"
+            {
+                string actionKind = "moveTo"
+                int blendLayer = 300
+                double duration = 1
+                uniform token info:id = "BE2D5FE3-773E-4E74-A2ED-5170D031D9C8"
+                float3 position = (0, 0, 0)
+                quatf rotation = (0.70710677, 0.70710677, 0, 0)
+                float3 scale = (1, 1, 1)
+                double startTime = 0.013075313807531281
+                rel target = </Root/BoxTest/Box/Lid/Plane_002>
+
+                def RealityKitStruct "transformMode"
+                {
+                    rel referenceEntity = </Root>
+                    token type = "parent"
+                }
+
+                def RealityKitStruct "timingFunction"
+                {
+                    token type = "easeInOut"
+                }
+            }
+        }
+    }
+
+    def RealityKitTimeline "Timeline2"
+    {
+        reorder nameChildren = ["Track2", "Track"]
+        def RealityKitTrack "Track2"
+        {
+            def RealityKitAction "Transform_By"
+            {
+                string actionKind = "moveBy"
+                int blendLayer = 300
+                double duration = 1
+                uniform token info:id = "86A3D3DE-D14C-4E2C-A458-1804F36B5CBB"
+                quatf rotation = (0.70710677, 0, 0, -0.70710677)
+                double startTime = 0.07455321749471444
+                rel target = </Root/BoxTest/Box/Lock/Plane_008>
+
+                def RealityKitStruct "timingFunction"
+                {
+                    token type = "easeInOut"
                 }
             }
         }
