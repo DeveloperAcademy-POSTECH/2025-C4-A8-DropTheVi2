@@ -9,7 +9,6 @@ import SwiftUI
 import RealityKit
 import RealityKitContent
 
-
 @MainActor
 @Observable
 final class RoomViewModel {
@@ -34,7 +33,7 @@ final class RoomViewModel {
   // MARK: - 씬 불러오는 로직
   private func loadRoom(into anchor: AnchorEntity) async {
     // 전체 씬 불러오기
-    guard let roomEntity = try? await Entity(named: "TestScene", in: realityKitContentBundle) else {
+    guard let roomEntity = try? await Entity(named: "Test3", in: realityKitContentBundle) else {
       print("방 불러오기 실패")
       return
     }
@@ -70,7 +69,7 @@ final class RoomViewModel {
     return self.worldAnchor
   }
   
-  // MARK: --  재사용 가능한 인터렉션 설정 함수 (드래그만)
+  // MARK: -  재사용 가능한 인터렉션 설정 함수 (드래그만)
   private func setDragEntity(_ entity: Entity, name: String) {
     entity.components.set(DraggableComponent())
     entity.components.set(InputTargetComponent())
