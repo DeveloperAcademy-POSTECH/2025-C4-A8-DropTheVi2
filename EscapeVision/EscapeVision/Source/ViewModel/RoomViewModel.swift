@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Foundation
 import RealityKit
 import RealityKitContent
 
@@ -29,6 +30,11 @@ final class RoomViewModel {
     await loadObject(into: anchor)
     
     print("RoomViewModel anchor 설정 성공")
+    
+    NotificationCenter.default.addObserver(forName: Notification.Name("openBox"), object: nil, queue: .main) { _ in
+      print("알림 수신")
+      self.openBox()
+    }
   }
   // MARK: - 씬 불러오는 로직
   private func loadRoom(into anchor: AnchorEntity) async {
@@ -37,12 +43,12 @@ final class RoomViewModel {
       print("방 불러오기 실패")
       return
     }
-        
+    
     if let boxTest = roomEntity.findEntity(named: "Box") {
       setUpLockEntity(in: boxTest)
       print("박스 설정 성공")
     } else {
-      print("테스트 박스 설정 실패") 
+      print("테스트 박스 설정 실패")
     }
     
     anchor.addChild(roomEntity)
@@ -69,7 +75,7 @@ final class RoomViewModel {
     return self.worldAnchor
   }
   
-  // MARK: -  재사용 가능한 인터렉션 설정 함수 (드래그만)
+  // MARK: - 재사용 가능한 인터렉션 설정 함수 (드래그만)
   private func setDragEntity(_ entity: Entity, name: String) {
     entity.components.set(DraggableComponent())
     entity.components.set(InputTargetComponent())
@@ -105,32 +111,19 @@ final class RoomViewModel {
       print("Lock에 인터렉션 설정 실패")
     }
   }
-  
-  func playOpenLidAnimation() {
-    guard let roomEntity = rootEntity.children.first?.children.first,
-          let box = roomEntity.findEntity(named: "Box") else {
-      print("애니메이션 Box 찾을 수 없음")
+  private func openBox() {
+    guard let boxEntity = rootEntity.children.first?.children.first?.findEntity(named: "Box") else {
+      print("애니메이션 부모 엔티티 Box 찾기 실패")
       return
     }
-    print("사용 가능한 애니메이션들:")
-    for animation in box.availableAnimations {
-      print("\(animation.name ?? "이름없음")")
-    }
-    
-    if let lid = box.findEntity(named: "Lid") {
-      print("Lid 애니메이션 개수 : \(lid.availableAnimations.count)")
-      if let openAnimation = lid.availableAnimations.first(where: { $0.name == "OpenLid" }) {
-        lid.playAnimation(openAnimation)
-      }
+    if let openKeypad = boxEntity.findEntity(named: "Plane_008"),
+       let openLid = boxEntity.findEntity(named: "Plane_002") {
+      print("뚜껑 키패드 둘다 찾음")
+      openKeypad.applyTapForBehaviors()
+      openLid.applyTapForBehaviors()
     } else {
       print("뚜껑 못찾음")
     }
-    
-//    if let openAnimation = lid.availableAnimations.first(where: { $0.name == "OpenLid" }) {
-//      lid.playAnimation(openAnimation)
-//    } else {
-//      print("애니메이션을 찾을 수 없습니다")
-//    }
   }
 }
 
