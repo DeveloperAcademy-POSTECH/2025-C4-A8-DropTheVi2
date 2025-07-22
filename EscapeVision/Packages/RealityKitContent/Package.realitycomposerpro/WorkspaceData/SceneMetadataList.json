@@ -40,8 +40,8 @@
       [
         "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
         "Root",
-        "Timeline2",
-        "Track2"
+        "OpenLid",
+        "Track"
       ],
       {
         "isExpanded" : true,
@@ -50,8 +50,18 @@
       [
         "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
         "Root",
-        "OpenLid",
-        "Track"
+        "BoxTest"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
+        "Root",
+        "Room__1_",
+        "Switch",
+        "Switch1"
       ],
       {
         "isExpanded" : true,
@@ -69,7 +79,29 @@
       },
       [
         "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
+        "Root",
+        "Room__1_",
+        "Switch"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
         "Root"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
+        "Root",
+        "Room__1_",
+        "Switch",
+        "Switch1",
+        "Joint1"
       ],
       {
         "isExpanded" : true,
@@ -97,9 +129,30 @@
       [
         "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
         "Root",
+        "Room__1_",
+        "Switch",
+        "Switch1",
+        "Handle1"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
+        "Root",
         "BoxTest",
         "Box",
         "Lock"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
+        "Root",
+        "Room__1_"
       ],
       {
         "isExpanded" : true,
@@ -142,29 +195,6 @@
         "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
         "Root",
         "BoxTest",
-        "Box",
-        "Box",
-        "Plane_001"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
-        "Root",
-        "BoxTest",
-        "Box"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
-        "Root",
-        "BoxTest",
-        "Box",
         "Box"
       ],
       {
@@ -196,7 +226,8 @@
       [
         "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
         "Root",
-        "BoxTest"
+        "Timeline2",
+        "Track2"
       ],
       {
         "isExpanded" : true,
