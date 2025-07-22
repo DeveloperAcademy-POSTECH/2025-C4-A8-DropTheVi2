@@ -17,6 +17,9 @@ struct PasswordModalView: View {
   
   @State private var viewModel = RoomViewModel.shared
   
+  @State private var animationScale: CGFloat = 0.3
+  @State private var animationOpacity: Double = 0.0
+  
   var body: some View {
     ZStack {
       Image("BoxKeypad")
@@ -51,6 +54,18 @@ struct PasswordModalView: View {
       .padding(.leading, 43)
     }
     .frame(width: 413, height: 568)
+    .scaleEffect(animationScale)
+    .opacity(animationOpacity)
+    .onAppear {
+      withAnimation(.spring(response: 0.6, dampingFraction: 0.8, blendDuration: 0)) {
+        animationScale = 1.0
+        animationOpacity = 1.0
+      }
+    }
+    .onDisappear {
+      animationScale = 0.3
+      animationOpacity = 0.0
+    }
   }
   
   struct PasswordDisplay: View {
