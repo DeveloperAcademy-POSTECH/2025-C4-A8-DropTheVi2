@@ -44,6 +44,25 @@ def Xform "Root" (
                 }
             }
         }
+
+        over "Switch"
+        {
+            over "Switch1"
+            {
+                over "Handle1"
+                {
+                    over "Sphere_005" (
+                        customData = {
+                            float3 rotationEulerHint = (-1.1920929e-7, 0, 6.7179435e-8)
+                        }
+                    )
+                    {
+                        quatf xformOp:orient = (1, -4.470348e-8, 8.557132e-9, 3.3589718e-8)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+                }
+            }
+        }
     }
 
     def "BoxTest" (
@@ -135,10 +154,28 @@ def Xform "Root" (
                 uniform token info:id = "RealityKit.AnimationLibrary"
             }
 
-            over "Lid"
+            over "Lid" (
+                customData = {
+                    float3 rotationEulerHint = (1.1920929e-7, 5.1357217e-16, -1.0263152e-15)
+                }
+            )
             {
-                over "Plane_002"
+                quatf xformOp:orient = (1, 8.685033e-8, 2.5678606e-16, -5.131576e-16)
+                float3 xformOp:scale = (1, 1, 1)
+                double3 xformOp:translate = (0.013536177575588226, -0.11702220886945724, 0.11268972605466843)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                over "Plane_002" (
+                    customData = {
+                        float3 rotationEulerHint = (0, 0, 0)
+                    }
+                )
                 {
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (1, 1, 1)
+                    float3 xformOp:translate = (0, 0, 0)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
                     def RealityKitComponent "RCP_BehaviorsContainer"
                     {
                         rel behaviors = [
@@ -163,7 +200,7 @@ def Xform "Root" (
                         def Preliminary_Action "Action"
                         {
                             rel affectedObjects = </Root>
-                            rel animationLibraryKey = </Root/OpenLidd>
+                            rel animationLibraryKey = </Root/OpenLid>
                             rel animationLibraryKeyOverrideKey = </Root/BoxTest/Box/Lid/Plane_002/OnTap/Trigger>
                             token info:id = "PlayTimeline"
                             int loops = 0
@@ -188,7 +225,7 @@ def Xform "Root" (
                         def Preliminary_Action "Action"
                         {
                             rel affectedObjects = </Root>
-                            rel animationLibraryKey = </Root/OpenLidd>
+                            rel animationLibraryKey = </Root/OpenLid>
                             rel animationLibraryKeyOverrideKey = </Root/BoxTest/Box/Lid/Plane_002/OnCollision/Trigger>
                             token info:id = "PlayTimeline"
                             int loops = 0
