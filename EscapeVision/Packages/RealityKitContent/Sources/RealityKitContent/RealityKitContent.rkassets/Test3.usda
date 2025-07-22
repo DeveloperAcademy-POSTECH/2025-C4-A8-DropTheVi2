@@ -75,7 +75,7 @@ def Xform "Root" (
     {
         quatf xformOp:orient = (0.70710677, -0.7071067, 0, 0)
         float3 xformOp:scale = (1, 1, 1)
-        float3 xformOp:translate = (-1.1025605, 0.50925577, 1.0194101)
+        float3 xformOp:translate = (-1.1025605, 0.3272818, 1.0194101)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
         over "Box"
@@ -200,7 +200,7 @@ def Xform "Root" (
                         def Preliminary_Action "Action"
                         {
                             rel affectedObjects = </Root>
-                            rel animationLibraryKey = </Root/OpenLid>
+                            rel animationLibraryKey = </Root/OpenLidd>
                             rel animationLibraryKeyOverrideKey = </Root/BoxTest/Box/Lid/Plane_002/OnTap/Trigger>
                             token info:id = "PlayTimeline"
                             int loops = 0
@@ -225,7 +225,7 @@ def Xform "Root" (
                         def Preliminary_Action "Action"
                         {
                             rel affectedObjects = </Root>
-                            rel animationLibraryKey = </Root/OpenLid>
+                            rel animationLibraryKey = </Root/OpenLidd>
                             rel animationLibraryKeyOverrideKey = </Root/BoxTest/Box/Lid/Plane_002/OnCollision/Trigger>
                             token info:id = "PlayTimeline"
                             int loops = 0
