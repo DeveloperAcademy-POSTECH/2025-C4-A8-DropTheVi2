@@ -252,12 +252,12 @@ def Xform "Root" (
             {
                 string actionKind = "moveTo"
                 int blendLayer = 300
-                double duration = 1
+                double duration = 0.5
                 uniform token info:id = "2211AA22-2DB4-40CE-B6A3-D4110736D556"
                 float3 position = (0, 0, 0)
                 quatf rotation = (0.70710677, 0, 0, -0.70710677)
                 float3 scale = (1, 1, 1)
-                double startTime = 0
+                double startTime = 1
                 rel target = </Root/BoxTest/Box/Lock/Plane_008>
 
                 def RealityKitStruct "transformMode"
@@ -286,12 +286,12 @@ def Xform "Root" (
             {
                 string actionKind = "moveTo"
                 int blendLayer = 300
-                double duration = 1
+                double duration = 0.5
                 uniform token info:id = "BE2D5FE3-773E-4E74-A2ED-5170D031D9C8"
                 float3 position = (0, 0, 0)
                 quatf rotation = (0.70710677, 0.70710677, 0, 0)
                 float3 scale = (1, 1, 1)
-                double startTime = 0.013075313807531281
+                double startTime = 1
                 rel target = </Root/BoxTest/Box/Lid/Plane_002>
 
                 def RealityKitStruct "transformMode"

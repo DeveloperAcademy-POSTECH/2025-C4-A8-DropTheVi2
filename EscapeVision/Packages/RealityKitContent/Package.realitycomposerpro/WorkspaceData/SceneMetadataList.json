@@ -96,9 +96,7 @@
       [
         "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
         "Root",
-        "BoxTest",
-        "Box",
-        "Lock"
+        "Room__1_"
       ],
       {
         "isExpanded" : true,
@@ -107,7 +105,10 @@
       [
         "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
         "Root",
-        "Room__1_"
+        "BoxTest",
+        "Box",
+        "Lid",
+        "Plane_002"
       ],
       {
         "isExpanded" : true,
@@ -161,18 +162,6 @@
         "Root",
         "OpenLid",
         "Track3"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
-        "Root",
-        "BoxTest",
-        "Box",
-        "Lock",
-        "Plane_008"
       ],
       {
         "isExpanded" : true,
