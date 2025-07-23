@@ -17,6 +17,7 @@ final class RoomViewModel {
   private init() {}
   
   var rootEntity = Entity()
+  var isPresented: Bool = false
   
   private var worldAnchor: AnchorEntity?
   
@@ -121,6 +122,10 @@ final class RoomViewModel {
       print("뚜껑 키패드 둘다 찾음")
       openKeypad.applyTapForBehaviors()
       openLid.applyTapForBehaviors()
+      
+      DispatchQueue.main.asyncAfter(deadline: .now() + 1.7) {
+        self.isPresented = true
+      }
     } else {
       print("뚜껑 못찾음")
     }
