@@ -16,7 +16,7 @@ struct PasswordModalView: View {
   @Environment(\.dismiss) private var dismiss
   
   @State private var viewModel = RoomViewModel.shared
-//  @State private var soundManager = SoundManager.shared
+  //  @State private var soundManager = SoundManager.shared
   
   @State private var animationScale: CGFloat = 0.3
   @State private var animationOpacity: Double = 0.0

@@ -30,5 +30,5 @@ struct NoteModalView: View {
 }
 
 #Preview {
-    NoteModalView()
+  NoteModalView()
 }
