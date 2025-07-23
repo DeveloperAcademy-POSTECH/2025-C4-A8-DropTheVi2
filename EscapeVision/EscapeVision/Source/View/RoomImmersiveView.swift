@@ -45,9 +45,9 @@ struct RoomImmersiveView: View {
       Attachment(id: "keypad") {
         if showPasswordModal {
           PasswordModalView(isPresented: $showPasswordModal, inputPassword: "")
-            
-//            .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 16))
-//            .glassBackgroundEffect()
+          
+          //            .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 16))
+          //            .glassBackgroundEffect()
         }
       }
       Attachment(id: "BoxNote") {
