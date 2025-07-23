@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "BoxNote1.png",
+      "filename" : "BoxNote10.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "BoxNote2.png",
+      "filename" : "BoxNote11.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "BoxNote3.png",
+      "filename" : "BoxNote12.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
