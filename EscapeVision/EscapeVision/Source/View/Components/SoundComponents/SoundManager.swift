@@ -17,9 +17,9 @@ final class SoundManager {
   }
   
   enum Sound: String, CaseIterable {
-    case buttonTap = "dd"
-    case success = "ddd"
-    case fail = "dddd"
+    case buttonTap = "keypad_tap"
+    case success = "keypad_success"
+    case fail = "keypad_wrong"
   }
   // MARK: - 오디오 세션 설정
   private func setupAudioSession() {
@@ -37,7 +37,6 @@ final class SoundManager {
   // MARK: - url 번들 찾고 AudioPlayer 로드
   private func loadSound(_ soundName: String) {
     guard let url = Bundle.main.url(forResource: soundName, withExtension: "mp3") else {
-      print("사운드 파일 못찾음")
       return
     }
     do {

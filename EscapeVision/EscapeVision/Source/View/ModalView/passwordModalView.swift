@@ -16,6 +16,7 @@ struct PasswordModalView: View {
   @Environment(\.dismiss) private var dismiss
   
   @State private var viewModel = RoomViewModel.shared
+//  @State private var soundManager = SoundManager.shared
   
   @State private var animationScale: CGFloat = 0.3
   @State private var animationOpacity: Double = 0.0
@@ -87,6 +88,7 @@ struct PasswordModalView: View {
   
   struct PasswordKeypadView: View {
     
+    @State private var soundManager = SoundManager.shared
     @Binding var inputPassword: String
     
     private let gridColumns: [GridItem] = Array(repeating: .init(.flexible(), spacing: 4), count: 3)
@@ -97,6 +99,7 @@ struct PasswordModalView: View {
           CustomButton(label: "\(number)", disable: false) {
             print("\(number)")
             addNumber(number)
+            soundManager.playSound(.buttonTap, volume: 1.0)
           }
         }
       }
@@ -111,6 +114,8 @@ struct PasswordModalView: View {
   
   struct BottomRow: View {
     
+    @State private var soundManager = SoundManager.shared
+    
     @Binding var inputPassword: String
     @Binding var correctPassword: String
     @Binding var isPresented: Bool
@@ -122,6 +127,7 @@ struct PasswordModalView: View {
           label: "",
           disable: false) {
             removeLastNumber()
+            soundManager.playSound(.buttonTap, volume: 1.0)
           }
         OpenCustomButton(
           label: "Open",
@@ -143,10 +149,12 @@ struct PasswordModalView: View {
         isPresented = false
         showError = false
         NotificationCenter.default.post(name: NSNotification.Name("openBox"), object: nil)
+        soundManager.playSound(.success, volume: 1.0)
       } else {
         // 실패
         showError = true
         inputPassword = ""
+        soundManager.playSound(.fail, volume: 1.0)
       }
     }
   }
