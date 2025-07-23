@@ -22,7 +22,7 @@ struct PasswordModalView: View {
   
   var body: some View {
     ZStack {
-      Image("BoxKeypad")
+      Image("BoxkeyPad")
         .resizable()
         .aspectRatio(contentMode: .fit)
         .frame(width: 413, height: 568)
