@@ -10,78 +10,144 @@ import SwiftUI
 
 struct PasswordModalView: View {
   @Binding var isPresented: Bool
-  @State private var inputPassword = ""
+  @State var inputPassword: String
   @State private var showError = false
+  @State private var correctPassword: String = "123"
   @Environment(\.dismiss) private var dismiss
   
-  private let correctPassword = "1234"
+  @State private var viewModel = RoomViewModel.shared
+  
+  @State private var animationScale: CGFloat = 0.3
+  @State private var animationOpacity: Double = 0.0
   
   var body: some View {
-    
-    VStack(spacing: 40) {
-      // 헤더
-      VStack(spacing: 16) {
-        Image(systemName: "lock.fill")
-          .font(.system(size: 60))
-          .foregroundStyle(.primary)
-        
-        Text("비밀번호를 입력하세요")
-          .font(.title)
-          .fontWeight(.semibold)
-      }
+    ZStack {
+      Image("BoxKeypad")
+        .resizable()
+        .aspectRatio(contentMode: .fit)
+        .frame(width: 413, height: 568)
       
-      // 비밀번호 입력 영역
-      VStack(spacing: 20) {
-        SecureField("비밀번호", text: $inputPassword)
-          .textFieldStyle(.roundedBorder)
-          .font(.title2)
-          .keyboardType(.numberPad)
-          .submitLabel(.done)
-          .onSubmit {
-            checkPassword()
-          }
-        
-        if showError {
-          Label("잘못된 비밀번호입니다", systemImage: "exclamationmark.triangle")
-            .foregroundStyle(.red)
-            .font(.callout)
-        }
+      VStack {
+        PasswordDisplay(inputPassword: $inputPassword)
+        Spacer()
       }
+      .padding(.top, 103)
+      .padding(.trailing, 30)
       
-      // 버튼 영역
-      HStack(spacing: 20) {
-        Button("취소") {
-          closeModal()
-        }
-        .buttonStyle(.bordered)
-        .controlSize(.large)
-        
-        Button("확인") {
-          checkPassword()
-        }
-        .buttonStyle(.borderedProminent)
-        .controlSize(.large)
-        .disabled(inputPassword.isEmpty)
+      VStack {
+        Spacer()
+        PasswordKeypadView(inputPassword: $inputPassword)
+      }
+      .padding(.bottom, 105)
+      .padding(.leading, 49)
+      
+      VStack {
+        Spacer()
+        BottomRow(
+          inputPassword: $inputPassword,
+          correctPassword: $correctPassword,
+          isPresented: $isPresented,
+          showError: $showError
+        )
+      }
+      .padding(.bottom, 39)
+      .padding(.leading, 43)
+    }
+    .frame(width: 413, height: 568)
+    .scaleEffect(animationScale)
+    .opacity(animationOpacity)
+    .onAppear {
+      withAnimation(.spring(response: 0.6, dampingFraction: 0.8, blendDuration: 0)) {
+        animationScale = 1.0
+        animationOpacity = 1.0
       }
     }
-    .padding(60)
-    .frame(maxWidth: 500)
-    
-    .onAppear {
-      inputPassword = ""
-      showError = false
+    .onDisappear {
+      animationScale = 0.3
+      animationOpacity = 0.0
     }
   }
   
-  private func checkPassword() {
-    if inputPassword == correctPassword {
-      // 성공
-      isPresented = false
-      showError = false
-    } else {
-      // 실패
-      showError = true
-      inputPassword = ""
+  struct PasswordDisplay: View {
+    
+    @Binding var inputPassword: String
+    
+    var body: some View {
+      HStack(alignment: .center) {
+        ForEach(0..<3, id: \.self) { index in
+          if index < inputPassword.count {
+            Text("*")
+              .font(.system(size: 90, weight: .bold))
+              .foregroundStyle(.secure)
+          }
+        }
+      }
+    }
+  }
+  
+  struct PasswordKeypadView: View {
+    
+    @Binding var inputPassword: String
+    
+    private let gridColumns: [GridItem] = Array(repeating: .init(.flexible(), spacing: 4), count: 3)
+    
+    var body: some View {
+      LazyVGrid(columns: gridColumns, spacing: 27) {
+        ForEach(1...9, id: \.self) { number in
+          CustomButton(label: "\(number)", disable: false) {
+            print("\(number)")
+            addNumber(number)
+          }
+        }
+      }
+      .frame(width: 240)
+    }
+    private func addNumber(_ number: Int) {
+      if inputPassword.count < 4 {
+        inputPassword += "\(number)"
+      }
+    }
+  }
+  
+  struct BottomRow: View {
+    
+    @Binding var inputPassword: String
+    @Binding var correctPassword: String
+    @Binding var isPresented: Bool
+    @Binding var showError: Bool
+    
+    var body: some View {
+      HStack(spacing: 36) {
+        CustomButton(
+          label: "",
+          disable: false) {
+            removeLastNumber()
+          }
+        OpenCustomButton(
+          label: "Open",
+          disable: false,
+          action: {
+            checkPassword()
+          }
+        )
+      }
+    }
+    private func removeLastNumber() {
+      if !inputPassword.isEmpty {
+        inputPassword.removeLast()
+      }
+    }
+    private func checkPassword() {
+      if inputPassword == correctPassword {
+        // 성공
+        isPresented = false
+        showError = false
+        NotificationCenter.default.post(name: NSNotification.Name("openBox"), object: nil)
+      } else {
+        // 실패
+        showError = true
+        inputPassword = ""
+      }
     }
   }
   
@@ -93,5 +159,5 @@ struct PasswordModalView: View {
 }
 
 #Preview {
-  PasswordModalView(isPresented: .constant(true))
+  PasswordModalView(isPresented: .constant(true), inputPassword: "111")
 }
