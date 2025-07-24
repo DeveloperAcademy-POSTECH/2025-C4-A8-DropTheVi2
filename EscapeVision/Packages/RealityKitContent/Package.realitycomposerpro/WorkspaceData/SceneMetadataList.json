@@ -44,6 +44,7 @@
         "Track"
       ],
       {
+        "disallowsFraming" : false,
         "isExpanded" : true,
         "isLocked" : false
       },
@@ -70,7 +71,8 @@
       },
       [
         "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
-        "Root"
+        "Root",
+        "OpenLidd"
       ],
       {
         "isExpanded" : true,
@@ -105,7 +107,8 @@
         "Track"
       ],
       {
-        "isExpanded" : true,
+        "disallowsFraming" : false,
+        "isExpanded" : false,
         "isLocked" : false
       },
       [
@@ -157,8 +160,7 @@
       [
         "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
         "Root",
-        "OpenLid",
-        "Track3"
+        "BoxTest"
       ],
       {
         "isExpanded" : true,
@@ -183,6 +185,17 @@
         "Plane_002"
       ],
       {
+        "disallowsFraming" : false,
+        "isExpanded" : false,
+        "isLocked" : false
+      },
+      [
+        "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
+        "Root",
+        "Timeline2",
+        "Track2"
+      ],
+      {
         "isExpanded" : true,
         "isLocked" : false
       }
@@ -190,14 +203,6 @@
   },
   "AF09ED6F-1707-48FD-8720-65B998362C09" : {
     "objectMetadataList" : [
-      [
-        "AF09ED6F-1707-48FD-8720-65B998362C09",
-        "Root"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
       [
         "AF09ED6F-1707-48FD-8720-65B998362C09",
         "Root",
@@ -215,6 +220,14 @@
       {
         "isExpanded" : true,
         "isLocked" : false
+      },
+      [
+        "AF09ED6F-1707-48FD-8720-65B998362C09",
+        "Root"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
       }
     ]
   },
@@ -223,25 +236,6 @@
       [
         "BC411585-85AB-4E63-A88A-07376BBF70CC",
         "Root"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "BC411585-85AB-4E63-A88A-07376BBF70CC",
-        "Root",
-        "BoxTest"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "BC411585-85AB-4E63-A88A-07376BBF70CC",
-        "Root",
-        "BoxTest",
-        "Box"
       ],
       {
         "isExpanded" : true,
@@ -264,6 +258,24 @@
         "BoxTest",
         "Box",
         "Lock"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "BC411585-85AB-4E63-A88A-07376BBF70CC",
+        "Root",
+        "BoxTest",
+        "Box"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "BC411585-85AB-4E63-A88A-07376BBF70CC",
+        "Root"
       ],
       {
         "isExpanded" : true,
