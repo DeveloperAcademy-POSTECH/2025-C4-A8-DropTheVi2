@@ -11,8 +11,12 @@ import RealityKitContent
 
 struct RoomImmersiveView: View {
   @State private var viewModel = RoomViewModel.shared
-  @State private var showPasswordModal: Bool = false
+  
   @State private var keypadPosition: SIMD3<Float> = SIMD3(-1.10256, 1.37728, 1.01941) // Y축 +0.3
+  @State private var showPasswordModal: Bool = false
+  
+  @State private var notePosition: SIMD3<Float> = SIMD3(-1.10256, 1.37728, 1.01941)
+  @State private var showNoteModal: Bool = false
   
   var body: some View {
     RealityView { content, attachments in
@@ -27,14 +31,28 @@ struct RoomImmersiveView: View {
         
         content.add(keypadAttachment)
       }
+      
+      if let noteAttachment = attachments.entity(for: "BoxNote") {
+        noteAttachment.position = notePosition
+        
+        noteAttachment.look(at: SIMD3(0, notePosition.y, 0), from: notePosition, relativeTo: nil)
+        noteAttachment.orientation = simd_quatf(angle: .pi, axis: SIMD3(0, 1, 0))
+        
+        content.add(noteAttachment)
+      }
     } attachments: {
       // 3D 공간에 배치될 키패드 첨부
       Attachment(id: "keypad") {
         if showPasswordModal {
           PasswordModalView(isPresented: $showPasswordModal, inputPassword: "")
-            
-//            .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 16))
-//            .glassBackgroundEffect()
+          
+          //            .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 16))
+          //            .glassBackgroundEffect()
+        }
+      }
+      Attachment(id: "BoxNote") {
+        if viewModel.isPresented {
+          NoteModalView()
         }
       }
     }
