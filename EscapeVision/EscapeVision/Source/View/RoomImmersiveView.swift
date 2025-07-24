@@ -16,7 +16,8 @@ struct RoomImmersiveView: View {
   @State private var showMonitorModal: Bool = false
   private let keypadPosition = SIMD3<Float>(-1.17064, 1.79641, 1.24997) // Y축 +0.3
   private let machinePosition = SIMD3<Float>(1.69722, 1.86142, -0.54857) // 수면가스 기계 좌표
-  private let monitorPosition = SIMD3<Float>(1.5092113, 1.5676245, -0.17031083) // 모니터 화면 위치 좌표
+  private let controlMonitorPosition = SIMD3<Float>(1.7007, 0.94853, -0.58316) // 조작 모니터 화면 위치 좌표 y + 0.5
+  private let patientMonitorPosition = SIMD3<Float>(1.62414, 1.21879, 0.05951) // 환자 모니터 화면 위치 좌표 y + 0.4
   private let particlePosition = SIMD3<Float>(0.79441, 0.57728, -0.60016) // 파티클 좌표
   
   private let particleManager = ParticleManager.shared
@@ -38,17 +39,32 @@ struct RoomImmersiveView: View {
         machineAttachment.position = machinePosition
         machineAttachment.look(at: SIMD3(0, machinePosition.y, 0), from: machinePosition, relativeTo: nil)
         
-        let totalAngle: Float = (-90.0 + 14.72) * .pi / 180
+        let totalAngle: Float = (-90.0 + 15) * .pi / 180
         machineAttachment.orientation = simd_quatf(angle: totalAngle, axis: SIMD3(0, 1, 0))
         
         content.add(machineAttachment)
       }
       
-      if let monitorAttachment = attachments.entity(for: "Monitor") {
-        monitorAttachment.position = monitorPosition
-        monitorAttachment.look(at: SIMD3(0, monitorPosition.y, 0), from: monitorPosition, relativeTo: nil)
+      if let controlMonitorAttachment = attachments.entity(for: "controlMonitor") {
+        controlMonitorAttachment.position = controlMonitorPosition
+        controlMonitorAttachment.look(
+          at: SIMD3(0, controlMonitorPosition.y, 0),
+          from: controlMonitorPosition, relativeTo: nil
+        )
+        controlMonitorAttachment.orientation = simd_quatf(angle: ((-90.0 + 15) * .pi / 180), axis: SIMD3(0, 1, 0))
         
-        content.add(monitorAttachment)
+        content.add(controlMonitorAttachment)
+      }
+      
+      if let patientMonitorAttachment = attachments.entity(for: "patientMonitor") {
+        patientMonitorAttachment.position = patientMonitorPosition
+        patientMonitorAttachment.look(
+          at: SIMD3(0, patientMonitorPosition.y, 0),
+          from: patientMonitorPosition, relativeTo: nil
+        )
+        patientMonitorAttachment.orientation = simd_quatf(angle: (270 * .pi / 180), axis: SIMD3(0, 1, 0))
+        
+        content.add(patientMonitorAttachment)
       }
     } attachments: {
       // 3D 공간에 배치될 키패드 첨부
@@ -68,7 +84,20 @@ struct RoomImmersiveView: View {
               particleManager.playParticle(at: particlePosition)
             }
           }
+          .frame(width: 1920, height: 1175)
         }
+      }
+      
+      Attachment(id: "controlMonitor") {
+        GasMonitorView()
+          .aspectRatio(1920.0 / 1175.0, contentMode: .fit)
+          .frame(width: 680)
+      }
+      
+      Attachment(id: "patientMonitor") {
+        GasMonitorView()
+          .aspectRatio(1920.0 / 1175.0, contentMode: .fit)
+          .frame(width: 700)
       }
     }
     .task {
