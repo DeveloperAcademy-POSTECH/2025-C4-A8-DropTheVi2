@@ -9,26 +9,38 @@ import SwiftUI
 import RealityKit
 
 struct TapGesture: Gesture {
-  
   @State private var viewModel = RoomViewModel.shared
   
-  @Binding var showPasswordModal: Bool
+  // target에 따라 어떤 엔티티를 누른 건지 판단
+  var target: String
+  @Binding var showModal: Bool
   
   var body: some Gesture {
     SpatialTapGesture()
       .targetedToAnyEntity()
       .onEnded { value in
-        lockTap(value)
+        if value.entity.name.contains(target) {
+          handleTap(for: target)
+        }
       }
   }
   
-  private func lockTap(_ value: EntityTargetValue<SpatialTapGesture.Value>) {
-    if value.entity.name.contains("Plane_008") {
-      print("비밀번호 입력 패널 클릭됨")
-      DispatchQueue.main.async {
-        showPasswordModal = true
+  private func handleTap(for target: String) {
+    DispatchQueue.main.async {
+      switch target {
+      case "Plane_008":
+        print("비밀번호 입력 패널 클릭됨")
+        showModal = true
         viewModel.playOpenLidAnimation()
-        print("모달 상태 변경: \(showPasswordModal)")
+        print("모달 상태 변경: \(showModal)")
+        
+      case "Cube_005":
+        print("모니터 패널 클릭됨")
+        showModal.toggle()
+        print("모달 상태 변경: \(showModal)")
+        
+      default:
+        break
       }
     }
   }
