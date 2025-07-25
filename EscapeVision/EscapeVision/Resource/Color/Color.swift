@@ -9,5 +9,4 @@ import SwiftUI
 extension Color {
   // MARK: Monitor Color
   static let green00 = Color(hex: "5FA252")
-
 }
