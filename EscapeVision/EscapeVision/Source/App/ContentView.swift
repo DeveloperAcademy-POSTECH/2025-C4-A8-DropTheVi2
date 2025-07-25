@@ -10,21 +10,35 @@ import RealityKit
 import RealityKitContent
 
 struct ContentView: View {
-
-    var body: some View {
-        VStack {
-            Model3D(named: "Scene", bundle: realityKitContentBundle)
-                .padding(.bottom, 50)
-
-            Text("Hello, world!")
-
-            ToggleImmersiveSpaceButton()
+  @State private var showARTutorial: Bool = false
+  
+  var body: some View {
+    VStack {
+      
+      Text("Hello, world!")
+        
+      HStack {
+        Button("튜토리얼") {
+          showARTutorial = true
         }
-        .padding()
+        .buttonStyle(.borderedProminent)
+        .opacity(0.5)
+        
+        ToggleImmersiveSpaceButton()
+          .buttonStyle(.borderedProminent)
+          .opacity(0.5)
+      }
+      .padding(.top, 50)
     }
+    .padding()
+    .fullScreenCover(isPresented: $showARTutorial, content: {
+      ARTutorial(isPresented: $showARTutorial)
+    })
+    .animation(.easeInOut(duration: 0.3), value: showARTutorial)
+  }
 }
 
 #Preview(windowStyle: .automatic) {
-    ContentView()
-        .environment(AppModel())
+  ContentView()
+    .environment(AppModel())
 }
