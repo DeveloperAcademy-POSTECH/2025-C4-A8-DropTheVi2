@@ -15,6 +15,8 @@ class AppModel {
     enum ImmersiveSpaceState {
         case closed
         case inTransition
+        case waiting   // 6초 대기 상태 (기본 화면 유지)
+        case loading   // 3초 검정화면 상태
         case open
     }
     var immersiveSpaceState = ImmersiveSpaceState.closed
