@@ -28,7 +28,7 @@ def Xform "Root" (
     )
     {
         quatf xformOp:orient = (0.70710677, -0.7071067, 0, 0)
-        float3 xformOp:scale = (1, 1, 1)
+        float3 xformOp:scale = (0.99999994, 0.99999994, 0.99999994)
         float3 xformOp:translate = (0, 1.1920929e-7, 0)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
@@ -82,8 +82,14 @@ def Xform "Root" (
         {
             over "Lock"
             {
-                over "Plane_008"
+                over "Plane_008" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
                 {
+                    rel material:binding = </Root/BoxTest/Box/_materials/KnifeSwitch_001> (
+                        bindMaterialAs = "weakerThanDescendants"
+                    )
+
                     def RealityKitComponent "RCP_BehaviorsContainer"
                     {
                         rel behaviors = [
