@@ -13,10 +13,10 @@ import RealityKitContent
 struct RoomImmersiveView: View {
   @State private var viewModel = RoomViewModel.shared
   
-  @State private var keypadPosition: SIMD3<Float> = SIMD3(-1.10256, 1.37728, 1.01941) // Y축 +0.3
+  
   @State private var showPasswordModal: Bool = false
   @State private var showMonitorModal: Bool = false
-  private let keypadPosition = SIMD3<Float>(-1.17064, 1.79641, 1.24997) // Y축 +0.3
+  private let keypadPosition: SIMD3<Float> = SIMD3(-1.10256, 1.37728, 1.01941) // Y축 +0.3
   private let machinePosition = SIMD3<Float>(1.69722, 1.86142, -0.54857) // 수면가스 기계 좌표
   private let controlMonitorPosition = SIMD3<Float>(1.7007, 0.94853, -0.58316) // 조작 모니터 화면 위치 좌표 y + 0.5
   private let patientMonitorPosition = SIMD3<Float>(1.62414, 1.21879, 0.05951) // 환자 모니터 화면 위치 좌표 y + 0.4
