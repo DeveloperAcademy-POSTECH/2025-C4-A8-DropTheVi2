@@ -1,0 +1,130 @@
+#usda 1.0
+(
+    customLayerData = {
+        string creator = "Reality Composer Pro Version 2.0 (448.100.13)"
+    }
+    defaultPrim = "Root"
+    metersPerUnit = 1
+    upAxis = "Y"
+)
+
+def Xform "Root"
+{
+    float3 xformOp:translate = (1.188, 0.22806233, -0.8323)
+    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+    def Xform "Fog_Emitter_1" (
+        customData = {
+            float3 rotationEulerHint = (1.3662983, -0.53655, -0.0015890836)
+        }
+    )
+    {
+        quatf xformOp:orient = (0.74797827, 0.6084954, -0.20606768, 0.16672724)
+        float3 xformOp:scale = (0.99999976, 0.99999964, 0.9999997)
+        float3 xformOp:translate = (-0.0054610968, -0.008011833, 0.034137785)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        def RealityKitComponent "VFXEmitter"
+        {
+            token info:id = "RealityKit.VFXEmitter"
+
+            def RealityKitStruct "currentState"
+            {
+                token birthDirection = "Normal"
+                token birthLocation = "Vertices"
+                float3 birthLocationVertex = (1, 1, 1)
+                int64 burstCount = 1
+                float3 emissionDirection = (0, 1, 0)
+                double emissionDuration = 2.15
+                double emissionDurationVariation = 0
+                token emitterShape = "Point"
+                double idleDuration = 0.001
+                double idleDurationVariation = 0
+                bool isEmitting = 0
+                bool isLocal = 0
+                bool isSpawningEnabled = 0
+                bool loops = 1
+                float particleSpeed = 1.2
+                float particleSpeedVariation = 0.1
+                float radialAmount = 6.2831855
+                float3 shapeSize = (0.01, 0.01, 0.01)
+                bool spawnInheritParentColor = 0
+                token spawnOccasion = "OnDeath"
+                float spawnSpreadFactor = 5.2359877
+                float spawnSpreadFactorVariation = 0
+                float spawnVelocityFactor = 10
+                double warmupDuration = 0.01
+
+                def RealityKitStruct "mainEmitter"
+                {
+                    float3 acceleration = (-0.1, -0.2, 0.1)
+                    token animationRepeatMode = "PlayOnce"
+                    token billboardMode = "Billboard"
+                    float birthRate = 200
+                    float birthRateVariation = 0
+                    token blendMode = "Alpha"
+                    float colorEvolutionPower = 1
+                    int64 columnCount = 4
+                    float dampingFactor = 0.82
+                    float4 endColorA = (0.0013309671, 0.03458923, 1, 1)
+                    float4 endColorB = (0.11386989, 0.0064959256, 0.10626237, 1)
+                    float frameRate = 0
+                    float frameRateVariation = 0
+                    int64 initialFrame = 2
+                    int64 initialFrameVariation = 6
+                    bool isAnimated = 1
+                    bool isLightingEnabled = 0
+                    token opacityOverLife = "EaseFadeOut"
+                    float particleAngle = 1.0471976
+                    float particleAngleVariation = 0
+                    float particleAngularVelocity = 1
+                    float particleAngularVelocityVariation = 1
+                    asset particleImage = @ParticleEmitterPresetTextures/dustsheet.exr@
+                    double particleLifeSpan = 2
+                    double particleLifeSpanVariation = 1
+                    float particleMass = 0.001
+                    float particleMassVariation = 0.8
+                    float particleSize = 0.08
+                    float particleSizeVariation = 0
+                    float3 radialGravityCenter = (1, 1, 0)
+                    float radialGravityStrength = 0
+                    int64 rowCount = 4
+                    float sizeMultiplierAtEndOfLifespan = 1.3
+                    float sizeMultiplierAtEndOfLifespanPower = 0.2
+                    token sortOrder = "DecreasingDepth"
+                    float spreadingAngle = 0.34906584
+                    float4 startColorA = (1, 1, 1, 0.03)
+                    float4 startColorB = (1, 1, 1, 0)
+                    float stretchFactor = 0.5
+                    bool useEndColor = 0
+                    bool useEndColorRange = 0
+                    bool useStartColorRange = 1
+                }
+
+                def RealityKitStruct "spawnedEmitter"
+                {
+                }
+            }
+        }
+
+        def RealityKitComponent "Collider"
+        {
+            uint group = 1
+            uniform token info:id = "RealityKit.Collider"
+            uint mask = 4294967295
+            token type = "Default"
+
+            def RealityKitStruct "Shape"
+            {
+                float3 extent = (0, 0, 0)
+                float radius = 0.01
+                token shapeType = "Sphere"
+
+                def RealityKitStruct "pose"
+                {
+                }
+            }
+        }
+    }
+}
+
