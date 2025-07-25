@@ -77,14 +77,7 @@ struct ContentView: View {
             }
         }
     }
-    .padding()
-    .fullScreenCover(isPresented: $showARTutorial, content: {
-      ARTutorial(isPresented: $showARTutorial)
-    })
-    .animation(.easeInOut(duration: 0.3), value: showARTutorial)
   }
-}
-
 #Preview(windowStyle: .automatic) {
   ContentView()
     .environment(AppModel())
