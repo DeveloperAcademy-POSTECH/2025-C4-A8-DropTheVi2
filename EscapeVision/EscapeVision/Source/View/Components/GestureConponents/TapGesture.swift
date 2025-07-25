@@ -31,7 +31,6 @@ struct TapGesture: Gesture {
       case "Plane_008":
         print("비밀번호 입력 패널 클릭됨")
         showModal = true
-        viewModel.playOpenLidAnimation()
         print("모달 상태 변경: \(showModal)")
         
       case "Cube_005":
