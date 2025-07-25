@@ -14,7 +14,7 @@ def Xform "Root" (
     }
 )
 {
-    reorder nameChildren = ["Room__1_", "BoxTest", "Monitor_Test_v2", "MonitorPositionTestCube", "Fog_Particle_1", "OpenLid", "ParticleStart"]
+    reorder nameChildren = ["OpenLid", "OpenLidd", "Timeline2"]
     quatf xformOp:orient = (1, 0, 0, 0)
     float3 xformOp:translate = (0, 0.35, 0)
     uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
@@ -45,206 +45,20 @@ def Xform "Root" (
             }
         }
 
-        over "Machine"
+        over "Switch"
         {
-            float3 xformOp:translate = (0, 0, 0)
-
-            over "Monitor"
+            over "Switch1"
             {
-                over "mesh1_001"
+                over "Handle1"
                 {
-                    def RealityKitComponent "RCP_BehaviorsContainer"
-                    {
-                        rel behaviors = [
-                            </Root/Room__1_/Machine/Monitor/mesh1_001/OnTap>,
-                            </Root/Room__1_/Machine/Monitor/mesh1_001/OnCollision>,
-                        ]
-                        uniform token info:id = "RCP.BehaviorsContainer"
-                    }
-
-                    def Preliminary_Behavior "OnTap"
-                    {
-                        rel actions = </Root/Room__1_/Machine/Monitor/mesh1_001/OnTap/Action>
-                        uniform bool exclusive
-                        rel triggers = </Root/Room__1_/Machine/Monitor/mesh1_001/OnTap/Trigger>
-
-                        def Preliminary_Trigger "Trigger"
-                        {
-                            rel affectedObjects = </Root/Room__1_/Machine/Monitor/mesh1_001>
-                            token info:id = "TapGesture"
+                    over "Sphere_005" (
+                        customData = {
+                            float3 rotationEulerHint = (-1.1920929e-7, 0, 6.7179435e-8)
                         }
-
-                        def Preliminary_Action "Action"
-                        {
-                            rel affectedObjects = </Root>
-                            rel animationLibraryKey = </Root/OpenLid>
-                            rel animationLibraryKeyOverrideKey = </Root/Room__1_/Machine/Monitor/mesh1_001/OnTap/Trigger>
-                            token info:id = "PlayTimeline"
-                            int loops = 0
-                            int performCount = 1
-                            token type = "serial"
-                        }
-                    }
-
-                    def Preliminary_Behavior "OnCollision"
+                    )
                     {
-                        rel actions = </Root/Room__1_/Machine/Monitor/mesh1_001/OnCollision/Action>
-                        uniform bool exclusive
-                        rel triggers = </Root/Room__1_/Machine/Monitor/mesh1_001/OnCollision/Trigger>
-
-                        def Preliminary_Trigger "Trigger"
-                        {
-                            rel affectedObjects = </Root/Room__1_/Machine/Monitor/mesh1_001>
-                            rel colliders = </Root/Room__1_/Machine/Monitor/mesh1_001>
-                            token info:id = "Collide"
-                        }
-
-                        def Preliminary_Action "Action"
-                        {
-                            rel affectedObjects = </Root>
-                            rel animationLibraryKey = </Root/OpenLid>
-                            rel animationLibraryKeyOverrideKey = </Root/Room__1_/Machine/Monitor/mesh1_001/OnCollision/Trigger>
-                            token info:id = "PlayTimeline"
-                            int loops = 0
-                            int performCount = 1
-                            token type = "serial"
-                        }
-                    }
-                }
-
-                def RealityKitComponent "RCP_BehaviorsContainer"
-                {
-                    rel behaviors = [
-                        </Root/Room__1_/Machine/Monitor/OnTap>,
-                        </Root/Room__1_/Machine/Monitor/OnCollision>,
-                    ]
-                    uniform token info:id = "RCP.BehaviorsContainer"
-                }
-
-                def Preliminary_Behavior "OnTap"
-                {
-                    rel actions = </Root/Room__1_/Machine/Monitor/OnTap/Action>
-                    uniform bool exclusive
-                    rel triggers = </Root/Room__1_/Machine/Monitor/OnTap/Trigger>
-
-                    def Preliminary_Trigger "Trigger"
-                    {
-                        rel affectedObjects = </Root/Room__1_/Machine/Monitor>
-                        token info:id = "TapGesture"
-                    }
-
-                    def Preliminary_Action "Action"
-                    {
-                        rel affectedObjects = </Root>
-                        rel animationLibraryKey = </Root/OpenLid>
-                        rel animationLibraryKeyOverrideKey = </Root/Room__1_/Machine/Monitor/OnTap/Trigger>
-                        token info:id = "PlayTimeline"
-                        int loops = 0
-                        int performCount = 1
-                        token type = "serial"
-                    }
-                }
-
-                def Preliminary_Behavior "OnCollision"
-                {
-                    rel actions = </Root/Room__1_/Machine/Monitor/OnCollision/Action>
-                    uniform bool exclusive
-                    rel triggers = </Root/Room__1_/Machine/Monitor/OnCollision/Trigger>
-
-                    def Preliminary_Trigger "Trigger"
-                    {
-                        rel affectedObjects = </Root/Room__1_/Machine/Monitor>
-                        rel colliders = </Root/Room__1_/Machine/Monitor>
-                        token info:id = "Collide"
-                    }
-
-                    def Preliminary_Action "Action"
-                    {
-                        rel affectedObjects = </Root>
-                        rel animationLibraryKey = </Root/OpenLid>
-                        rel animationLibraryKeyOverrideKey = </Root/Room__1_/Machine/Monitor/OnCollision/Trigger>
-                        token info:id = "PlayTimeline"
-                        int loops = 0
-                        int performCount = 1
-                        token type = "serial"
-                    }
-                }
-            }
-        }
-
-        over "BedEmpty"
-        {
-            def RealityKitComponent "RigidBody"
-            {
-                uniform token info:id = "RealityKit.RigidBody"
-                token motionType = "Static"
-
-                def RealityKitStruct "massFrame"
-                {
-                    def RealityKitStruct "m_pose"
-                    {
-                    }
-                }
-
-                def RealityKitStruct "material"
-                {
-                }
-            }
-
-            def RealityKitComponent "Collider"
-            {
-                uint group = 1
-                uniform token info:id = "RealityKit.Collider"
-                uint mask = 4294967295
-                token type = "Default"
-
-                def RealityKitStruct "Shape"
-                {
-                    float3 extent = (1.8923631, 1.2421477, 1.4166008)
-                    token shapeType = "Box"
-
-                    def RealityKitStruct "pose"
-                    {
-                        float3 position = (1.0345757, 0.86976445, 0.31355518)
-                    }
-                }
-            }
-        }
-
-        over "BedKadan"
-        {
-            def RealityKitComponent "RigidBody"
-            {
-                uniform token info:id = "RealityKit.RigidBody"
-                token motionType = "Static"
-
-                def RealityKitStruct "massFrame"
-                {
-                    def RealityKitStruct "m_pose"
-                    {
-                    }
-                }
-
-                def RealityKitStruct "material"
-                {
-                }
-            }
-
-            def RealityKitComponent "Collider"
-            {
-                uint group = 1
-                uniform token info:id = "RealityKit.Collider"
-                uint mask = 4294967295
-                token type = "Default"
-
-                def RealityKitStruct "Shape"
-                {
-                    float3 extent = (1.8923631, 1.1047062, 1.4166008)
-                    token shapeType = "Box"
-
-                    def RealityKitStruct "pose"
-                    {
-                        float3 position = (1.0345757, -0.90845877, 0.31355518)
+                        quatf xformOp:orient = (1, -4.470348e-8, 8.557132e-9, 3.3589718e-8)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
                     }
                 }
             }
@@ -261,7 +75,7 @@ def Xform "Root" (
     {
         quatf xformOp:orient = (0.70710677, -0.7071067, 0, 0)
         float3 xformOp:scale = (1, 1, 1)
-        float3 xformOp:translate = (-1.1025605, 0.50925577, 1.0194101)
+        float3 xformOp:translate = (-1.1025605, 0.3272818, 1.0194101)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
         over "Box"
@@ -333,25 +147,123 @@ def Xform "Root" (
                             token type = "serial"
                         }
                     }
+
+                    def RealityKitComponent "AnimationLibrary"
+                    {
+                        uniform token info:id = "RealityKit.AnimationLibrary"
+                    }
                 }
             }
+
+            def RealityKitComponent "AnimationLibrary"
+            {
+                uniform token info:id = "RealityKit.AnimationLibrary"
+            }
+
+            over "Lid" (
+                customData = {
+                    float3 rotationEulerHint = (1.1920929e-7, 5.1357217e-16, -1.0263152e-15)
+                }
+            )
+            {
+                quatf xformOp:orient = (1, 8.685033e-8, 2.5678606e-16, -5.131576e-16)
+                float3 xformOp:scale = (1, 1, 1)
+                double3 xformOp:translate = (0.013536177575588226, -0.11702220886945724, 0.11268972605466843)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                over "Plane_002" (
+                    customData = {
+                        float3 rotationEulerHint = (0, 0, 0)
+                    }
+                )
+                {
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (1, 1, 1)
+                    float3 xformOp:translate = (0, 0, 0)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                    def RealityKitComponent "RCP_BehaviorsContainer"
+                    {
+                        rel behaviors = [
+                            </Root/BoxTest/Box/Lid/Plane_002/OnTap>,
+                            </Root/BoxTest/Box/Lid/Plane_002/OnCollision>,
+                        ]
+                        uniform token info:id = "RCP.BehaviorsContainer"
+                    }
+
+                    def Preliminary_Behavior "OnTap"
+                    {
+                        rel actions = </Root/BoxTest/Box/Lid/Plane_002/OnTap/Action>
+                        uniform bool exclusive
+                        rel triggers = </Root/BoxTest/Box/Lid/Plane_002/OnTap/Trigger>
+
+                        def Preliminary_Trigger "Trigger"
+                        {
+                            rel affectedObjects = </Root/BoxTest/Box/Lid/Plane_002>
+                            token info:id = "TapGesture"
+                        }
+
+                        def Preliminary_Action "Action"
+                        {
+                            rel affectedObjects = </Root>
+                            rel animationLibraryKey = </Root/OpenLidd>
+                            rel animationLibraryKeyOverrideKey = </Root/BoxTest/Box/Lid/Plane_002/OnTap/Trigger>
+                            token info:id = "PlayTimeline"
+                            int loops = 0
+                            int performCount = 1
+                            token type = "serial"
+                        }
+                    }
+
+                    def Preliminary_Behavior "OnCollision"
+                    {
+                        rel actions = </Root/BoxTest/Box/Lid/Plane_002/OnCollision/Action>
+                        uniform bool exclusive
+                        rel triggers = </Root/BoxTest/Box/Lid/Plane_002/OnCollision/Trigger>
+
+                        def Preliminary_Trigger "Trigger"
+                        {
+                            rel affectedObjects = </Root/BoxTest/Box/Lid/Plane_002>
+                            rel colliders = </Root/BoxTest/Box/Lid/Plane_002>
+                            token info:id = "Collide"
+                        }
+
+                        def Preliminary_Action "Action"
+                        {
+                            rel affectedObjects = </Root>
+                            rel animationLibraryKey = </Root/OpenLidd>
+                            rel animationLibraryKeyOverrideKey = </Root/BoxTest/Box/Lid/Plane_002/OnCollision/Trigger>
+                            token info:id = "PlayTimeline"
+                            int loops = 0
+                            int performCount = 1
+                            token type = "serial"
+                        }
+                    }
+                }
+            }
+        }
+
+        def RealityKitComponent "AnimationLibrary"
+        {
+            uniform token info:id = "RealityKit.AnimationLibrary"
         }
     }
 
     def RealityKitTimeline "OpenLid"
     {
-        def RealityKitTrack "Track"
+        reorder nameChildren = ["Track3", "Track"]
+        def RealityKitTrack "Track3"
         {
             def RealityKitAction "Transform_To"
             {
                 string actionKind = "moveTo"
                 int blendLayer = 300
-                double duration = 0.9249758376288659
+                double duration = 0.5
                 uniform token info:id = "2211AA22-2DB4-40CE-B6A3-D4110736D556"
                 float3 position = (0, 0, 0)
                 quatf rotation = (0.70710677, 0, 0, -0.70710677)
                 float3 scale = (1, 1, 1)
-                double startTime = 0.012067425034867393
+                double startTime = 1
                 rel target = </Root/BoxTest/Box/Lock/Plane_008>
 
                 def RealityKitStruct "transformMode"
@@ -362,94 +274,81 @@ def Xform "Root" (
 
                 def RealityKitStruct "timingFunction"
                 {
+                    token type = "easeInOut"
                 }
             }
         }
-    }
 
-    def RealityKitTimeline "ParticleStart" (
-        references = @Fog_Particle.usda@
-    )
-    {
         def RealityKitTrack "Track"
         {
         }
     }
 
-    def "Machine_Test_v02" (
-        active = true
-        customData = {
-            float3 rotationEulerHint = (-1.5707964, 2.38418e-7, -2.389648e-7)
-        }
-        prepend references = @Machine_Test_v02.usdz@
-    )
+    def RealityKitTimeline "OpenLidd"
     {
-        quatf xformOp:orient = (0.70710677, -0.70710677, 1.6878029e-7, -1.9331983e-10)
-        float3 xformOp:scale = (1, 1, 1)
-        float3 xformOp:translate = (1.7160408, -0.40011203, -3.61586e-7)
-        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-
-        over "Monitor"
+        def RealityKitTrack "Track"
         {
-            over "Cube_005"
+            def RealityKitAction "Transform_To"
             {
-                def RealityKitComponent "RCP_BehaviorsContainer"
+                string actionKind = "moveTo"
+                int blendLayer = 300
+                double duration = 0.5
+                uniform token info:id = "BE2D5FE3-773E-4E74-A2ED-5170D031D9C8"
+                float3 position = (0, 0, 0)
+                quatf rotation = (0.70710677, 0.70710677, 0, 0)
+                float3 scale = (1, 1, 1)
+                double startTime = 1
+                rel target = </Root/BoxTest/Box/Lid/Plane_002>
+
+                def RealityKitStruct "transformMode"
                 {
-                    rel behaviors = [
-                        </Root/Machine_Test_v02/Monitor/Cube_005/OnTap>,
-                        </Root/Machine_Test_v02/Monitor/Cube_005/OnCollision>,
-                    ]
-                    uniform token info:id = "RCP.BehaviorsContainer"
+                    rel referenceEntity = </Root>
+                    token type = "parent"
                 }
 
-                def Preliminary_Behavior "OnTap"
+                def RealityKitStruct "timingFunction"
                 {
-                    rel actions = </Root/Machine_Test_v02/Monitor/Cube_005/OnTap/Action>
-                    uniform bool exclusive
-                    rel triggers = </Root/Machine_Test_v02/Monitor/Cube_005/OnTap/Trigger>
-
-                    def Preliminary_Trigger "Trigger"
-                    {
-                        rel affectedObjects = </Root/Machine_Test_v02/Monitor/Cube_005>
-                        token info:id = "TapGesture"
-                    }
-
-                    def Preliminary_Action "Action"
-                    {
-                        rel affectedObjects = None
-                        rel animationLibraryKeyOverrideKey = </Root/Machine_Test_v02/Monitor/Cube_005/OnTap/Trigger>
-                        token info:id = "PlayTimeline"
-                        int loops = 0
-                        int performCount = 1
-                        token type = "serial"
-                    }
-                }
-
-                def Preliminary_Behavior "OnCollision"
-                {
-                    rel actions = </Root/Machine_Test_v02/Monitor/Cube_005/OnCollision/Action>
-                    uniform bool exclusive
-                    rel triggers = </Root/Machine_Test_v02/Monitor/Cube_005/OnCollision/Trigger>
-
-                    def Preliminary_Trigger "Trigger"
-                    {
-                        rel affectedObjects = </Root/Machine_Test_v02/Monitor/Cube_005>
-                        rel colliders = </Root/Machine_Test_v02/Monitor/Cube_005>
-                        token info:id = "Collide"
-                    }
-
-                    def Preliminary_Action "Action"
-                    {
-                        rel affectedObjects = None
-                        rel animationLibraryKeyOverrideKey = </Root/Machine_Test_v02/Monitor/Cube_005/OnCollision/Trigger>
-                        token info:id = "PlayTimeline"
-                        int loops = 0
-                        int performCount = 1
-                        token type = "serial"
-                    }
+                    token type = "easeInOut"
                 }
             }
         }
+    }
+
+    def RealityKitTimeline "Timeline2"
+    {
+        reorder nameChildren = ["Track2", "Track"]
+        def RealityKitTrack "Track2"
+        {
+            def RealityKitAction "Transform_By"
+            {
+                string actionKind = "moveBy"
+                int blendLayer = 300
+                double duration = 1
+                uniform token info:id = "86A3D3DE-D14C-4E2C-A458-1804F36B5CBB"
+                quatf rotation = (0.70710677, 0, 0, -0.70710677)
+                double startTime = 0.07455321749471444
+                rel target = </Root/BoxTest/Box/Lock/Plane_008>
+
+                def RealityKitStruct "timingFunction"
+                {
+                    token type = "easeInOut"
+                }
+            }
+        }
+    }
+
+    def "Door__1_" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (-1.5707963, 0, 0)
+        }
+        prepend references = @Door (1).usdz@
+    )
+    {
+        quatf xformOp:orient = (0.70710677, -0.7071067, 0, 0)
+        float3 xformOp:scale = (1, 1, 1)
+        float3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
     }
 }
 

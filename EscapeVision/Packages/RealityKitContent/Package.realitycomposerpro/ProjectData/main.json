@@ -8,10 +8,14 @@
     "RealityKitContent\/Sources\/RealityKitContent\/RealityKitContent.rkassets\/Immersive.usda" : "AF09ED6F-1707-48FD-8720-65B998362C09",
     "RealityKitContent\/Sources\/RealityKitContent\/RealityKitContent.rkassets\/Scene.usda" : "D66134B1-3681-4A8E-AFE5-29F257229F3B",
     "RealityKitContent\/Sources\/RealityKitContent\/RealityKitContent.rkassets\/Test3.usda" : "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
-    "RealityKitContent\/Sources\/RealityKitContent\/RealityKitContent.rkassets\/TestScene.usda" : "BC411585-85AB-4E63-A88A-07376BBF70CC"
+    "RealityKitContent\/Sources\/RealityKitContent\/RealityKitContent.rkassets\/Test4.usda" : "926CBAEE-7897-4E19-9CD5-852E7FC57A07",
+    "RealityKitContent\/Sources\/RealityKitContent\/RealityKitContent.rkassets\/TestScene.usda" : "BC411585-85AB-4E63-A88A-07376BBF70CC",
+    "RealityKitContent\/Sources\/RealityKitContent\/RealityKitContent.rkassets\/Untitled%20Scene.usda" : "2FAB345A-AAC9-4F97-9CD1-E416C8254E6C"
   },
   "projectID" : 6744657196370827432,
   "uuidToIntID" : {
+    "2FAB345A-AAC9-4F97-9CD1-E416C8254E6C" : 4229087024484120505,
+    "926CBAEE-7897-4E19-9CD5-852E7FC57A07" : -5734019725801216074,
     "962C490F-809E-4FE7-95BB-F1AF3EAE8A75" : 618160567375823629,
     "AF09ED6F-1707-48FD-8720-65B998362C09" : -8045588930193989089,
     "BC411585-85AB-4E63-A88A-07376BBF70CC" : -6396190330796864021
