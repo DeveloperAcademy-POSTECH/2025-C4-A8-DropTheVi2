@@ -28,7 +28,7 @@ def Xform "Root" (
     )
     {
         quatf xformOp:orient = (0.70710677, -0.7071067, 0, 0)
-        float3 xformOp:scale = (1, 1, 1)
+        float3 xformOp:scale = (0.99999994, 0.99999994, 0.99999994)
         float3 xformOp:translate = (0, 1.1920929e-7, 0)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
@@ -82,8 +82,14 @@ def Xform "Root" (
         {
             over "Lock"
             {
-                over "Plane_008"
+                over "Plane_008" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
                 {
+                    rel material:binding = </Root/BoxTest/Box/_materials/KnifeSwitch_001> (
+                        bindMaterialAs = "weakerThanDescendants"
+                    )
+
                     def RealityKitComponent "RCP_BehaviorsContainer"
                     {
                         rel behaviors = [
@@ -252,12 +258,12 @@ def Xform "Root" (
             {
                 string actionKind = "moveTo"
                 int blendLayer = 300
-                double duration = 1
+                double duration = 0.5
                 uniform token info:id = "2211AA22-2DB4-40CE-B6A3-D4110736D556"
                 float3 position = (0, 0, 0)
                 quatf rotation = (0.70710677, 0, 0, -0.70710677)
                 float3 scale = (1, 1, 1)
-                double startTime = 0
+                double startTime = 1
                 rel target = </Root/BoxTest/Box/Lock/Plane_008>
 
                 def RealityKitStruct "transformMode"
@@ -286,12 +292,12 @@ def Xform "Root" (
             {
                 string actionKind = "moveTo"
                 int blendLayer = 300
-                double duration = 1
+                double duration = 0.5
                 uniform token info:id = "BE2D5FE3-773E-4E74-A2ED-5170D031D9C8"
                 float3 position = (0, 0, 0)
                 quatf rotation = (0.70710677, 0.70710677, 0, 0)
                 float3 scale = (1, 1, 1)
-                double startTime = 0.013075313807531281
+                double startTime = 1
                 rel target = </Root/BoxTest/Box/Lid/Plane_002>
 
                 def RealityKitStruct "transformMode"
@@ -329,6 +335,20 @@ def Xform "Root" (
                 }
             }
         }
+    }
+
+    def "Door__1_" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (-1.5707963, 0, 0)
+        }
+        prepend references = @Door (1).usdz@
+    )
+    {
+        quatf xformOp:orient = (0.70710677, -0.7071067, 0, 0)
+        float3 xformOp:scale = (1, 1, 1)
+        float3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
     }
 }
 
