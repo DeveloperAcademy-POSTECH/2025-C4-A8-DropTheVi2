@@ -11,6 +11,7 @@ import RealityKit
 import RealityKitContent
 
 struct RoomImmersiveView: View {
+    @State private var isVisible = false
   @State private var viewModel = RoomViewModel.shared
   
   
@@ -89,6 +90,11 @@ struct RoomImmersiveView: View {
           //            .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 16))
           //            .glassBackgroundEffect()
         }
+        .scaleEffect(isVisible ? 1.0 : 0.8)
+        .opacity(isVisible ? 1.0 : 0.0)
+            // 애니메이션 시작
+            withAnimation(.easeOut(duration: 1.2)) {
+                isVisible = true
       }
       Attachment(id: "BoxNote") {
         if viewModel.isPresented {
