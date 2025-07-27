@@ -8,6 +8,7 @@ import Foundation
 import SwiftUI
 
 struct GasMonitorView: View {
+    @State private var soundManager = SoundManager.shared
   @ObservedObject var viewModel = GasMonitorViewModel.shared
   
   // 파티클 제어를 위한 클로저
@@ -63,6 +64,7 @@ struct GasMonitorView: View {
     .onChange(of: viewModel.isActive) { oldValue, newValue in
       print("GasMonitorView: isActive 변경됨 - \(oldValue) → \(newValue)")
       onParticleStateChanged?(newValue)
+        soundManager.playSound(.monitorsuccess, volume: 3.0)
     }
   }
 }
@@ -71,4 +73,13 @@ struct MonitorControlData: Identifiable {
   let id: Int
   let value: Int
   let yRatio: CGFloat
+}
+
+#Preview {
+    GasMonitorView(
+        viewModel: GasMonitorViewModel(),
+        onParticleStateChanged: { isActive in
+            print("Particle State Changed: \(isActive)")
+        }
+    )
 }
