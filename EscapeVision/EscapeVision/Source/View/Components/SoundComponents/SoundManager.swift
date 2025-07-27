@@ -20,6 +20,10 @@ final class SoundManager {
     case buttonTap = "keypad_tap"
     case success = "keypad_success"
     case fail = "keypad_wrong"
+    case maintheme = "maintheme"
+    case gamestart = "gamestart"
+    case monitorTap = "monitor_tap"
+    case monitorsuccess = "monitor_success"
   }
   // MARK: - 오디오 세션 설정
   private func setupAudioSession() {
