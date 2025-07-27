@@ -14,7 +14,7 @@ struct TapGesture: Gesture {
   // target에 따라 어떤 엔티티를 누른 건지 판단
   var target: String
   @Binding var showModal: Bool
-  
+   
   var body: some Gesture {
     SpatialTapGesture()
       .targetedToAnyEntity()
@@ -26,7 +26,7 @@ struct TapGesture: Gesture {
   }
   
   private func handleTap(for target: String) {
-    DispatchQueue.main.async {
+    
       switch target {
       case "Plane_008":
         print("비밀번호 입력 패널 클릭됨")
@@ -38,9 +38,12 @@ struct TapGesture: Gesture {
         showModal.toggle()
         print("모달 상태 변경: \(showModal)")
         
+      case "__pastas_02_001":
+        print("File 클릭됨")
+        showModal = true
+        
       default:
         break
       }
-    }
   }
 }
