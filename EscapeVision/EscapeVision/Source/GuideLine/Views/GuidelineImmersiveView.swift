@@ -30,7 +30,7 @@ struct GuidelineImmersiveView: View {
         return
       }
       
-      guideLineEntity.position = SIMD3<Float>(0, 0, 0.0)
+      guideLineEntity.position = SIMD3<Float>(0, 0, -0.5)
       
       self.guidelineEntity = guideLineEntity
       anchor.addChild(guideLineEntity)
