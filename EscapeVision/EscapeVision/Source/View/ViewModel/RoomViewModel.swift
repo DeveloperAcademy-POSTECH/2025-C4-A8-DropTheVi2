@@ -60,7 +60,7 @@ final class RoomViewModel {
       print("테스트 박스 설정 실패")
     }
     
-    if let machineTest = roomEntity.findEntity(named: "Machine_Test_v02") {
+    if let machineTest = roomEntity.findEntity(named: "Machine_v06") {
       setUpMonitorEntity(in: machineTest)
       print("모니터 설정 성공")
     } else {
@@ -69,8 +69,6 @@ final class RoomViewModel {
     
     if let particleEntity = roomEntity.findEntity(named: "Fog_Emitter_1") {
       particleManager.setParticleEntity(particleEntity)
-      //      particleEntity.isEnabled = true
-      print("✅ RoomViewModel: Particle entity 설정 완료")
       
       // 디버깅용
       particleManager.debugParticleInfo()
@@ -142,7 +140,7 @@ final class RoomViewModel {
   }
   
   private func setUpMonitorEntity(in machineEntity: Entity) {
-    if let lock = machineEntity.findEntity(named: "Cube_005") {
+    if let lock = machineEntity.findEntity(named: "Cube_007") {
       lock.components.set(InputTargetComponent())
       lock.generateCollisionShapes(recursive: true)
       
