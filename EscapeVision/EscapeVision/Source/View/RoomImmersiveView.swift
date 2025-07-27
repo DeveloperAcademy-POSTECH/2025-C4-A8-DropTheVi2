@@ -21,7 +21,6 @@ struct RoomImmersiveView: View {
   
   // 좌표값
   private let keypadPosition: SIMD3<Float> = SIMD3(-1.10256, 1.37728, 1.01941) // Y축 +0.3
-  //  private let machinePosition = SIMD3<Float>(1.69722, 1.86142, -0.54857) // 수면가스 기계 좌표
   private let machinePosition = SIMD3<Float>(1.23308, 1.05112, -0.69557) // 모니터 앞으로 띄우는 좌표
   private let controlMonitorPosition = SIMD3<Float>(1.7007, 0.94853, -0.58316) // 조작 모니터 화면 위치 좌표 y + 0.5
   private let patientMonitorPosition = SIMD3<Float>(1.62414, 1.21879, 0.05951) // 환자 모니터 화면 위치 좌표 y + 0.4
@@ -90,9 +89,6 @@ struct RoomImmersiveView: View {
       Attachment(id: "keypad") {
         if showPasswordModal {
           PasswordModalView(isPresented: $showPasswordModal, inputPassword: "")
-          
-          //            .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 16))
-          //            .glassBackgroundEffect()
         }
       }
       Attachment(id: "BoxNote") {
@@ -114,7 +110,6 @@ struct RoomImmersiveView: View {
               DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                 
                 showMonitorModal = false
-                
               }
             }
           }
