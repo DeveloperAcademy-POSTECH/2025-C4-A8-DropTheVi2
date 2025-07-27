@@ -24,6 +24,7 @@ final class SoundManager {
     case gamestart = "gamestart"
     case monitorTap = "monitor_tap"
     case monitorsuccess = "monitor_success"
+    case doorTap = "door_locked"
   }
   // MARK: - 오디오 세션 설정
   private func setupAudioSession() {
