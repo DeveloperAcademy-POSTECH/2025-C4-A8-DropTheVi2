@@ -78,6 +78,13 @@ final class RoomViewModel {
       print("❌ RoomViewModel: Fog_Particle_1을 찾을 수 없음")
     }
     
+    if let fileEntity = roomEntity.findEntity(named: "File1") {
+      setUpFileEntity(in: fileEntity)
+      print("\(fileEntity): 파일 엔티티 찾음")
+    } else {
+      print("파일 못찾았다.")
+    }
+    
     anchor.addChild(roomEntity)
   }
   
@@ -149,6 +156,17 @@ final class RoomViewModel {
       print("모니터에 인터렉션 설정 완료")
     } else {
       print("모니터에 인터렉션 설정 실패")
+    }
+  }
+  
+  private func setUpFileEntity(in boxEntity: Entity) {
+    if let lock = boxEntity.findEntity(named: "__pastas_02_001") {
+      lock.components.set(InputTargetComponent())
+      lock.generateCollisionShapes(recursive: true)
+      
+      print("File에 인터렉션 설정 완료")
+    } else {
+      print("File에 인터렉션 설정 실패")
     }
   }
   
