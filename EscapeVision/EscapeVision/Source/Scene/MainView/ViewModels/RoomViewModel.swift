@@ -83,6 +83,14 @@ final class RoomViewModel {
       print("파일 못찾았다.")
     }
     
+    if let doorTest = roomEntity.findEntity(named: "_DoorKnob") {
+      setUpDoorEntity(in: doorTest)
+      print("문고리 찾기 성공")
+    } else {
+      print("문고리 찾기 실패")
+    }
+    
+    
     anchor.addChild(roomEntity)
   }
   
@@ -143,6 +151,17 @@ final class RoomViewModel {
       print("Lock에 인터렉션 설정 완료")
     } else {
       print("Lock에 인터렉션 설정 실패")
+    }
+  }
+  
+  private func setUpDoorEntity(in doorEntity: Entity) {
+    if let knob = doorEntity.findEntity(named: "J_2b17_001") {
+      knob.components.set(InputTargetComponent())
+      knob.generateCollisionShapes(recursive: true)
+      
+      print("문고리에 인터렉션 설정 완료")
+    } else {
+      print("문고리에 인터렉션 설정 실패")
     }
   }
   
