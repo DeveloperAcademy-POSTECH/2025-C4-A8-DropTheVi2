@@ -51,11 +51,6 @@ class AppModel {
     appState = .playing
   }
   
-  func resetToMain() {
-    print("🎮 메인으로 돌아가기")
-    appState = .menu
-  }
-  
   // MARK: - Computed Properties
   var isShowingGuideline: Bool {
     return appState == .guideline
