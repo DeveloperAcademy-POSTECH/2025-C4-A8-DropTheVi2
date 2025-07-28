@@ -1,0 +1,74 @@
+#usda 1.0
+(
+    customLayerData = {
+        string creator = "Reality Composer Pro Version 2.0 (448.120.2)"
+    }
+    defaultPrim = "Root"
+    metersPerUnit = 1
+    upAxis = "Y"
+)
+
+def Xform "Root"
+{
+    reorder nameChildren = ["SkyDome", "BlackMaterial"]
+    def "SkyDome" (
+        active = true
+        prepend apiSchemas = ["MaterialBindingAPI"]
+        references = @SkyDome.usdz@
+    )
+    {
+        rel material:binding = </Root/BlackMaterial> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        float3 xformOp:scale = (1, 1, 1)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+    }
+
+    def Material "BlackMaterial"
+    {
+        token outputs:mtlx:surface
+        token outputs:realitykit:vertex
+        token outputs:surface.connect = </Root/BlackMaterial/UsdPreviewSurface.outputs:surface>
+
+        def Shader "UsdPreviewSurface"
+        {
+            uniform token info:id = "UsdPreviewSurface"
+            color3f inputs:diffuseColor = (0, 0, 0) (
+                colorSpace = "srgb_texture"
+            )
+            float inputs:roughness = 0
+            token outputs:surface
+        }
+    }
+
+    def "SkyDome_1" (
+        active = true
+        prepend apiSchemas = ["MaterialBindingAPI"]
+        references = @SkyDome.usdz@
+    )
+    {
+        rel material:binding = </Root/BlackMaterial> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        float2 ui:nodegraph:node:pos = (20, 20)
+        int ui:nodegraph:node:stackingOrder = 1
+        float3 xformOp:scale = (0.1, 0.1, 0.1)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+    }
+
+    def "SkyDome_2" (
+        active = true
+        prepend apiSchemas = ["MaterialBindingAPI"]
+        references = @SkyDome.usdz@
+    )
+    {
+        rel material:binding = </Root/BlackMaterial> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        float2 ui:nodegraph:node:pos = (40, 40)
+        int ui:nodegraph:node:stackingOrder = 2
+        float3 xformOp:scale = (0.5, 0.5, 0.5)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+    }
+}
+
