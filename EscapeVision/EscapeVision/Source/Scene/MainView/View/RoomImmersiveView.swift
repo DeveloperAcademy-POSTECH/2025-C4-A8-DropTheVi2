@@ -13,34 +13,46 @@ import RealityKitContent
 struct RoomImmersiveView: View {
   @State private var isVisible = false
   @State private var viewModel = RoomViewModel.shared
+  @State private var attachModel = AttachViewModel.shared
+  private let particleManager = ParticleManager.shared
   
-  @State private var showPasswordModal: Bool = false
   @State private var showMonitorModal: Bool = false
-  @State private var showFileModal: Bool = false
-  @State private var showNoteModal: Bool = false
   
-  private let keypadPosition: SIMD3<Float> = SIMD3(-0.83808, 1.37728, 1.10787) // Y축 +0.3
-  private let notePosition: SIMD3<Float> = SIMD3(-0.83808, 1.37728, 1.10787)
   private let machinePosition = SIMD3<Float>(1.69722, 1.86142, -0.54857) // 수면가스 기계 좌표
   private let controlMonitorPosition = SIMD3<Float>(1.7007, 0.94853, -0.58316) // 조작 모니터 화면 위치 좌표 y + 0.5
   private let patientMonitorPosition = SIMD3<Float>(1.62414, 1.21879, 0.05951) // 환자 모니터 화면 위치 좌표 y + 0.4
   private let particlePosition = SIMD3<Float>(0.79441, 0.57728, -0.60016) // 파티클 좌표
-  private let filePosition = SIMD3<Float>(-1.58947, 1.37728, 1.10787)
   
-  private let particleManager = ParticleManager.shared
   
   var body: some View {
-    RealityView { content, attachments in
+    RealityView {
+      content,
+      attachments in
       
       content.add(viewModel.rootEntity)
       
-      // 키패드를 3D 공간에 직접 배치
       if let keypadAttachment = attachments.entity(for: "keypad") {
-        keypadAttachment.position = keypadPosition
-        keypadAttachment.look(at: SIMD3(0, keypadPosition.y, 0), from: keypadPosition, relativeTo: nil)
-        keypadAttachment.orientation = simd_quatf(angle: .pi, axis: SIMD3(0, 1, 0))
-        
-        content.add(keypadAttachment)
+        attachModel.attachEntity(
+          keypadAttachment,
+          type: .keypad,
+          content: content
+        )
+      }
+      
+      if let noteAttachment = attachments.entity(for: "BoxNote") {
+        attachModel.attachEntity(
+          noteAttachment,
+          type: .boxNote,
+          content: content
+        )
+      }
+      
+      if let fileAttachment = attachments.entity(for: "File") {
+        attachModel.attachEntity(
+          fileAttachment,
+          type: .file,
+          content: content
+        )
       }
       
       if let machineAttachment = attachments.entity(for: "Machine_Test") {
@@ -49,7 +61,6 @@ struct RoomImmersiveView: View {
         
         let totalAngle: Float = (-90.0 + 15) * .pi / 180
         machineAttachment.orientation = simd_quatf(angle: totalAngle, axis: SIMD3(0, 1, 0))
-        
         content.add(machineAttachment)
       }
       
@@ -74,32 +85,11 @@ struct RoomImmersiveView: View {
         
         content.add(patientMonitorAttachment)
       }
-      
-      if let noteAttachment = attachments.entity(for: "BoxNote") {
-        noteAttachment.position = notePosition
-        
-        noteAttachment.look(at: SIMD3(0, notePosition.y, 0), from: notePosition, relativeTo: nil)
-        noteAttachment.orientation = simd_quatf(angle: .pi, axis: SIMD3(0, 1, 0))
-        
-        content.add(noteAttachment)
-      }
-      
-      if let fileAttachment = attachments.entity(for: "File") {
-        fileAttachment.position = filePosition
-        
-        fileAttachment.look(at: SIMD3(0, filePosition.y, 0), from: filePosition, relativeTo: nil)
-        fileAttachment.orientation = simd_quatf(angle: .pi, axis: SIMD3(0, 1, 0))
-        
-        content.add(fileAttachment)
-      }
     } attachments: {
       // 3D 공간에 배치될 키패드 첨부
       Attachment(id: "keypad") {
-        if showPasswordModal {
-          PasswordModalView(isPresented: $showPasswordModal, inputPassword: "")
-          
-          //            .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 16))
-          //            .glassBackgroundEffect()
+        if attachModel.showPasswordModal {
+          PasswordModalView(isPresented: $attachModel.showPasswordModal, inputPassword: "")
         }
       }
       Attachment(id: "BoxNote") {
@@ -109,8 +99,8 @@ struct RoomImmersiveView: View {
       }
       
       Attachment(id: "File") {
-        if showFileModal {
-          FileModalView(isPresented: $showFileModal)
+        if attachModel.showFileModal {
+          FileModalView(isPresented: $attachModel.showFileModal)
         }
       }
       
@@ -141,12 +131,12 @@ struct RoomImmersiveView: View {
       await viewModel.setup()
     }
     .simultaneousGesture(
-      TapGesture(target: "Plane_008", showModal: $showPasswordModal)
+      TapGesture(target: "Plane_008", showModal: $attachModel.showPasswordModal)
     )
     .simultaneousGesture(
       TapGestureFile(
         target: "__pastas_02_001",
-        isPresented: $showFileModal
+        isPresented: $attachModel.showFileModal
       )
     )
     .simultaneousGesture(
