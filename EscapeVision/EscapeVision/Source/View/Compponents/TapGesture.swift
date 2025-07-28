@@ -30,10 +30,6 @@ struct TapGesture: Gesture {
         viewModel.playOpenLidAnimation()
         print("모달 상태 변경: \(showPasswordModal)")
       }
-      
-      
-      
-      
     }
   }
 }

@@ -21,6 +21,7 @@ struct EscapeTestApp: App {
         ImmersiveSpace(id: appModel.immersiveSpaceID) {
             RoomImmersiveView()
                 .environment(appModel)
+                .environment(RoomViewModel.shared)
                 .onAppear {
                     appModel.immersiveSpaceState = .open
                 }

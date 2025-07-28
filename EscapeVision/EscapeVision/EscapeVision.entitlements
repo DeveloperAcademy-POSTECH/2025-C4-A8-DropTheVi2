@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- ARKit 월드 트래킹 권한 (핵심) -->
+	<key>com.apple.developer.arkit.world-sensing.data-provider.world-tracking</key>
+	<true/>
+	
+	<!-- ARKit 플레인 검출 권한 -->
+	<key>com.apple.developer.arkit.world-sensing.data-provider.plane-detection</key>
+	<true/>
+	
+	<!-- ARKit 씬 재구성 권한 -->
+	<key>com.apple.developer.arkit.world-sensing.data-provider.scene-reconstruction</key>
+	<true/>
+	
+	<!-- ARKit 핸드 트래킹 권한 -->
+	<key>com.apple.developer.arkit.hand-tracking.provider</key>
+	<true/>
+	
+	<!-- 카메라 접근 권한 (Vision Pro용 Passthrough) -->
+	<key>com.apple.developer.arkit.world-sensing.data-provider.passthrough</key>
+	<true/>
+	
+	<!-- ARKit 오브젝트 스캐닝 및 인식 -->
+	<key>com.apple.developer.arkit.world-sensing.data-provider.object-detection</key>
+	<true/>
+	
+	<!-- ARKit 이미지 추적 및 인식 -->
+	<key>com.apple.developer.arkit.world-sensing.data-provider.image-detection</key>
+	<true/>
+	
+	<!-- ARKit 얼굴 추적 -->
+	<key>com.apple.developer.arkit.face-tracking.provider</key>
+	<true/>
+	
+	<!-- ARKit 바디 추적 (visionOS 2.0+) -->
+	<key>com.apple.developer.arkit.body-tracking.provider</key>
+	<true/>
+	
+	<!-- 몰입형 공간 권한 -->
+	<key>com.apple.developer.group-session.immersive-space</key>
+	<true/>
+	
+	<!-- visionOS 앱 그룹 (필요시) -->
+	<key>com.apple.security.application-groups</key>
+	<array>
+		<string>group.com.yourcompany.escapevision</string>
+	</array>
+	
+	<!-- 네트워크 액세스 (멀티플레이어 등) -->
+	<key>com.apple.developer.networking.wifi-info</key>
+	<true/>
+	
+	<!-- 백그라운드 앱 리프레시 -->
+	<key>com.apple.developer.background-modes</key>
+	<array>
+		<string>background-processing</string>
+		<string>background-fetch</string>
+	</array>
+	
+	<!-- visionOS 앱 샌드박스 (개발용) -->
+	<key>com.apple.security.app-sandbox</key>
+	<false/>
+	
+	<!-- 사용자 선택 파일 읽기/쓰기 (스크린샷 저장 등) -->
+	<key>com.apple.security.files.user-selected.read-write</key>
+	<true/>
+	
+	<!-- 사진 라이브러리 접근 -->
+	<key>com.apple.security.personal-information.photos-library</key>
+	<true/>
+	
+	<!-- 위치 서비스 (ARKit 정확도 향상) -->
+	<key>com.apple.security.personal-information.location</key>
+	<true/>
+</dict>
+</plist> 
