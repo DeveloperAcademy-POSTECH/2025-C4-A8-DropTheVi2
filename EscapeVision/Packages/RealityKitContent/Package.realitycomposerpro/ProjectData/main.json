@@ -6,6 +6,7 @@
     "\/RealityKitContent\/Sources\/RealityKitContent\/RealityKitContent.rkassets\/Untitled Scene.usda" : "D560BB77-AAF3-4BDE-B7C4-989332A4688B",
     "RealityKitContent\/Sources\/RealityKitContent\/RealityKitContent.rkassets\/GridMaterial.usda" : "66168B71-AB05-424E-8B6C-D33D6E61B08F",
     "RealityKitContent\/Sources\/RealityKitContent\/RealityKitContent.rkassets\/Immersive.usda" : "AF09ED6F-1707-48FD-8720-65B998362C09",
+    "RealityKitContent\/Sources\/RealityKitContent\/RealityKitContent.rkassets\/Room.usda" : "06EB4DCB-A810-4020-8552-469D54D9458B",
     "RealityKitContent\/Sources\/RealityKitContent\/RealityKitContent.rkassets\/Scene.usda" : "D66134B1-3681-4A8E-AFE5-29F257229F3B",
     "RealityKitContent\/Sources\/RealityKitContent\/RealityKitContent.rkassets\/Test3.usda" : "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
     "RealityKitContent\/Sources\/RealityKitContent\/RealityKitContent.rkassets\/Test4.usda" : "926CBAEE-7897-4E19-9CD5-852E7FC57A07",
@@ -14,6 +15,7 @@
   },
   "projectID" : 6744657196370827432,
   "uuidToIntID" : {
+    "06EB4DCB-A810-4020-8552-469D54D9458B" : -7556623086195950680,
     "2FAB345A-AAC9-4F97-9CD1-E416C8254E6C" : 4229087024484120505,
     "926CBAEE-7897-4E19-9CD5-852E7FC57A07" : -5734019725801216074,
     "962C490F-809E-4FE7-95BB-F1AF3EAE8A75" : 618160567375823629,
