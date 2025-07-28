@@ -21,7 +21,7 @@ def Xform "Root"
     {
         quatf xformOp:orient = (0.74797827, 0.6084954, -0.20606768, 0.16672724)
         float3 xformOp:scale = (0.99999976, 0.99999964, 0.9999997)
-        float3 xformOp:translate = (-0.0054610968, -0.008011833, 0.034137785)
+        float3 xformOp:translate = (0.014540076, -0.008011833, -0.005859971)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
         def RealityKitComponent "VFXEmitter"
@@ -93,7 +93,7 @@ def Xform "Root"
                     float sizeMultiplierAtEndOfLifespanPower = 0.2
                     token sortOrder = "DecreasingDepth"
                     float spreadingAngle = 0.34906584
-                    float4 startColorA = (1, 1, 1, 0.03)
+                    float4 startColorA = (0.8286274, 1, 0.49138373, 0.14)
                     float4 startColorB = (1, 1, 1, 0)
                     float stretchFactor = 0.5
                     bool useEndColor = 0

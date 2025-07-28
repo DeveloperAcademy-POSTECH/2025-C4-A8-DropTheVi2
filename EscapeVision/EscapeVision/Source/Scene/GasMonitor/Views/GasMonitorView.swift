@@ -13,6 +13,7 @@ struct GasMonitorView: View {
   
   // 파티클 제어를 위한 클로저
   var onParticleStateChanged: ((Bool) -> Void)?
+  @State private var monitorViewOpacity = 0.0
   
   // 기본 비율 (1920:1175) 및 기준 크기
   private let aspectRatio: CGFloat = 1920.0 / 1175.0
@@ -57,6 +58,18 @@ struct GasMonitorView: View {
             y: geo.size.height * item.yRatio
           )
         }
+      }
+    }
+    .opacity(monitorViewOpacity)
+    .onAppear {
+      // Fade in 애니메이션
+      withAnimation(.easeIn(duration: 0.6)) {
+        monitorViewOpacity = 1.0
+      }
+    }
+    .onDisappear {
+      withAnimation(.easeInOut(duration: 0.6)) {
+        monitorViewOpacity = 0.0
       }
     }
     .aspectRatio(aspectRatio, contentMode: .fit)
