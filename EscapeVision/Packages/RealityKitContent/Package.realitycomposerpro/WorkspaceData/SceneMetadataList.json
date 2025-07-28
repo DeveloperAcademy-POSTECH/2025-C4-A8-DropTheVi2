@@ -52,6 +52,57 @@
       [
         "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
         "Root",
+        "OpenLid"
+      ],
+      {
+        "disallowsFraming" : false,
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
+        "Root",
+        "File",
+        "Papers"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
+        "Root",
+        "Timeline2"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
+        "Root",
+        "BoxTest",
+        "Box",
+        "Lid",
+        "Plane_002"
+      ],
+      {
+        "disallowsFraming" : false,
+        "isExpanded" : false,
+        "isLocked" : false
+      },
+      [
+        "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
+        "Root",
+        "OpenLidd"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
+        "Root",
         "Timeline",
         "Track"
       ],
@@ -64,7 +115,48 @@
         "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
         "Root",
         "OpenLid",
+        "Track"
+      ],
+      {
+        "disallowsFraming" : false,
+        "isExpanded" : false,
+        "isLocked" : false
+      },
+      [
+        "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
+        "Root",
+        "OpenLid",
         "Track3"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
+        "Root",
+        "OpenLidd",
+        "Track"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
+        "Root",
+        "OpenLid",
+        "Track3",
+        "Transform_To"
+      ],
+      {
+        "disallowsFraming" : false,
+        "isExpanded" : false,
+        "isLocked" : false
+      },
+      [
+        "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
+        "Root"
       ],
       {
         "isExpanded" : true,
@@ -93,100 +185,8 @@
       [
         "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
         "Root",
-        "OpenLidd",
-        "Track"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
-        "Root",
-        "Timeline2"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
-        "Root",
-        "OpenLid"
-      ],
-      {
-        "disallowsFraming" : false,
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
-        "Root",
-        "OpenLid",
-        "Track"
-      ],
-      {
-        "disallowsFraming" : false,
-        "isExpanded" : false,
-        "isLocked" : false
-      },
-      [
-        "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
-        "Root",
-        "OpenLidd"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
-        "Root",
-        "BoxTest",
-        "Box",
-        "Lid",
-        "Plane_002"
-      ],
-      {
-        "disallowsFraming" : false,
-        "isExpanded" : false,
-        "isLocked" : false
-      },
-      [
-        "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
-        "Root"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
-        "Root",
-        "OpenLid",
-        "Track3",
-        "Transform_To"
-      ],
-      {
-        "disallowsFraming" : false,
-        "isExpanded" : false,
-        "isLocked" : false
-      },
-      [
-        "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
-        "Root",
         "Timeline2",
         "Track2"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
-        "Root",
-        "File",
-        "Papers"
       ],
       {
         "isExpanded" : true,
@@ -207,7 +207,7 @@
       [
         "AF09ED6F-1707-48FD-8720-65B998362C09",
         "Root",
-        "Sphere_Right"
+        "Sphere_Left"
       ],
       {
         "isExpanded" : true,
@@ -216,7 +216,7 @@
       [
         "AF09ED6F-1707-48FD-8720-65B998362C09",
         "Root",
-        "Sphere_Left"
+        "Sphere_Right"
       ],
       {
         "isExpanded" : true,
@@ -226,14 +226,6 @@
   },
   "BC411585-85AB-4E63-A88A-07376BBF70CC" : {
     "objectMetadataList" : [
-      [
-        "BC411585-85AB-4E63-A88A-07376BBF70CC",
-        "Root"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
       [
         "BC411585-85AB-4E63-A88A-07376BBF70CC",
         "Root",
@@ -246,10 +238,7 @@
       },
       [
         "BC411585-85AB-4E63-A88A-07376BBF70CC",
-        "Root",
-        "BoxTest",
-        "Box",
-        "Lid"
+        "Root"
       ],
       {
         "isExpanded" : true,
@@ -265,6 +254,17 @@
       {
         "isExpanded" : true,
         "isLocked" : false
+      },
+      [
+        "BC411585-85AB-4E63-A88A-07376BBF70CC",
+        "Root",
+        "BoxTest",
+        "Box",
+        "Lid"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
       }
     ]
   },
@@ -272,8 +272,7 @@
     "objectMetadataList" : [
       [
         "CB766F92-EE55-4A63-9401-E7B8C009764D",
-        "Root",
-        "GridMaterial"
+        "Root"
       ],
       {
         "isExpanded" : true,
@@ -281,7 +280,8 @@
       },
       [
         "CB766F92-EE55-4A63-9401-E7B8C009764D",
-        "Root"
+        "Root",
+        "GridMaterial"
       ],
       {
         "isExpanded" : true,
@@ -298,9 +298,7 @@
     "objectMetadataList" : [
       [
         "D66134B1-3681-4A8E-AFE5-29F257229F3B",
-        "Root",
-        "GridMaterial",
-        "GridMaterial"
+        "Root"
       ],
       {
         "isExpanded" : true,
@@ -308,7 +306,198 @@
       },
       [
         "D66134B1-3681-4A8E-AFE5-29F257229F3B",
+        "Root",
+        "GridMaterial",
+        "GridMaterial"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      }
+    ]
+  },
+  "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5" : {
+    "objectMetadataList" : [
+      [
+        "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
+        "Root",
+        "FileFolder"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
+        "Root",
+        "OpenDrawer",
+        "Track"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
+        "Root",
+        "BoxTest",
+        "Box"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
+        "Root",
+        "BoxTest",
+        "Box",
+        "Lock"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
+        "Root",
+        "OpenDrawer"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
+        "Root",
+        "RoomScene",
+        "Desk",
+        "Knob1"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
         "Root"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
+        "Root",
+        "BoxTest"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
+        "Root",
+        "RoomScene"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
+        "Root",
+        "BoxTest",
+        "Box",
+        "Lid"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
+        "Root",
+        "RoomScene",
+        "Desk"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
+        "Root",
+        "FileFolder",
+        "FileHolder"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
+        "Root",
+        "OpenDrawerKnob"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
+        "Root",
+        "OpenLid"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
+        "Root",
+        "OpenLid",
+        "Track"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
+        "Root",
+        "OpenDrawerKnob",
+        "Track"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
+        "Root",
+        "OpenLidd",
+        "Track"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
+        "Root",
+        "RoomScene",
+        "Desk",
+        "Drawer1"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
+        "Root",
+        "OpenLidd"
       ],
       {
         "isExpanded" : true,

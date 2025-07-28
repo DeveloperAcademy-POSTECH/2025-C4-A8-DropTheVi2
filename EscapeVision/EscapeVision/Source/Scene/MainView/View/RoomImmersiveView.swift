@@ -158,6 +158,16 @@ struct RoomImmersiveView: View {
       )
     )
     .simultaneousGesture(
+      TapGestureObject(
+        target: "Sphere_004"
+      )
+    )
+    .simultaneousGesture(
+      TapGestureObject(
+        target: "Cube_007"
+      )
+    )
+    .simultaneousGesture(
       TapGesture(target: "Cube_007", showModal: $showMonitorModal)
     )
   }
