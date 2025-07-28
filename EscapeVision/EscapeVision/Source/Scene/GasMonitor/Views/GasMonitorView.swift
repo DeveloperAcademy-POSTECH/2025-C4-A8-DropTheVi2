@@ -8,7 +8,7 @@ import Foundation
 import SwiftUI
 
 struct GasMonitorView: View {
-    @State private var soundManager = SoundManager.shared
+  @State private var soundManager = SoundManager.shared
   @ObservedObject var viewModel = GasMonitorViewModel.shared
   
   // 파티클 제어를 위한 클로저
