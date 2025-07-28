@@ -14,7 +14,7 @@ def Xform "Root" (
     }
 )
 {
-    reorder nameChildren = ["OpenLid", "OpenLidd", "Timeline2"]
+    reorder nameChildren = ["Room__1_", "BoxTest", "OpenLid", "OpenLidd", "Timeline2", "Door__1_", "File1", "Board1"]
     quatf xformOp:orient = (1, 0, 0, 0)
     float3 xformOp:translate = (0, 0.35, 0)
     uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
@@ -28,7 +28,7 @@ def Xform "Root" (
     )
     {
         quatf xformOp:orient = (0.70710677, -0.7071067, 0, 0)
-        float3 xformOp:scale = (0.99999994, 0.99999994, 0.99999994)
+        float3 xformOp:scale = (1, 1, 1)
         float3 xformOp:translate = (0, 1.1920929e-7, 0)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
@@ -63,6 +63,19 @@ def Xform "Root" (
                 }
             }
         }
+
+        over "Board"
+        {
+            over "_materials"
+            {
+                over "Particle_Board"
+                {
+                    token cullMode = "back" (
+                        allowedTokens = ["unspecified", "none", "front", "back"]
+                    )
+                }
+            }
+        }
     }
 
     def "BoxTest" (
@@ -75,21 +88,15 @@ def Xform "Root" (
     {
         quatf xformOp:orient = (0.70710677, -0.7071067, 0, 0)
         float3 xformOp:scale = (1, 1, 1)
-        float3 xformOp:translate = (-1.1025605, 0.3272818, 1.0194101)
+        float3 xformOp:translate = (-0.8380774, 0.3272818, 1.1078693)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
         over "Box"
         {
             over "Lock"
             {
-                over "Plane_008" (
-                    prepend apiSchemas = ["MaterialBindingAPI"]
-                )
+                over "Plane_008"
                 {
-                    rel material:binding = </Root/BoxTest/Box/_materials/KnifeSwitch_001> (
-                        bindMaterialAs = "weakerThanDescendants"
-                    )
-
                     def RealityKitComponent "RCP_BehaviorsContainer"
                     {
                         rel behaviors = [
@@ -342,13 +349,119 @@ def Xform "Root" (
         customData = {
             float3 rotationEulerHint = (-1.5707963, 0, 0)
         }
-        prepend references = @Door (1).usdz@
+        references = @Door (1).usdz@
     )
     {
         quatf xformOp:orient = (0.70710677, -0.7071067, 0, 0)
         float3 xformOp:scale = (1, 1, 1)
         float3 xformOp:translate = (0, 0, 0)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+    }
+
+    def "File1" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (-1.5707963, 0, 0)
+        }
+        references = @File.usdz@
+    )
+    {
+        quatf xformOp:orient = (0.70710677, -0.7071067, 0, 0)
+        float3 xformOp:scale = (1, 1, 1)
+        float3 xformOp:translate = (0.2, 0, -0.1)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+    }
+
+    def "Board1" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (-4.7123885, -1.5707963, 0)
+        }
+        references = @Board1.usdz@
+    )
+    {
+        quatf xformOp:orient = (0.5, -0.5, -0.5, -0.5)
+        float3 xformOp:scale = (1, 1, 1)
+        float3 xformOp:translate = (-0.5, 0.1446499, 1.9568201)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        over "_materials"
+        {
+            over "Particle_Board"
+            {
+                token cullMode = "unspecified" (
+                    allowedTokens = ["unspecified", "none", "front", "back"]
+                )
+                token outputs:mtlx:surface.connect = </Root/Board1/_materials/Particle_Board/PreviewSurface.outputs:out>
+                token outputs:realitykit:vertex
+                token outputs:surface.connect = </Root/Board1/_materials/Particle_Board/Principled_BSDF.outputs:surface>
+                float2 ui:nodegraph:realitykit:subgraphOutputs:pos = (0, 110.5)
+
+                over "Principled_BSDF" (
+                    active = true
+                )
+                {
+                }
+
+                def Shader "PreviewSurface" (
+                    active = false
+                )
+                {
+                    uniform token info:id = "ND_UsdPreviewSurface_surfaceshader"
+                    token outputs:out
+                    float2 ui:nodegraph:node:pos = (-255, 105)
+                }
+            }
+
+            over "Thumbtack"
+            {
+                token outputs:mtlx:surface
+                token outputs:realitykit:vertex
+            }
+
+            over "Papers"
+            {
+                token cullMode = "none" (
+                    allowedTokens = ["unspecified", "none", "front", "back"]
+                )
+                token outputs:mtlx:surface
+                token outputs:realitykit:vertex
+            }
+
+            over "Material_002"
+            {
+                token cullMode = "back" (
+                    allowedTokens = ["unspecified", "none", "front", "back"]
+                )
+                token outputs:mtlx:surface
+                token outputs:realitykit:vertex
+            }
+
+            over "Material_003"
+            {
+                token cullMode = "front" (
+                    allowedTokens = ["unspecified", "none", "front", "back"]
+                )
+                token outputs:mtlx:surface
+                token outputs:realitykit:vertex
+            }
+        }
+
+        over "Board" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </Root/Room__1_/Board/_materials/Particle_Board> (
+                bindMaterialAs = "strongerThanDescendants"
+            )
+
+            over "Cube_003"
+            {
+                rel material:binding (
+                    bindMaterialAs = "strongerThanDescendants"
+                )
+            }
+        }
     }
 }
 
