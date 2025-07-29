@@ -17,6 +17,8 @@ class AppModel {
   
   enum ImmersiveSpaceState {
     case closed
+    case waiting
+    case loading
     case inTransition
     case open
   }
