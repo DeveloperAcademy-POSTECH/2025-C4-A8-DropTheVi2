@@ -12,7 +12,7 @@ import RealityKitContent
 
 struct RoomImmersiveView: View {
   @Environment(RoomViewModel.self) private var viewModel
-  @Environment(RoomViewModel.self) private var appModel
+  @Environment(AppModel.self) private var appModel
   
   @State private var attachModel = AttachViewModel.shared
   @State private var lightManager = LightManager.shared
@@ -305,14 +305,6 @@ struct RoomImmersiveView: View {
       LastLog.lastPinchStatus = currentPinchStatus
     }
   }
-}
-
-// MARK: - Extensions
-
-extension SIMD4 {
-  var xyz: SIMD3<Scalar> {
-    return SIMD3<Scalar>(x, y, z)
-  }
   
   private func startWhiteOutSequence() {
       print("🎬 WhiteOut 시퀀스 시작")
@@ -326,4 +318,12 @@ extension SIMD4 {
         }
       }
     }
+}
+
+// MARK: - Extensions
+
+extension SIMD4 {
+  var xyz: SIMD3<Scalar> {
+    return SIMD3<Scalar>(x, y, z)
+  }
 }
