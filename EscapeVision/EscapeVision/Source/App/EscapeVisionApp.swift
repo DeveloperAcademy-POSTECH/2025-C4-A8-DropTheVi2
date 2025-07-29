@@ -39,4 +39,19 @@ struct EscapeTestApp: App {
       // progressive Mode
       // 몰입도 조절 가능 (0.1~1.0), FullMode 보다 더 넓은 환경, 동적 몰입도 변경 가능
     }
+    
+    ImmersiveSpace(id: appModel.immersiveSpaceID) {
+      // 게임 상태에 따라 다른 View 표시
+      if appModel.appState == .guideline {
+        GuidelineImmersiveView()
+          .environment(appModel)
+          .transition(.opacity.combined(with: .scale))
+      } else if appModel.appState == .playing {
+        RoomImmersiveView()
+          .environment(appModel)
+          .transition(.opacity.combined(with: .scale))
+      }
+    }
+    .immersionStyle(selection: .constant(.mixed), in: .mixed)
+  }
 }

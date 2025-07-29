@@ -93,6 +93,11 @@ fastlane/test_output
 
 iOSInjectionProject/
 
+*.usdz
+*.usda
+*.rkassets
+*.rcuserdata
+
 .DS_Store
 **/.DS_Store
 
