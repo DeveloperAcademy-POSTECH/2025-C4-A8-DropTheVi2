@@ -166,7 +166,7 @@ final class RoomViewModel {
       print("테스트 박스 설정 실패")
     }
     
-    if let machineTest = roomEntity.findEntity(named: "Machine_v06") {
+    if let machineTest = roomEntity.findEntity(named: "Machine_v05") {
       setUpMonitorEntity(in: machineTest)
       print("모니터 설정 성공")
     } else {
