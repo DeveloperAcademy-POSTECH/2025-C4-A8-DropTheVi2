@@ -143,6 +143,10 @@ final class RoomViewModel {
       print("서랍 알림 수신")
       self.openDrawer()
     }
+    NotificationCenter.default.addObserver(forName: Notification.Name("openVent"), object: nil, queue: .main) { _ in
+      print("환풍구 오픈 알림 수신")
+      self.openVent()
+    }
   }
 
   // MARK: - Scene Loading
@@ -166,7 +170,7 @@ final class RoomViewModel {
       print("테스트 박스 설정 실패")
     }
     
-    if let machineTest = roomEntity.findEntity(named: "Machine_v05") {
+    if let machineTest = roomEntity.findEntity(named: "Monitor06_002") {
       setUpMonitorEntity(in: machineTest)
       print("모니터 설정 성공")
     } else {
@@ -209,6 +213,15 @@ final class RoomViewModel {
     } else {
       print("책상 서랍 손잡이 찾기 실패")
     }
+    
+    //환풍구 찾기
+    if let ventTest = roomEntity.findEntity(named: "AirVent3") {
+      setUpVentEntity(in: ventTest)
+      print("환풍구 찾기 성공")
+    } else {
+      print("환풍구 찾기 실패")
+    }
+
     
     anchor.addChild(roomEntity)
   }
@@ -348,7 +361,7 @@ final class RoomViewModel {
   }
   
   private func setUpMonitorEntity(in machineEntity: Entity) {
-    if let lock = machineEntity.findEntity(named: "Cube_007") {
+    if let lock = machineEntity.findEntity(named: "Cube_008") {
       lock.components.set(InputTargetComponent())
       lock.generateCollisionShapes(recursive: true)
       
@@ -369,6 +382,17 @@ final class RoomViewModel {
     }
   }
   
+  private func setUpVentEntity(in ventEntity: Entity) {
+    if let ventgrill = ventEntity.findEntity(named: "CubeVent_001") {
+      ventgrill.components.set(InputTargetComponent())
+      ventgrill.generateCollisionShapes(recursive: true)
+      
+      print("환풍구에 인터렉션 설정 완료")
+    } else {
+      print("환풍구에 인터렉션 설정 실패")
+    }
+  }
+  
   private func openBox() {
     guard let boxEntity = rootEntity.children.first?.children.first?.findEntity(named: "Box") else {
       print("애니메이션 부모 엔티티 Box 찾기 실패")
@@ -383,6 +407,19 @@ final class RoomViewModel {
       DispatchQueue.main.asyncAfter(deadline: .now() + 1.7) {
         self.isPresented = true
       }
+    }
+  }
+  
+  func openVent() {
+    guard let ventEntity = rootEntity.children.first?.children.first?.findEntity(named: "AirVent3") else {
+      print("애니메이션 부모 엔티티 AirVent3 찾기 실패")
+      return
+    }
+    if let openAirVent = ventEntity.findEntity(named: "CubeVent_001") {
+      print("환풍구 그릴 찾음")
+      openAirVent.applyTapForBehaviors()
+    } else {
+      print("환풍구 그릴 못찾음")
     }
   }
   
