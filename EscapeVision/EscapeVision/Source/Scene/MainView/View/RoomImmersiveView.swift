@@ -11,8 +11,9 @@ import RealityKit
 import RealityKitContent
 
 struct RoomImmersiveView: View {
-  @Environment(RoomViewModel.self) private var viewModel
   @Environment(AppModel.self) private var appModel
+  
+  @State private var viewModel = RoomViewModel.shared
   
   @State private var attachModel = AttachViewModel.shared
   @State private var lightManager = LightManager.shared
