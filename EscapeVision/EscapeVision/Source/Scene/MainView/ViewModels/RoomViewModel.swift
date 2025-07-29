@@ -64,7 +64,7 @@ final class RoomViewModel {
       print("테스트 박스 설정 실패")
     }
     
-    if let machineTest = roomEntity.findEntity(named: "Machine_v06") {
+    if let machineTest = roomEntity.findEntity(named: "Monitor06_002") {
       setUpMonitorEntity(in: machineTest)
       print("모니터 설정 성공")
     } else {
@@ -205,7 +205,7 @@ final class RoomViewModel {
   }
   
   private func setUpMonitorEntity(in machineEntity: Entity) {
-    if let lock = machineEntity.findEntity(named: "Cube_007") {
+    if let lock = machineEntity.findEntity(named: "Cube_008") {
       lock.components.set(InputTargetComponent())
       lock.generateCollisionShapes(recursive: true)
       

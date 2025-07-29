@@ -34,7 +34,7 @@ struct TapGesture: Gesture {
       showModal = true
       print("모달 상태 변경: \(showModal)")
       
-    case "Cube_005":
+    case "Cube_008":
       print("모니터 패널 클릭됨")
       showModal.toggle()
       print("모달 상태 변경: \(showModal)")

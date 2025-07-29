@@ -31,7 +31,7 @@ struct TapGestureObject: Gesture {
     case "Sphere_004":
       print("서랍 클릭됨")
       NotificationCenter.default.post(name: NSNotification.Name("openDrawer"), object: nil)
-    case "Cube_007":
+    case "Cube_07":
       print("서랍 손잡이 클릭됨")
     default:
       break
