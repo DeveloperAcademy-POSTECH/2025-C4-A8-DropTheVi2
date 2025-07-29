@@ -36,6 +36,4 @@ struct EscapeTestApp: App {
               .animation(.easeInOut, value: appModel.appState)
       }
     }
-    .immersionStyle(selection: .constant(.mixed), in: .mixed)
-  }
 }
