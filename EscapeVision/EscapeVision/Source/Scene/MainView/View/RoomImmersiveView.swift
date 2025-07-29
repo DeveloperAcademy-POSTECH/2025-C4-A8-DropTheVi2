@@ -13,6 +13,7 @@ import RealityKitContent
 struct RoomImmersiveView: View {
   @Environment(RoomViewModel.self) private var viewModel
   @State private var attachModel = AttachViewModel.shared
+  @State private var lightManager = LightManager.shared
   private let particleManager = ParticleManager.shared
   
   // Legacy 손 추적 모달 상태
@@ -21,15 +22,16 @@ struct RoomImmersiveView: View {
   private let machinePosition = SIMD3<Float>(1.23308, 1.05112, -0.69557) // 모니터 앞으로 띄우는 좌표
   @State private var showMonitorModal: Bool = false
   @State private var monitorOpacity: Double = 0.0
-  private let controlMonitorPosition = SIMD3<Float>(1.7007, 0.94853, -0.58316) // 조작 모니터 화면 위치 좌표 y + 0.5
-  private let patientMonitorPosition = SIMD3<Float>(1.62414, 1.21879, 0.05951) // 환자 모니터 화면 위치 좌표 y + 0.4
+  private let controlMonitorPosition = SIMD3<Float>(1.61993, 1.065, -0.59932) // 조작 모니터 화면 위치 좌표 y + 0.5
+  private let patientMonitorPosition = SIMD3<Float>(1.5828, 1.31, -0.005) // x-2
   private let particlePosition = SIMD3<Float>(0.81441, 0.57728, -0.64016) // 파티클 좌표
-  
-  
+
   var body: some View {
     RealityView { content, attachments in
       await viewModel.setup()
       content.add(viewModel.rootEntity)
+      
+      lightManager.setupWhiteOutLight(in: content)
       
       // ARKit 상태 진단 로그
       print("🎯 [RoomImmersiveView] ARKit 세션 초기화 완료")
@@ -75,7 +77,7 @@ struct RoomImmersiveView: View {
           at: SIMD3(0, controlMonitorPosition.y, 0),
           from: controlMonitorPosition, relativeTo: nil
         )
-        controlMonitorAttachment.orientation = simd_quatf(angle: ((-90.0 + 15) * .pi / 180), axis: SIMD3(0, 1, 0))
+        controlMonitorAttachment.orientation = simd_quatf(angle: ((-90.0 + 20) * .pi / 180), axis: SIMD3(0, 1, 0))
         
         content.add(controlMonitorAttachment)
       }
@@ -144,17 +146,21 @@ struct RoomImmersiveView: View {
       Attachment(id: "controlMonitor") {
         GasMonitorView()
           .aspectRatio(1920.0 / 1175.0, contentMode: .fit)
-          .frame(width: 680)
+          .frame(width: 800)
       }
       
       Attachment(id: "patientMonitor") {
-        GasMonitorView()
-          .aspectRatio(1920.0 / 1175.0, contentMode: .fit)
+        Image("A7_Monitor")
+          .resizable()
+          .aspectRatio(1920.0 / 1350.0, contentMode: .fit)
           .frame(width: 700)
       }
     }
     .task {
       await viewModel.setup()
+    }
+    .onDisappear {
+      lightManager.cleanup()
     }
     .gesture(
       TapGesture(target: "Plane_008", showModal: $attachModel.showPasswordModal)
@@ -179,6 +185,16 @@ struct RoomImmersiveView: View {
     .simultaneousGesture(
       TapGestureObject(
         target: "J_2b17_001"
+      )
+    )
+    .simultaneousGesture(
+      TapGestureObject(
+        target: "Sphere_004"
+      )
+    )
+    .simultaneousGesture(
+      TapGestureObject(
+        target: "Cube_007"
       )
     )
     .simultaneousGesture(
@@ -289,6 +305,19 @@ struct RoomImmersiveView: View {
       LastLog.lastPinchStatus = currentPinchStatus
     }
   }
+  
+  private func startWhiteOutSequence() {
+      print("🎬 WhiteOut 시퀀스 시작")
+      
+      // LightManager를 통한 WhiteOut 효과 시작
+      lightManager.startWhiteOutEffect { [weak appModel] in
+        // WhiteOut 효과 완료 후 메인 메뉴로 전환
+        Task { @MainActor in
+          try? await Task.sleep(nanoseconds: 5_000_000_000)
+          appModel?.showMainMenu()
+        }
+      }
+    }
 }
 
 // MARK: - Extensions

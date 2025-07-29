@@ -136,8 +136,12 @@ final class RoomViewModel {
     print("RoomViewModel anchor 설정 성공")
     
     NotificationCenter.default.addObserver(forName: Notification.Name("openBox"), object: nil, queue: .main) { _ in
-      print("알림 수신")
+      print("박스 알림 수신")
       self.openBox()
+    }
+    NotificationCenter.default.addObserver(forName: Notification.Name("openDrawer"), object: nil, queue: .main) { _ in
+      print("서랍 알림 수신")
+      self.openDrawer()
     }
   }
 
@@ -147,7 +151,7 @@ final class RoomViewModel {
     // 전체 씬 불러오기
     guard
       let roomEntity = try? await Entity(
-        named: "Test3",
+        named: "Final",
         in: realityKitContentBundle
       )
     else {
@@ -162,7 +166,7 @@ final class RoomViewModel {
       print("테스트 박스 설정 실패")
     }
     
-    if let machineTest = roomEntity.findEntity(named: "Machine_v06") {
+    if let machineTest = roomEntity.findEntity(named: "Machine_v05") {
       setUpMonitorEntity(in: machineTest)
       print("모니터 설정 성공")
     } else {
@@ -178,7 +182,7 @@ final class RoomViewModel {
       print("❌ RoomViewModel: Fog_Particle_1을 찾을 수 없음")
     }
     
-    if let fileEntity = roomEntity.findEntity(named: "File1") {
+    if let fileEntity = roomEntity.findEntity(named: "FileHolder") {
       setUpFileEntity(in: fileEntity)
       print("\(fileEntity): 파일 엔티티 찾음")
     } else {
@@ -190,6 +194,20 @@ final class RoomViewModel {
       print("문고리 찾기 성공")
     } else {
       print("문고리 찾기 실패")
+    }
+    
+    if let drawer = roomEntity.findEntity(named: "Drawer1") {
+      setUpDrawerEntity(in: drawer)
+      print("책상 서랍 찾기 성공")
+    } else {
+      print("책상 서랍 찾기 실패")
+    }
+    
+    if let drawerKnob = roomEntity.findEntity(named: "Knob1") {
+      setUpKnobEntity(in: drawerKnob)
+      print("책상 서랍 손잡이 찾기 성공")
+    } else {
+      print("책상 서랍 손잡이 찾기 실패")
     }
     
     anchor.addChild(roomEntity)
@@ -307,6 +325,28 @@ final class RoomViewModel {
     }
   }
   
+  private func setUpDrawerEntity(in drawerEntity: Entity) {
+    if let drawer = drawerEntity.findEntity(named: "Cube_007") {
+      drawer.components.set(InputTargetComponent())
+      drawer.generateCollisionShapes(recursive: true)
+      
+      print("문고리에 인터렉션 설정 완료")
+    } else {
+      print("문고리에 인터렉션 설정 실패")
+    }
+  }
+  
+  private func setUpKnobEntity(in knobEntity: Entity) {
+    if let knob = knobEntity.findEntity(named: "Sphere_004") {
+      knob.components.set(InputTargetComponent())
+      knob.generateCollisionShapes(recursive: true)
+      
+      print("문고리에 인터렉션 설정 완료")
+    } else {
+      print("문고리에 인터렉션 설정 실패")
+    }
+  }
+  
   private func setUpMonitorEntity(in machineEntity: Entity) {
     if let lock = machineEntity.findEntity(named: "Cube_007") {
       lock.components.set(InputTargetComponent())
@@ -343,6 +383,22 @@ final class RoomViewModel {
       DispatchQueue.main.asyncAfter(deadline: .now() + 1.7) {
         self.isPresented = true
       }
+    }
+  }
+  
+  private func openDrawer() {
+    guard let drawerEntity = rootEntity.children.first?.children.first?.findEntity(named: "Desk") else {
+      print("Desk 애니메이션 부모 계층 찾기 실패")
+      return
+    }
+    if let openKeypad = drawerEntity.findEntity(named: "Cube_007"),
+       let openLid = drawerEntity.findEntity(named: "Sphere_004") {
+      print("서랍, 손잡이 둘다 찾음")
+      openKeypad.applyTapForBehaviors()
+      openLid.applyTapForBehaviors()
+      
+    } else {
+      print("서랍 손잡이 못찾음")
     }
   }
   

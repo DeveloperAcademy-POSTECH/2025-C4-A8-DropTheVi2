@@ -5,29 +5,47 @@
 //  Created by PenguinLand on 7/28/25.
 //
 
+import Foundation
 import SwiftUI
 
 struct MainThemeView: View {
-  @Environment(AppModel.self) private var appmodel
-  
-  var body: some View {
-    VStack {
-      Text("MainView")
-      Button(action: {
-            appmodel.startGame()
-      }, label: {
-        Text("게임 시작")
-          .font(.system(size: 24, weight: .bold))
-          .padding(.vertical, 15)
-          .padding(.horizontal, 10)
-      })
+    @Environment(AppModel.self) private var appModel
+    var body: some View {
+        ZStack {
+            Image("IntroImage")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .cornerRadius(46)
+                .edgesIgnoringSafeArea(.all)
+            
+            VStack {
+                if appModel.appState == .menu {
+                    Button(action: {
+                        appModel.startLoad()
+                    }, label: {
+                        Text("Game Start")
+                            .font(.system(size: 32, weight: .bold))
+                            .padding(.vertical, 15)
+                            .padding(.horizontal, 10)
+                    })
+                } else if appModel.appState == .loading {
+                    ProgressView()
+                        .onAppear {
+                            Task {
+                                try await Task.sleep(nanoseconds: 9_000_000_000)
+                                await MainActor.run {
+                                    appModel.startGame()
+                                }
+                            }
+                        }
+                }
+            }
+            .padding(.top, 400)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
     }
-    .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .glassBackgroundEffect()
-  }
 }
-
 #Preview {
-  MainThemeView()
-    .environment(AppModel())
+    MainThemeView()
+        .environment(AppModel())
 }

@@ -10,7 +10,7 @@ import RealityKit
 
 // MARK: - Particle Manager
 @MainActor
-class ParticleManager: ObservableObject {
+final class ParticleManager: ObservableObject {
   static let shared = ParticleManager()
   
   private var particleEntity: Entity?
