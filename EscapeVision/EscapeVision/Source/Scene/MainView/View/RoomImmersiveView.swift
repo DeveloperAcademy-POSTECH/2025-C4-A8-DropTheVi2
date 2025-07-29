@@ -11,6 +11,7 @@ import RealityKit
 import RealityKitContent
 
 struct RoomImmersiveView: View {
+  @Environment(AppModel.self) private var appModel
   @Environment(RoomViewModel.self) private var viewModel
   @State private var attachModel = AttachViewModel.shared
   @State private var lightManager = LightManager.shared
@@ -155,9 +156,6 @@ struct RoomImmersiveView: View {
           .aspectRatio(1920.0 / 1350.0, contentMode: .fit)
           .frame(width: 700)
       }
-    }
-    .task {
-      await viewModel.setup()
     }
     .onDisappear {
       lightManager.cleanup()

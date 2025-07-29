@@ -65,6 +65,10 @@ class AppModel {
     
     func resetToMain() {
         print("🎮 메인으로 돌아가기")
+        
+        // RoomViewModel 리셋은 나중에 추가
+        // RoomViewModel.shared.resetSetup()
+        
         appState = .menu
     }
     

@@ -11,6 +11,7 @@ import SwiftUI
 struct EscapeTestApp: App {
   
   @State private var appModel = AppModel()
+  @State private var roomViewModel = RoomViewModel.shared
   
   var body: some Scene {
     WindowGroup {
@@ -28,6 +29,7 @@ struct EscapeTestApp: App {
       } else if appModel.appState == .playing {
         RoomImmersiveView()
           .environment(appModel)
+          .environment(roomViewModel)
           .transition(.opacity.combined(with: .scale))
       } else if appModel.appState == .black {
           BlackImmersiveView()
