@@ -25,8 +25,8 @@ struct RoomImmersiveView: View {
   private let machinePosition = SIMD3<Float>(1.23308, 1.05112, -0.69557) // 모니터 앞으로 띄우는 좌표
   @State private var showMonitorModal: Bool = false
   @State private var monitorOpacity: Double = 0.0
-  private let controlMonitorPosition = SIMD3<Float>(1.61993, 1.065, -0.59932) // 조작 모니터 화면 위치 좌표 y + 0.5
-  private let patientMonitorPosition = SIMD3<Float>(1.5828, 1.31, -0.005) // x-2
+  private let controlMonitorPosition = SIMD3<Float>(1.6407, 0.69853, -0.58316) // 조작 모니터 화면 위치 좌표 y + 0.5
+  private let patientMonitorPosition = SIMD3<Float>(1.56414, 0.90879, 0.05951) // 환자 모니터 화면 위치 좌표 y + 0.4
   private let particlePosition = SIMD3<Float>(0.81441, 0.57728, -0.64016) // 파티클 좌표
 
   var body: some View {
@@ -194,11 +194,11 @@ struct RoomImmersiveView: View {
     )
     .simultaneousGesture(
       TapGestureObject(
-        target: "Cube_007"
+        target: "Cube_07"
       )
     )
     .simultaneousGesture(
-      TapGesture(target: "Cube_007", showModal: $showMonitorModal)
+      TapGesture(target: "Cube_008", showModal: $showMonitorModal)
     )
     .sheet(isPresented: $showPasswordModal) {
       PasswordModalView(isPresented: $showPasswordModal, inputPassword: "")
