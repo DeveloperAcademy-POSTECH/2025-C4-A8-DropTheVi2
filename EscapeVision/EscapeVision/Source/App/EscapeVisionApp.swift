@@ -15,7 +15,7 @@ struct EscapeTestApp: App {
   var body: some Scene {
     WindowGroup {
       ContentView()
-        .environment(appModel) 
+        .environment(appModel)
     }
     .windowStyle(.plain)
     
@@ -30,10 +30,11 @@ struct EscapeTestApp: App {
           .environment(appModel)
           .transition(.opacity.combined(with: .scale))
       } else if appModel.appState == .black {
-          BlackImmersiveView()
-              .environment(appModel)
-              .transition(.opacity.combined(with: .scale))
-              .animation(.easeInOut, value: appModel.appState)
+        BlackImmersiveView()
+          .environment(appModel)
+          .transition(.opacity.combined(with: .scale))
+          .animation(.easeInOut, value: appModel.appState)
       }
     }
+  }
 }
