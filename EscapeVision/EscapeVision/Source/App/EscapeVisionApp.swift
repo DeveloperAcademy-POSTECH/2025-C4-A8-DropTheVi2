@@ -15,8 +15,9 @@ struct EscapeTestApp: App {
   var body: some Scene {
     WindowGroup {
       ContentView()
-        .environment(appModel)
+        .environment(appModel) 
     }
+    .windowStyle(.plain)
     
     ImmersiveSpace(id: appModel.immersiveSpaceID) {
       // 게임 상태에 따라 다른 View 표시
@@ -28,6 +29,11 @@ struct EscapeTestApp: App {
         RoomImmersiveView()
           .environment(appModel)
           .transition(.opacity.combined(with: .scale))
+      } else if appModel.appState == .black {
+          BlackImmersiveView()
+              .environment(appModel)
+              .transition(.opacity.combined(with: .scale))
+              .animation(.easeInOut, value: appModel.appState)
       }
     }
     .immersionStyle(selection: .constant(.mixed), in: .mixed)

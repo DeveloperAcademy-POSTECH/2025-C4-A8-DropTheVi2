@@ -24,7 +24,7 @@ struct RoomImmersiveView: View {
   private let controlMonitorPosition = SIMD3<Float>(1.61993, 1.065, -0.59932) // 조작 모니터 화면 위치 좌표 y + 0.5
   private let patientMonitorPosition = SIMD3<Float>(1.5828, 1.31, -0.005) // x-2
   private let particlePosition = SIMD3<Float>(0.81441, 0.57728, -0.64016) // 파티클 좌표
-  
+
   var body: some View {
     RealityView { content, attachments in
       content.add(viewModel.rootEntity)
@@ -158,6 +158,16 @@ struct RoomImmersiveView: View {
     .simultaneousGesture(
       TapGestureObject(
         target: "J_2b17_001"
+      )
+    )
+    .simultaneousGesture(
+      TapGestureObject(
+        target: "Sphere_004"
+      )
+    )
+    .simultaneousGesture(
+      TapGestureObject(
+        target: "Cube_007"
       )
     )
     .simultaneousGesture(
