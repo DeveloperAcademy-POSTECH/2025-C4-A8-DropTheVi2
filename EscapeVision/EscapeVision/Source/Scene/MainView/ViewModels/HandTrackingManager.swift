@@ -58,6 +58,16 @@ final class HandTrackingManager {
       return 
     }
     
+    // HandleDetached가 kinematic 모드(바닥 착지 후 고정 상태)인지 확인
+    if handleDetached.components.has(PhysicsBodyComponent.self) {
+      let physicsBody = handleDetached.components[PhysicsBodyComponent.self]!
+      if physicsBody.mode == .kinematic && !physicsBody.isAffectedByGravity {
+        // 바닥에 착지하여 고정된 상태 - 손 움직임에 반응하지 않음
+        print("🛡️ [손 추적 차단] HandleDetached가 바닥에 고정된 상태 - 손 움직임 무시")
+        return
+      }
+    }
+    
     // 핀치 모드 우선 처리
     if isPinchMode {
       updatePinchMode(handleDetached: handleDetached)
@@ -210,6 +220,16 @@ final class HandTrackingManager {
   func updatePinchMode(handleDetached: Entity, deltaTime: Float = 0.016) {
     guard isPinchMode else { return }
     
+    // HandleDetached가 kinematic 모드(바닥 착지 후 고정 상태)인지 확인
+    if handleDetached.components.has(PhysicsBodyComponent.self) {
+      let physicsBody = handleDetached.components[PhysicsBodyComponent.self]!
+      if physicsBody.mode == .kinematic && !physicsBody.isAffectedByGravity {
+        // 바닥에 착지하여 고정된 상태 - 손 움직임에 반응하지 않음
+        print("🛡️ [핀치 모드 차단] HandleDetached가 바닥에 고정된 상태 - 손 움직임 무시")
+        return
+      }
+    }
+    
     let currentPosition = handleDetached.position
     let direction = targetHandPosition - currentPosition
     let distance = length(direction)
@@ -355,8 +375,9 @@ final class HandTrackingManager {
   func dropToFloor(handleDetached: Entity) {
     let currentPosition = handleDetached.position
     
-    // 바닥 위치 재확인
-    updateFloorPosition()
+    // 바닥 위치를 고정된 안전한 값으로 설정 (매번 재계산하지 않음)
+    // 이를 통해 HandleDetached가 점점 더 아래로 떨어지는 문제 해결
+    let fixedFloorY: Float = 0.0  // 고정된 바닥 높이
     
     // 확실한 안전을 위해 절대적으로 안전한 높이 사용
     // 바닥 계산에 의존하지 않고 충분히 높은 위치에 배치
@@ -397,7 +418,7 @@ final class HandTrackingManager {
     if let handPosition = RealHandTrackingManager.shared.getCurrentHandPosition() {
       // 손의 월드 위치에서 시작해서 바로 아래 바닥으로 떨어뜨리기
       startPosition = handPosition
-      dropPosition = SIMD3<Float>(handPosition.x, floorY + handleHeight, handPosition.z)
+      dropPosition = SIMD3<Float>(handPosition.x, fixedFloorY + handleHeight, handPosition.z)
       print("🤏 [손 위치 기준] 손 위치: \(String(format: "%.3f,%.3f,%.3f", handPosition.x, handPosition.y, handPosition.z))")
       
       // HandleDetached를 먼저 손 위치로 순간 이동 (자연스러운 "놓기" 효과)
@@ -406,7 +427,7 @@ final class HandTrackingManager {
     } else {
       // 손 위치를 못 찾으면 현재 HandleDetached 위치 기준
       startPosition = currentPosition
-      dropPosition = SIMD3<Float>(currentPosition.x, floorY + handleHeight, currentPosition.z)
+      dropPosition = SIMD3<Float>(currentPosition.x, fixedFloorY + handleHeight, currentPosition.z)
       print("⚠️ [Fallback] 손 위치를 찾지 못해 HandleDetached 현재 위치 사용")
     }
     
@@ -418,12 +439,12 @@ final class HandTrackingManager {
     
     let targetPosition = dropPosition
     
-    print("🏠 [바닥 정보] floorY: \(String(format: "%.3f", floorY))m, handleHeight: \(String(format: "%.3f", handleHeight))m")
+    print("🏠 [바닥 정보] fixedFloorY: \(String(format: "%.3f", fixedFloorY))m, handleHeight: \(String(format: "%.3f", handleHeight))m")
     print("🧮 [절대 안전 배치 실행]")
-    print("   - 바닥 표면 Y좌표: \(String(format: "%.3f", floorY))m")
+    print("   - 바닥 표면 Y좌표: \(String(format: "%.3f", fixedFloorY))m (고정값)")
     print("   - 절대 안전 높이: \(String(format: "%.3f", handleHeight))m")
-    print("   - HandleDetached pivot 목표 Y좌표: \(String(format: "%.3f", floorY + handleHeight))m")
-    print("   - 계산식: floorY + 안전높이 = \(String(format: "%.3f", floorY)) + \(String(format: "%.3f", handleHeight)) = \(String(format: "%.3f", floorY + handleHeight))m")
+    print("   - HandleDetached pivot 목표 Y좌표: \(String(format: "%.3f", fixedFloorY + handleHeight))m")
+    print("   - 계산식: fixedFloorY + 안전높이 = \(String(format: "%.3f", fixedFloorY)) + \(String(format: "%.3f", handleHeight)) = \(String(format: "%.3f", fixedFloorY + handleHeight))m")
     print("🪂 [안전 낙하] 시작 위치: (\(String(format: "%.3f", startPosition.x)), \(String(format: "%.3f", startPosition.y)), \(String(format: "%.3f", startPosition.z)))")
     print("🎯 [안전 착지] 목표 위치: (\(String(format: "%.3f", targetPosition.x)), \(String(format: "%.3f", targetPosition.y)), \(String(format: "%.3f", targetPosition.z)))")
     print("📏 [낙하 거리] Y축 이동: \(String(format: "%.3f", startPosition.y - targetPosition.y))m")

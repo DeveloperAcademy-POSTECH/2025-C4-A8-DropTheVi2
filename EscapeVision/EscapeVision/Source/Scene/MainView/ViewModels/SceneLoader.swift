@@ -92,6 +92,8 @@ final class SceneLoader {
     createFallbackScene(into: anchor)
   }
   
+  // MARK: - Object Loading (중복 방지를 위해 주석처리)
+  /*
   func loadObject(into anchor: AnchorEntity) async {
     guard let clipBoard = try? await ModelEntity(named: "Clipboard") else {
       print("클립보드 불러오기 실패")
@@ -102,6 +104,7 @@ final class SceneLoader {
     EntityUtilities.setDragEntity(clipBoard, name: "Clipboard")
     anchor.addChild(clipBoard)
   }
+  */
   
   // MARK: - Private Methods
   
