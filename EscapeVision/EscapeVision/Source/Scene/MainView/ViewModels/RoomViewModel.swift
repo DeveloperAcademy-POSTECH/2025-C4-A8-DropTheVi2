@@ -170,6 +170,13 @@ final class RoomViewModel {
       print("테스트 박스 설정 실패")
     }
     
+//    if let blakcEntity = roomEntity.findEntity(named: "") {
+//      setUpLockEntity(in: boxTest)
+//      print("박스 설정 성공")
+//    } else {
+//      print("테스트 박스 설정 실패")
+//    }
+    
     if let machineTest = roomEntity.findEntity(named: "Monitor06_002") {
       setUpMonitorEntity(in: machineTest)
       print("모니터 설정 성공")
@@ -221,7 +228,22 @@ final class RoomViewModel {
     } else {
       print("환풍구 찾기 실패")
     }
-
+    
+    guard let blackDomeEntity = roomEntity.findEntity(named: "SkyDome") else {
+      print("블랙돔 엔티티 불러오기 실패")
+      return
+    }
+//
+//    guard var opacityComponent = blackDomeEntity.components[OpacityComponent.self] else {
+//                print("❌ SkyDome에 OpacityComponent가 없습니다. Reality Composer Pro에서 추가했는지 확인하세요.")
+//                return
+//    }
+    
+    Task { @MainActor in
+        try await Task.sleep(nanoseconds: 3_000_000_000)
+//      opacityComponent.opacity = 0
+        blackDomeEntity.removeFromParent()
+    }
     
     anchor.addChild(roomEntity)
   }
@@ -456,6 +478,35 @@ final class RoomViewModel {
     } else {
       print("서랍 손잡이 못찾음")
     }
+  }
+  
+  func fadeSkyDome(duration: Float = 3.0, completion: (() -> Void)? = nil) {
+    guard let skyDome = rootEntity.children.first?.findEntity(named: "SkyDome"),
+            var opacityComponent = skyDome.components[OpacityComponent.self] else {
+          print("❌ SkyDome 또는 OpacityComponent를 찾을 수 없습니다.")
+          return
+      }
+      
+      let startTime = Date()
+      let targetDuration = TimeInterval(duration)
+      let startOpacity = opacityComponent.opacity
+      
+      let timer = Timer.scheduledTimer(withTimeInterval: 0.016, repeats: true) { timer in
+          let elapsed = Date().timeIntervalSince(startTime)
+          let progress = min(elapsed / targetDuration, 1.0)
+          
+          let currentOpacity = startOpacity * (1.0 - Float(progress))
+          opacityComponent.opacity = currentOpacity
+          skyDome.components.set(opacityComponent)
+          
+          if progress >= 1.0 {
+              timer.invalidate()
+              print("✅ SkyDome 페이드아웃 완료!")
+              completion?()
+          }
+      }
+      
+      RunLoop.current.add(timer, forMode: .common)
   }
 }
 
