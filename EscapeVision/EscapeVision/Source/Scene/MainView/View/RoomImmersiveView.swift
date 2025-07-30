@@ -152,7 +152,7 @@ struct RoomImmersiveView: View {
       Attachment(id: "controlMonitor") {
         GasMonitorView()
           .aspectRatio(1920.0 / 1175.0, contentMode: .fit)
-          .frame(width: 800)
+          .frame(width: 730)
       }
       
       Attachment(id: "patientMonitor") {
@@ -215,10 +215,58 @@ struct RoomImmersiveView: View {
       print("   3. HandleDetached를 드래그하여 이동")
       print("   4. 최대 이동 거리: ±1.5미터")
       print("   5. 손 움직임이 직접 HandleDetached 위치에 반영")
+      
+      // 🎯 openVent 알림 구독 추가 (기존 onAppear 내용에 추가)
+      NotificationCenter.default.addObserver(
+        forName: NSNotification.Name("openVent"),
+        object: nil,
+        queue: .main
+      ) { _ in
+        print("🎯 [WhiteOut 트리거] 01100 패턴 달성!")
+        
+        // 극적인 WhiteOut 효과 실행
+        lightManager.startDramaticWhiteOutEffect {
+          print("🎬 [WhiteOut 완료] 메인 메뉴로 전환")
+          
+          DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+            print("🎬 [메뉴 전환] 5초 대기 완료 - 메인 메뉴로 이동")
+            appModel.showMainMenu()
+          }
+        }
+      }
     }
     .onDisappear {
       print("🔚 [RoomImmersiveView] onDisappear - 몰입형 공간 종료")
-      lightManager.cleanup()
+      
+        // 1. 알림 구독 해제
+        NotificationCenter.default.removeObserver(self)
+        
+        // 2. 매니저들 정리
+        particleManager.stopParticle()
+        lightManager.cleanup()
+        
+        // 3. 🧹 핵심: 모든 Entity 완전 제거
+        Task { @MainActor in
+          // rootEntity 완전 초기화
+          viewModel.rootEntity.children.removeAll()
+          viewModel.rootEntity.removeFromParent()
+          viewModel.rootEntity = Entity()
+          
+          // viewModel 상태 리셋
+          viewModel.isPresented = false
+        }
+        
+        // 4. 로컬 상태 초기화
+        showPasswordModal = false
+        showMonitorModal = false
+        monitorOpacity = 0.0
+        
+        // AttachModel 상태 리셋
+        attachModel.showPasswordModal = false
+        attachModel.showFileModal = false
+        
+        print("✅ [완전 정리] 새 게임 준비 완료!")
+      
     }
   }
   
