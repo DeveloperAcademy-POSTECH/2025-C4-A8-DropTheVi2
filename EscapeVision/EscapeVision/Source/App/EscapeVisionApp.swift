@@ -11,11 +11,15 @@ import SwiftUI
 struct EscapeTestApp: App {
   
   @State private var appModel = AppModel()
+  @State private var showLicenses = true
   
   var body: some Scene {
     WindowGroup {
       ContentView()
         .environment(appModel)
+        .onAppear {
+          clearState()
+        }
     }
     .windowStyle(.plain)
     
@@ -29,12 +33,13 @@ struct EscapeTestApp: App {
         RoomImmersiveView()
           .environment(appModel)
           .transition(.opacity.combined(with: .scale))
-      } else if appModel.appState == .black {
-        BlackImmersiveView()
-          .environment(appModel)
-          .transition(.opacity.combined(with: .scale))
-          .animation(.easeInOut, value: appModel.appState)
       }
     }
+  }
+  
+  private func clearState() {
+    appModel.appState = .splash
+    appModel.immersiveSpaceState = .closed
+    appModel.isWhiteoutActive = false
   }
 }

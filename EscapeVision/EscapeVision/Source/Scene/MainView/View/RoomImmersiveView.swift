@@ -16,7 +16,7 @@ struct RoomImmersiveView: View {
   @State private var viewModel = RoomViewModel.shared
   
   @State private var attachModel = AttachViewModel.shared
-  @State private var lightManager = LightManager.shared
+  private var lightManager = LightManager.shared
   private let particleManager = ParticleManager.shared
   
   // Legacy 손 추적 모달 상태
@@ -26,9 +26,12 @@ struct RoomImmersiveView: View {
   @State private var showMonitorModal: Bool = false
   @State private var monitorOpacity: Double = 0.0
   private let controlMonitorPosition = SIMD3<Float>(1.6407, 1.04853, -0.58316) // 조작 모니터 화면 위치 좌표 y + 0.5
-  private let patientMonitorPosition = SIMD3<Float>(1.56414, 1.25879, 0.05951) // 환자 모니터 화면 위치 좌표 y + 0.4
-  private let particlePosition = SIMD3<Float>(0.81441, 0.57728, -0.64016) // 파티클 좌표
-
+  private let patientMonitorPosition = SIMD3<Float>(1.56414, 1.25879, 0.02) // 환자 모니터 화면 위치 좌표 y + 0.4
+  private let particlePosition = SIMD3<Float>(0.80041, 0.57728, -0.62416) // 파티클 좌표
+  
+  // 화이트아웃 시작 지점에서 해당 메서드 호출
+  // lightManager.startDramaticWhiteOutEffect()
+  
   var body: some View {
     RealityView { content, attachments in
       await viewModel.setup()
@@ -286,9 +289,9 @@ struct RoomImmersiveView: View {
     let currentPinchStatus = handTrackingManager.isPinchModeActive
     
     // 5초마다 또는 상태가 변경될 때만 로그 출력
-    if timeSinceLastLog > 5.0 || 
-       LastLog.lastStatus != handTrackingManager.isHandTracking ||
-       LastLog.lastPinchStatus != currentPinchStatus {
+    if timeSinceLastLog > 5.0 ||
+        LastLog.lastStatus != handTrackingManager.isHandTracking ||
+        LastLog.lastPinchStatus != currentPinchStatus {
       
       let handleDetachedExists = handleManager.getHandleDetached() != nil
       
@@ -307,19 +310,6 @@ struct RoomImmersiveView: View {
       LastLog.lastPinchStatus = currentPinchStatus
     }
   }
-  
-  private func startWhiteOutSequence() {
-      print("🎬 WhiteOut 시퀀스 시작")
-      
-      // LightManager를 통한 WhiteOut 효과 시작
-      lightManager.startWhiteOutEffect { [weak appModel] in
-        // WhiteOut 효과 완료 후 메인 메뉴로 전환
-        Task { @MainActor in
-          try? await Task.sleep(nanoseconds: 5_000_000_000)
-          appModel?.showMainMenu()
-        }
-      }
-    }
 }
 
 // MARK: - Extensions
