@@ -147,12 +147,11 @@
       [
         "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
         "Root",
-        "OpenLid",
+        "OpenLidd",
         "Track"
       ],
       {
-        "disallowsFraming" : false,
-        "isExpanded" : false,
+        "isExpanded" : true,
         "isLocked" : false
       },
       [
@@ -172,6 +171,7 @@
         "FileHolder"
       ],
       {
+        "disallowsFraming" : false,
         "isExpanded" : true,
         "isLocked" : false
       },
@@ -188,8 +188,8 @@
       [
         "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
         "Root",
-        "OpenLidd",
-        "Track"
+        "File",
+        "FileHolder"
       ],
       {
         "isExpanded" : true,
@@ -243,7 +243,15 @@
         "Root",
         "BoxTest",
         "Box",
-        "Lid"
+        "Lock"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "BC411585-85AB-4E63-A88A-07376BBF70CC",
+        "Root"
       ],
       {
         "isExpanded" : true,
@@ -254,15 +262,7 @@
         "Root",
         "BoxTest",
         "Box",
-        "Lock"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "BC411585-85AB-4E63-A88A-07376BBF70CC",
-        "Root"
+        "Lid"
       ],
       {
         "isExpanded" : true,
@@ -440,6 +440,17 @@
         "Root",
         "AirVent3_only",
         "AirVent3"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
+        "Root",
+        "RoomScene",
+        "Desk",
+        "Desk"
       ],
       {
         "isExpanded" : true,

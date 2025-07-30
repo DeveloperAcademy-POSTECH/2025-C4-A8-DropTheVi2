@@ -38,6 +38,21 @@ struct MainThemeView: View {
                                 }
                             }
                         }
+                } else if appModel.appState == .playing {
+                    VStack(spacing: 20) {
+                        Text("Game Paused")
+                            .font(.system(size: 28, weight: .bold))
+                            .foregroundColor(.white)
+                        
+                        Button(action: {
+                            appModel.exitGame()
+                        }, label: {
+                            Text("Exit Game")
+                                .font(.system(size: 32, weight: .bold))
+                                .padding(.vertical, 15)
+                                .padding(.horizontal, 10)
+                        })
+                    }
                 }
             }
             .padding(.top, 400)
