@@ -35,6 +35,8 @@ struct HandleComponent: Component {
   }
 }
 
+// swiftlint:disable type_body_length
+
 @MainActor
 @Observable
 final class RoomViewModel {
@@ -180,13 +182,6 @@ final class RoomViewModel {
       print("테스트 박스 설정 실패")
     }
     
-//    if let blakcEntity = roomEntity.findEntity(named: "") {
-//      setUpLockEntity(in: boxTest)
-//      print("박스 설정 성공")
-//    } else {
-//      print("테스트 박스 설정 실패")
-//    }
-    
     if let machineTest = roomEntity.findEntity(named: "Monitor06_002") {
       setUpMonitorEntity(in: machineTest)
       print("모니터 설정 성공")
@@ -239,21 +234,23 @@ final class RoomViewModel {
       print("환풍구 찾기 실패")
     }
     
-    guard let blackDomeEntity = roomEntity.findEntity(named: "SkyDome") else {
-      print("블랙돔 엔티티 불러오기 실패")
-      return
+    if let blackDomeEntity = roomEntity.findEntity(named: "SkyDome") {
+      print("✅ SkyDome 엔티티 발견 - 3초 후 제거 예정")
+      
+      // 🔧 개선: 이미 @MainActor 컨텍스트이므로 Task 불필요
+      DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { [weak blackDomeEntity] in
+        guard let entity = blackDomeEntity else {
+          print("⚠️ SkyDome 엔티티가 이미 해제됨")
+          return
+        }
+        
+        entity.removeFromParent()
+        print("✅ SkyDome 제거 완료")
+      }
+    } else {
+      print("❌ SkyDome 엔티티를 찾을 수 없음")
     }
-//
-//    guard var opacityComponent = blackDomeEntity.components[OpacityComponent.self] else {
-//                print("❌ SkyDome에 OpacityComponent가 없습니다. Reality Composer Pro에서 추가했는지 확인하세요.")
-//                return
-//    }
-    
-    Task { @MainActor in
-        try await Task.sleep(nanoseconds: 3_000_000_000)
-//      opacityComponent.opacity = 0
-        blackDomeEntity.removeFromParent()
-    }
+
     
     anchor.addChild(roomEntity)
   }
