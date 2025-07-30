@@ -5,6 +5,7 @@
 //  Created by PenguinLand on 7/25/25.
 //
 import Foundation
+import SwiftUI
 
 final class GasMonitorViewModel: ObservableObject {
   static let shared = GasMonitorViewModel()
@@ -14,9 +15,12 @@ final class GasMonitorViewModel: ObservableObject {
   @Published var value3: Int = 0
   @Published var isActive: Bool = false
   
+  @State private var soundManager = SoundManager.shared
+  
   private func checkAnswer() {
     if value1 == 4 && value2 == 7 && value3 == 9 {
       isActive = true
+      soundManager.pausedSound(.gasAlert)
     }
   }
   

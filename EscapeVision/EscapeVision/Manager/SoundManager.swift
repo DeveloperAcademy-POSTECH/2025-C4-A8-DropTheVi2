@@ -26,6 +26,7 @@ final class SoundManager {
     case monitorsuccess = "monitor_success"
     case doorTap = "door_locked"
     case gasAlert = "gasAlert"
+    case ventOpen = "ventOpen"
   }
   // MARK: - 오디오 세션 설정
   private func setupAudioSession() {
@@ -63,5 +64,14 @@ final class SoundManager {
     player.volume = volume
     player.currentTime = 0
     player.play()
+  }
+  
+  func pausedSound(_ effect: Sound) {
+    guard let player = audioPlayers[effect.rawValue] else {
+      print("사운드 플레이어 없음")
+      return
+    }
+    player.stop()
+    player.currentTime = 0
   }
 }
