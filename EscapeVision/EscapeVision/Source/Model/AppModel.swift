@@ -31,7 +31,7 @@ class AppModel {
     }
     
     var immersiveSpaceState = ImmersiveSpaceState.closed
-    var appState = AppState.splash // 앱 시작 시 가이드라인부터
+    var appState = AppState.splash // 앱 시작 시 스플래시 화면부터
     
     var needsImmersiveSpace: Bool {
         return appState == .guideline || appState == .playing || appState == .black
