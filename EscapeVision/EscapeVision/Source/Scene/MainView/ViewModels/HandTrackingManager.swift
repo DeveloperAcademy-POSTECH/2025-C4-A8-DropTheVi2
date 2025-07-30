@@ -460,6 +460,13 @@ final class HandTrackingManager {
     Task { @MainActor in
       try? await Task.sleep(nanoseconds: 100_000_000) // 0.1초 대기
       
+      // 첫 번째 바닥 접촉 시점에 드롭 사운드 재생 (별도 태스크로 실행)
+      Task { @MainActor in
+        try? await Task.sleep(nanoseconds: 800_000_000) // 0.8초 후 (첫 번째 낙하 완료 시점)
+        SwitchDropSoundManager.shared.playSwitchDropSound()
+        print("🔊 [드롭 타이밍] HandleDetached 첫 번째 바닥 접촉 시점에 사운드 재생")
+      }
+      
       try await HandleBounceAnimator.shared.performBounceAnimation(
         handleDetached: handleDetached, 
         startPosition: startPosition, 
