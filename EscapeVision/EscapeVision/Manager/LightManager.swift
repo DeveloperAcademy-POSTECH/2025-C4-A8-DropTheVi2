@@ -221,8 +221,8 @@ final class LightManager {
     onCompletion: (() -> Void)? = nil
   ) {
     let startTime = Date()
-    let totalDuration: TimeInterval = 5.0
-    let slowPhase: TimeInterval = 3.0  // 처음 5초는 천천히
+    let totalDuration: TimeInterval = 7.0
+    let slowPhase: TimeInterval = 5.0  // 처음 5초는 천천히
     let fastPhase: TimeInterval = 2.0  // 마지막 2초는 급격히
     
     currentTimer = Timer.scheduledTimer(withTimeInterval: 0.016, repeats: true) { [weak self] timer in
@@ -240,12 +240,12 @@ final class LightManager {
         // 처음 3초: 100 → 50000 (천천히)
         let slowProgress = elapsed / slowPhase
         let easedSlowProgress = self.easeOut(Float(slowProgress))
-        currentIntensity = 100 + (50000 - 100) * easedSlowProgress
+        currentIntensity = 100 + (100000 - 100) * easedSlowProgress
       } else {
         // 마지막 2초: 50000 → 1000000 (급격히)
         let fastProgress = (elapsed - slowPhase) / fastPhase
         let easedFastProgress = self.easeIn(Float(fastProgress))
-        currentIntensity = 50000 + (1000000 - 50000) * easedFastProgress
+        currentIntensity = 100000 + (50000000 - 100000) * easedFastProgress
       }
       
       guard var lightComponent = entity.components[PointLightComponent.self] else {
