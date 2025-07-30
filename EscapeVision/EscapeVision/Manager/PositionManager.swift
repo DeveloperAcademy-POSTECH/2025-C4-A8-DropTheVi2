@@ -17,19 +17,19 @@ final class PositionManager {
   
   private let configurations: [AttachmentType: AttachmentConfig] = [
     .keypad: AttachmentConfig(
-      position: SIMD3(-0.83808, 0.97728, 1.10787),
+      position: SIMD3(-0.83808, 1.22728, 1.10787),
       lookAtY: 1.37728,
       rotationAngle: .pi,
       rotationAxis: SIMD3(0, 1, 0)
     ),
     .boxNote: AttachmentConfig(
-      position: SIMD3(-0.83808, 1.12728, 1.10787),
+      position: SIMD3(-0.83808, 1.47728, 1.10787),
       lookAtY: 1.37728,
       rotationAngle: .pi,
       rotationAxis: SIMD3(0, 1, 0)
     ),
     .file: AttachmentConfig(
-      position: SIMD3(-1.58947, 1.17728, 1.10787),
+      position: SIMD3(-1.58947, 1.52728, 1.10787),
       lookAtY: 1.37728,
       rotationAngle: .pi,
       rotationAxis: SIMD3(0, 1, 0)
