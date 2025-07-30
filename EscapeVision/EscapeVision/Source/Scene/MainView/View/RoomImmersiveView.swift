@@ -225,7 +225,8 @@ struct RoomImmersiveView: View {
         print("🎯 [WhiteOut 트리거] 01100 패턴 달성!")
         
         // 극적인 WhiteOut 효과 실행
-        lightManager.startDramaticWhiteOutEffect {
+        /*lightManager.startDramaticWhiteOutEffect*/
+        lightManager.startQuickWhiteOutEffect {
           print("🎬 [WhiteOut 완료] 메인 메뉴로 전환")
           
           DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
@@ -266,7 +267,6 @@ struct RoomImmersiveView: View {
         attachModel.showFileModal = false
         
         print("✅ [완전 정리] 새 게임 준비 완료!")
-      
     }
   }
   

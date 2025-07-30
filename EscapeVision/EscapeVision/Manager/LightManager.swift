@@ -86,7 +86,7 @@ final class LightManager {
     animateLightIntensity(
       entity: lightEntity,
       from: 100,
-      to: 100000000,
+      to: 1000000000,
       duration: 5.0,
       onCompletion: onCompletion
     )
@@ -107,7 +107,7 @@ final class LightManager {
     animateLightIntensity(
       entity: lightEntity,
       from: 100,
-      to: 500000,
+      to: 50000000,
       duration: 3.0,
       onCompletion: onCompletion
     )
