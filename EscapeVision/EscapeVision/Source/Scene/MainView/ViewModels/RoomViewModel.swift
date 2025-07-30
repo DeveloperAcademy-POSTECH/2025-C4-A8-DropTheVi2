@@ -47,6 +47,8 @@ final class RoomViewModel {
   
   private var worldAnchor: AnchorEntity?
   
+  private let soundManager = SoundManager.shared
+  
   // 매니저 인스턴스들
   private let cameraTrackingManager = CameraTrackingManager.shared
   private let sceneLoader = SceneLoader.shared
@@ -138,6 +140,10 @@ final class RoomViewModel {
     NotificationCenter.default.addObserver(forName: Notification.Name("openBox"), object: nil, queue: .main) { _ in
       print("박스 알림 수신")
       self.openBox()
+      DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+        self.soundManager
+          .playSound(.gasAlert, volume: 1.0)
+      }
     }
     NotificationCenter.default.addObserver(forName: Notification.Name("openDrawer"), object: nil, queue: .main) { _ in
       print("서랍 알림 수신")
@@ -215,7 +221,7 @@ final class RoomViewModel {
     }
     
     //환풍구 찾기
-    if let ventTest = roomEntity.findEntity(named: "AirVent3") {
+    if let ventTest = roomEntity.findEntity(named: "AirVent3_only") {
       setUpVentEntity(in: ventTest)
       print("환풍구 찾기 성공")
     } else {
@@ -310,10 +316,11 @@ final class RoomViewModel {
     let physicsBody = PhysicsBodyComponent(
       massProperties: .default,
       material: .default,
-      mode: .static
+      mode: .dynamic
     )
     entity.components.set(physicsBody)
     entity.generateCollisionShapes(recursive: true)
+    print("환풍구 물리 설정 완료")
   }
   
   private func setUpLockEntity(in boxEntity: Entity) {
@@ -383,7 +390,7 @@ final class RoomViewModel {
   }
   
   private func setUpVentEntity(in ventEntity: Entity) {
-    if let ventgrill = ventEntity.findEntity(named: "CubeVent_001") {
+    if let ventgrill = ventEntity.findEntity(named: "AirVent3") {
       ventgrill.components.set(InputTargetComponent())
       ventgrill.generateCollisionShapes(recursive: true)
       
@@ -411,13 +418,16 @@ final class RoomViewModel {
   }
   
   func openVent() {
-    guard let ventEntity = rootEntity.children.first?.children.first?.findEntity(named: "AirVent3") else {
+    guard let ventEntity = rootEntity.children.first?.children.first?.findEntity(named: "AirVent3_only") else {
       print("애니메이션 부모 엔티티 AirVent3 찾기 실패")
       return
     }
-    if let openAirVent = ventEntity.findEntity(named: "CubeVent_001") {
+    if let openAirVent = ventEntity.findEntity(named: "AirVent3") {
       print("환풍구 그릴 찾음")
       openAirVent.applyTapForBehaviors()
+      DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+        self.fixedPhysicsBody(openAirVent)
+      }
     } else {
       print("환풍구 그릴 못찾음")
     }
@@ -452,7 +462,6 @@ final class RoomViewModel {
       print("서랍, 손잡이 둘다 찾음")
       openKeypad.applyTapForBehaviors()
       openLid.applyTapForBehaviors()
-      
     } else {
       print("서랍 손잡이 못찾음")
     }

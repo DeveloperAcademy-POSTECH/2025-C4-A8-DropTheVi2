@@ -134,6 +134,7 @@ struct PasswordModalView: View {
           disable: false,
           action: {
             checkPassword()
+            NotificationCenter.default.post(name: NSNotification.Name("openVent"), object: nil)
           }
         )
       }

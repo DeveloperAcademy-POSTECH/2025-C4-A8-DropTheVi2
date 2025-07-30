@@ -80,7 +80,7 @@ struct RoomImmersiveView: View {
           at: SIMD3(0, controlMonitorPosition.y, 0),
           from: controlMonitorPosition, relativeTo: nil
         )
-        controlMonitorAttachment.orientation = simd_quatf(angle: ((-90.0 + 20) * .pi / 180), axis: SIMD3(0, 1, 0))
+        controlMonitorAttachment.orientation = simd_quatf(angle: ((-90.0 + 14) * .pi / 180), axis: SIMD3(0, 1, 0))
         
         content.add(controlMonitorAttachment)
       }
