@@ -68,6 +68,9 @@ final class CollisionManager {
       print("⚠️ 바닥 엔티티를 찾을 수 없음 - 대체 바닥 생성")
       await createFallbackFloor(in: rootEntity)
     }
+    
+    // 항상 안전 바닥도 함께 설정하여 HandleDetached가 절대 사라지지 않도록 보장
+    await setupSafetyFloor(in: rootEntity)
   }
   
   /// 특정 엔티티에 바닥 충돌 설정

@@ -159,9 +159,10 @@ struct RoomImmersiveView: View {
           .frame(width: 700)
       }
     }
-    .task {
-      await viewModel.setup()
-    }
+    // .task 블록에서 setup() 호출 제거 - RealityView 블록에서 이미 호출됨 (중복 방지)
+    // .task {
+    //   await viewModel.setup()
+    // }
     .gesture(
       SwitchDragGesture(viewModel: viewModel)
     )
