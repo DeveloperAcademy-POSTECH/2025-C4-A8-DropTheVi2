@@ -27,6 +27,7 @@ final class SoundManager {
     case doorTap = "door_locked"
     case gasAlert = "gasAlert"
     case ventOpen = "ventOpen"
+    case openDesk = "DeskSound"
   }
   // MARK: - 오디오 세션 설정
   private func setupAudioSession() {
