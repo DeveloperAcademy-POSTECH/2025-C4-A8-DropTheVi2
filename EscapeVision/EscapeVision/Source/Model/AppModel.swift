@@ -68,6 +68,11 @@ class AppModel {
         appState = .menu
     }
     
+    func exitGame() {
+        print("🚪 게임 종료")
+        exit(0)
+    }
+    
     // MARK: - Computed Properties
     var isShowingGuideline: Bool {
         return appState == .guideline
