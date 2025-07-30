@@ -302,9 +302,15 @@ final class SwitchManager {
     
     // 특별 상태(01100) 체크 및 사운드 재생
     if stateString == "01100" {
-      print("🎯 [특별 상태 감지] 01100 패턴 달성!")
+      // Switch1에 Handle1이 실제로 연결되어 있는지 확인
+      if isSwitch1Handle1Connected() {
+        print("🎯 [특별 상태 감지] 01100 패턴 달성! (Switch1 Handle1 연결됨)")
         NotificationCenter.default.post(name: NSNotification.Name("openVent"), object: nil)
-//      playSpecialStateSound()
+//        playSpecialStateSound()
+      } else {
+        print("❌ [특별 상태 차단] 01100 패턴이지만 Switch1에 Handle1이 없음")
+        print("   └─ 01100 패턴 달성을 위해서는 Switch1에 Handle1이 연결되어 있어야 합니다")
+      }
     }
   }
   
@@ -634,6 +640,38 @@ final class SwitchManager {
       print("🔊 [SystemSound] switch_change 사운드 재생 완료")
     } else {
       print("❌ [SystemSound] SystemSoundID가 설정되지 않음")
+    }
+  }
+  
+  /// Switch1에 Handle1이 연결되어 있는지 확인
+  private func isSwitch1Handle1Connected() -> Bool {
+    let roomViewModel = RoomViewModel.shared
+    guard let roomEntity = entitySearchManager.findRoomEntity(from: roomViewModel.rootEntity) else {
+      print("❌ [Handle1 확인] Room 엔티티를 찾을 수 없음")
+      return false
+    }
+    
+    guard let switch1Entity = entitySearchManager.findSwitchEntity(in: roomEntity, switchNumber: 1) else {
+      print("❌ [Handle1 확인] Switch1 엔티티를 찾을 수 없음")
+      return false
+    }
+    
+    // Switch1에서 Handle1 찾기
+    let handle1Entity = entitySearchManager.findHandleEntity(in: switch1Entity, handleNumber: 1)
+    
+    if let handle1 = handle1Entity {
+      // Handle1이 존재하고 활성화되어 있는지 확인
+      let isEnabled = handle1.isEnabled
+      let hasParent = handle1.parent != nil
+      let isSwitch1Child = handle1.parent == switch1Entity
+      
+      print("🔍 [Handle1 확인] Handle1 발견: \(handle1.name)")
+      print("   └─ 활성화: \(isEnabled), 부모 존재: \(hasParent), Switch1 자식: \(isSwitch1Child)")
+      
+      return isEnabled && hasParent && isSwitch1Child
+    } else {
+      print("❌ [Handle1 확인] Switch1에서 Handle1을 찾을 수 없음")
+      return false
     }
   }
   

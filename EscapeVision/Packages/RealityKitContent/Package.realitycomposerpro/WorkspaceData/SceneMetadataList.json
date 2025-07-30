@@ -402,6 +402,15 @@
       [
         "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
         "Root",
+        "SkyDome"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
+        "Root",
         "OpenDrawerKnob",
         "Track"
       ],
