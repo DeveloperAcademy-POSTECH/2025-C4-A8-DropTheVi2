@@ -23,6 +23,18 @@
       }
     ]
   },
+  "38778314-E90E-4461-8E20-1BA3D1297909" : {
+    "objectMetadataList" : [
+      [
+        "38778314-E90E-4461-8E20-1BA3D1297909",
+        "Root"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      }
+    ]
+  },
   "65F6F990-A780-4474-B78B-572E0E4E273D" : {
     "objectMetadataList" : [
       [
@@ -52,47 +64,8 @@
       [
         "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
         "Root",
-        "File",
-        "Hint1"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
-        "Root",
-        "OpenLidd"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
-        "Root",
-        "File",
-        "FileHolder"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
-        "Root",
         "Timeline2",
         "Track2"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
-        "Root",
-        "File",
-        "Papers"
       ],
       {
         "isExpanded" : true,
@@ -118,20 +91,22 @@
       [
         "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
         "Root",
-        "OpenLid"
+        "BoxTest",
+        "Box",
+        "Lid",
+        "Plane_002"
       ],
       {
         "disallowsFraming" : false,
-        "isExpanded" : true,
+        "isExpanded" : false,
         "isLocked" : false
       },
       [
         "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
         "Root",
-        "BoxTest",
-        "Box",
-        "Lid",
-        "Plane_002"
+        "OpenLid",
+        "Track3",
+        "Transform_To"
       ],
       {
         "disallowsFraming" : false,
@@ -152,22 +127,20 @@
       [
         "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
         "Root",
-        "OpenLid",
-        "Track3",
-        "Transform_To"
+        "File",
+        "Hint1"
       ],
       {
-        "disallowsFraming" : false,
-        "isExpanded" : false,
+        "isExpanded" : true,
         "isLocked" : false
       },
       [
         "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
         "Root",
-        "OpenLid",
-        "Track3"
+        "OpenLid"
       ],
       {
+        "disallowsFraming" : false,
         "isExpanded" : true,
         "isLocked" : false
       },
@@ -184,12 +157,51 @@
       [
         "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
         "Root",
-        "OpenLid",
-        "Track"
+        "File",
+        "Papers"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
+        "Root",
+        "File",
+        "FileHolder"
       ],
       {
         "disallowsFraming" : false,
-        "isExpanded" : false,
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
+        "Root",
+        "OpenLid",
+        "Track3"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
+        "Root",
+        "File",
+        "FileHolder"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "962C490F-809E-4FE7-95BB-F1AF3EAE8A75",
+        "Root",
+        "OpenLidd"
+      ],
+      {
+        "isExpanded" : true,
         "isLocked" : false
       }
     ]
@@ -207,8 +219,7 @@
       },
       [
         "AF09ED6F-1707-48FD-8720-65B998362C09",
-        "Root",
-        "Sphere_Left"
+        "Root"
       ],
       {
         "isExpanded" : true,
@@ -216,7 +227,8 @@
       },
       [
         "AF09ED6F-1707-48FD-8720-65B998362C09",
-        "Root"
+        "Root",
+        "Sphere_Left"
       ],
       {
         "isExpanded" : true,
@@ -239,16 +251,6 @@
       },
       [
         "BC411585-85AB-4E63-A88A-07376BBF70CC",
-        "Root",
-        "BoxTest",
-        "Box"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "BC411585-85AB-4E63-A88A-07376BBF70CC",
         "Root"
       ],
       {
@@ -261,6 +263,16 @@
         "BoxTest",
         "Box",
         "Lid"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "BC411585-85AB-4E63-A88A-07376BBF70CC",
+        "Root",
+        "BoxTest",
+        "Box"
       ],
       {
         "isExpanded" : true,
@@ -320,6 +332,74 @@
     "objectMetadataList" : [
       [
         "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
+        "Root",
+        "Machine",
+        "Machine",
+        "Monitor06_001"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
+        "Root",
+        "OpenDrawer"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
+        "Root",
+        "AirVent3_only"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
+        "Root",
+        "OpenVent2"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
+        "Root",
+        "OpenVent2",
+        "Track3"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
+        "Root",
+        "OpenLidd",
+        "Track"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
+        "Root",
+        "OpenDrawerKnob",
+        "Track"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
         "Root"
       ],
       {
@@ -329,7 +409,7 @@
       [
         "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
         "Root",
-        "OpenLidd"
+        "OpenLid"
       ],
       {
         "isExpanded" : true,
@@ -338,7 +418,49 @@
       [
         "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
         "Root",
-        "OpenDrawerKnob"
+        "OpenVent2",
+        "Track"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
+        "Root",
+        "OpenLid",
+        "Track"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
+        "Root",
+        "AirVent3_only",
+        "AirVent3"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
+        "Root",
+        "RoomScene",
+        "Desk",
+        "Desk"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
+        "Root",
+        "OpenDrawer",
+        "Track"
       ],
       {
         "isExpanded" : true,
@@ -358,8 +480,7 @@
       [
         "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
         "Root",
-        "OpenDrawer",
-        "Track"
+        "OpenDrawerKnob"
       ],
       {
         "isExpanded" : true,
@@ -368,7 +489,9 @@
       [
         "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
         "Root",
-        "OpenLid"
+        "AirVent3_only",
+        "AirVent3",
+        "Vent_Front"
       ],
       {
         "isExpanded" : true,
@@ -377,18 +500,7 @@
       [
         "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
         "Root",
-        "OpenLid",
-        "Track"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
-        "Root",
-        "OpenLidd",
-        "Track"
+        "OpenLidd"
       ],
       {
         "isExpanded" : true,
@@ -400,36 +512,6 @@
         "Machine",
         "Machine",
         "Monitor06_003"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
-        "Root",
-        "OpenDrawerKnob",
-        "Track"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
-        "Root",
-        "Machine",
-        "Machine",
-        "Monitor06_001"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
-        "Root",
-        "OpenDrawer"
       ],
       {
         "isExpanded" : true,

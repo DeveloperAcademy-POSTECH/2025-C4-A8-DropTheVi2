@@ -18,7 +18,7 @@ class HandleBounceAnimator {
     
     // 핸들이 바닥에 평평하게 눕도록 하는 최종 회전 계산
     let startRotation = handleDetached.orientation
-    let finalRotation = calculateFlatRotation(from: startRotation)
+    let finalRotation = calculateFlatRotation(from: startRotation, entity: handleDetached)
     
     print("🔄 [회전 정보] 시작: \(startRotation), 최종: \(finalRotation)")
     
@@ -110,57 +110,93 @@ class HandleBounceAnimator {
     // 완료 콜백 실행 (컴포넌트 복원 등을 위임)
     onComplete?()
     
-    // 착지 시각 효과
-    if let modelEntity = handleDetached as? ModelEntity {
-      var material = SimpleMaterial()
-      material.color = .init(tint: .blue, texture: nil)
-      modelEntity.model?.materials = [material]
-    }
-    
-    // 1초 후 초록색으로 변경
-    Task {
-      try? await Task.sleep(nanoseconds: 1_000_000_000)
-      if let modelEntity = handleDetached as? ModelEntity {
-        var material = SimpleMaterial()
-        material.color = .init(tint: .green, texture: nil)
-        modelEntity.model?.materials = [material]
-      }
-    }
+
     
     print("🏁 [바운스 완료] HandleDetached가 바닥에 완전히 정착했습니다: Y = \(targetPosition.y)")
   }
   
 
   
-  /// 핸들이 바닥에 평평하게 눕도록 하는 회전 계산
-  private func calculateFlatRotation(from currentRotation: simd_quatf) -> simd_quatf {
-    // 현재 회전을 유지하면서 바닥에 평평하게 눕도록 조정
-    // 현재 회전의 Y축(수평) 성분만 유지하고 X,Z축 회전을 0으로 만들어 평평하게 함
+  /// 핸들이 바닥에 평평하게 눕도록 하는 회전 계산 (넓은 면이 바닥으로 가도록)
+  private func calculateFlatRotation(from currentRotation: simd_quatf, entity: Entity) -> simd_quatf {
+    // HandleDetached의 실제 크기 분석
+    let handleBounds = entity.visualBounds(relativeTo: entity)
+    let handleSize = handleBounds.max - handleBounds.min
     
-    // 현재 회전을 회전 행렬로 변환
-    let rotMatrix = matrix_float3x3(currentRotation)
+    print("📏 [크기 분석] HandleDetached 크기: X=\(String(format: "%.3f", handleSize.x)), Y=\(String(format: "%.3f", handleSize.y)), Z=\(String(format: "%.3f", handleSize.z))")
     
-    // Forward 벡터(Z축)를 XZ 평면으로 투영하여 수평 방향 계산
-    let forwardXZ = normalize(SIMD3<Float>(rotMatrix.columns.2.x, 0, rotMatrix.columns.2.z))
+    // 각 면의 넓이 계산
+    let xyArea = handleSize.x * handleSize.y  // XY 면 (앞뒤면)
+    let xzArea = handleSize.x * handleSize.z  // XZ 면 (윗아래면)
+    let yzArea = handleSize.y * handleSize.z  // YZ 면 (좌우면)
     
-    // 바닥에 평평하게 누운 상태의 회전 행렬 생성
-    let rightVector = normalize(cross(SIMD3<Float>(0, 1, 0), forwardXZ))  // Y축과 forward의 외적으로 right 계산
-    let upVector = SIMD3<Float>(0, 1, 0)  // 항상 위쪽
-    let correctedForward = cross(rightVector, upVector)  // right와 up의 외적으로 forward 재계산
+    print("📐 [면적 분석] XY면=\(String(format: "%.4f", xyArea)), XZ면=\(String(format: "%.4f", xzArea)), YZ면=\(String(format: "%.4f", yzArea))")
     
-    // 90도 회전을 추가하여 막대기가 옆으로 누워있도록 함
-    let rotated90 = matrix_float3x3(
-      correctedForward,  // X축: forward 방향으로 막대기가 누워있음
-      upVector,          // Y축: 위쪽 방향 유지
-      rightVector        // Z축: 옆쪽 방향
-    )
+    // 가장 넓은 면 찾기
+    let maxArea = max(xyArea, xzArea, yzArea)
     
-    let flatRotation = simd_quatf(rotated90)
+    var finalRotation: simd_quatf
     
-    print("🔄 [회전 계산] 수평 방향 유지하며 바닥에 평평하게 누움")
-    print("🔄 [회전 계산] Forward: (\(String(format: "%.2f", correctedForward.x)), \(String(format: "%.2f", correctedForward.y)), \(String(format: "%.2f", correctedForward.z)))")
+    if maxArea == xzArea {
+      // XZ 면이 가장 넓음 - 이미 바닥과 평행하므로 Y축 회전만 조정
+      print("🔄 [회전 선택] XZ면이 가장 넓음 - 그대로 바닥에 평평하게 배치")
+      
+      // 현재 회전을 회전 행렬로 변환하여 Y축 회전만 유지
+      let rotMatrix = matrix_float3x3(currentRotation)
+      let forwardXZ = normalize(SIMD3<Float>(rotMatrix.columns.2.x, 0, rotMatrix.columns.2.z))
+      
+      let rightVector = normalize(cross(SIMD3<Float>(0, 1, 0), forwardXZ))
+      let upVector = SIMD3<Float>(0, 1, 0)
+      let correctedForward = cross(rightVector, upVector)
+      
+      let flatMatrix = matrix_float3x3(
+        rightVector,       // X축
+        upVector,          // Y축 (위쪽)
+        correctedForward   // Z축
+      )
+      
+      finalRotation = simd_quatf(flatMatrix)
+      
+         } else if maxArea == xyArea {
+       // XY 면이 가장 넓음 - XY면을 바닥과 평행하게 회전
+       print("🔄 [회전 선택] XY면이 가장 넓음 - XY면을 바닥으로 향하도록 회전")
+       
+       // XY면이 바닥(XZ 평면)과 평행하게 하려면 X축 주위로 90도 회전 필요
+       // 현재 회전을 고려해서 자연스러운 방향으로 회전
+       let currentMatrix = matrix_float3x3(currentRotation)
+       let currentUp = currentMatrix.columns.1  // 현재 Y축 방향
+       
+       // Y축이 XZ 평면을 향하도록 X축 주위로 회전
+       let targetMatrix = matrix_float3x3(
+         SIMD3<Float>(1, 0, 0),  // X축 유지
+         SIMD3<Float>(0, 0, 1),  // Y축 → Z축 방향 (XY면이 수평)
+         SIMD3<Float>(0, 1, 0)   // Z축 → Y축 방향
+       )
+       
+       finalRotation = simd_quatf(targetMatrix)
+       
+     } else {
+       // YZ 면이 가장 넓음 - YZ면을 바닥과 평행하게 회전
+       print("🔄 [회전 선택] YZ면이 가장 넓음 - YZ면을 바닥으로 향하도록 회전")
+       
+       // YZ면이 바닥(XZ 평면)과 평행하게 하려면 Z축 주위로 90도 회전 필요
+       // 현재 회전을 고려해서 자연스러운 방향으로 회전
+       let currentMatrix = matrix_float3x3(currentRotation)
+       let currentRight = currentMatrix.columns.0  // 현재 X축 방향
+       
+       // X축이 Y축 방향으로 가도록 Z축 주위로 회전
+       let targetMatrix = matrix_float3x3(
+         SIMD3<Float>(0, 1, 0),  // X축 → Y축 방향 (YZ면이 수평)
+         SIMD3<Float>(1, 0, 0),  // Y축 → X축 방향  
+         SIMD3<Float>(0, 0, 1)   // Z축 유지
+       )
+       
+       finalRotation = simd_quatf(targetMatrix)
+     }
     
-    return flatRotation
+    print("🔄 [회전 완료] 넓은 면(면적=\(String(format: "%.4f", maxArea)))이 바닥으로 향하도록 회전 적용")
+    
+    return finalRotation
   }
   
   /// 단일 바운스 애니메이션 수행 (올라갔다가 내려오기)

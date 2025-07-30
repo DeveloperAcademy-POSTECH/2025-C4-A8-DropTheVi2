@@ -12,7 +12,7 @@ struct PasswordModalView: View {
   @Binding var isPresented: Bool
   @State var inputPassword: String
   @State private var showError = false
-  @State private var correctPassword: String = "123"
+  @State private var correctPassword: String = "735"
   @Environment(\.dismiss) private var dismiss
   
   @State private var viewModel = RoomViewModel.shared
@@ -134,6 +134,7 @@ struct PasswordModalView: View {
           disable: false,
           action: {
             checkPassword()
+            
           }
         )
       }
