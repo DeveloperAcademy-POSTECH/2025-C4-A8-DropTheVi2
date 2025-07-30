@@ -43,6 +43,22 @@ final class ParticleManager: ObservableObject {
     }
   }
   
+  func stopParticle() {
+    guard let particleEntity = particleEntity else {
+      print("❌ ParticleManager: Particle entity가 설정되지 않음")
+      return
+    }
+    
+    print("🛑 ParticleManager: Particle 중지")
+    
+    // ParticleEmitterComponent가 있는지 확인하고 중지
+    if var particleEmitter = particleEntity.components[ParticleEmitterComponent.self] {
+      particleEmitter.isEmitting = false
+      particleEntity.components[ParticleEmitterComponent.self] = particleEmitter
+      print("✅ ParticleManager: ParticleEmitter 비활성화됨")
+    }
+  }
+  
   func setParticlePosition(_ position: SIMD3<Float>) {
       guard let particleEntity = particleEntity else {
         print("❌ ParticleManager: Particle entity가 설정되지 않음")
