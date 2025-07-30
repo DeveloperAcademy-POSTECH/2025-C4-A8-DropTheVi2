@@ -303,7 +303,8 @@ final class SwitchManager {
     // 특별 상태(01100) 체크 및 사운드 재생
     if stateString == "01100" {
       print("🎯 [특별 상태 감지] 01100 패턴 달성!")
-      playSpecialStateSound()
+        NotificationCenter.default.post(name: NSNotification.Name("openVent"), object: nil)
+//      playSpecialStateSound()
     }
   }
   
