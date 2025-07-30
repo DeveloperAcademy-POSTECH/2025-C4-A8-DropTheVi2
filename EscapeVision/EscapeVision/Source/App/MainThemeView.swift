@@ -44,7 +44,7 @@ struct MainThemeView: View {
             ProgressView()
               .onAppear {
                 Task {
-                  try await Task.sleep(nanoseconds: 6_000_000_000)
+                  try await Task.sleep(nanoseconds: 4_000_000_000)
                   await MainActor.run {
                     appModel.startGame()
                   }
