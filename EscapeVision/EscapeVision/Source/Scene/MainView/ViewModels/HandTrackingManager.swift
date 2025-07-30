@@ -87,7 +87,7 @@ final class HandTrackingManager {
     
     // 손 움직임 변화량 계산
     let handDeltaX = deltaWidth * sensitivity
-    let handDeltaY = -deltaHeight * sensitivity  // Y축 반전
+    let handDeltaY = deltaHeight * sensitivity  // Y축 방향 수정: 손을 위로 올리면 객체도 위로
     
     // 누적 움직임 업데이트
     accumulatedMovement.x += handDeltaX
