@@ -29,31 +29,23 @@ struct MainThemeView: View {
       }
       .padding(.trailing, 50)
       .padding(.bottom, 570)
-        
-        VStack {
-          if appModel.appState == .menu {
-            Button(action: {
-              appModel.startLoad()
-            }, label: {
-              Text("Game Start")
-                .font(.system(size: 32, weight: .bold))
-                .padding(.vertical, 15)
-                .padding(.horizontal, 10)
-            })
-          } else if appModel.appState == .loading {
-            ProgressView()
-              .onAppear {
-                Task {
-                  try await Task.sleep(nanoseconds: 4_000_000_000)
-                  await MainActor.run {
-                    appModel.startGame()
-                  }
-                }
-              }
-          }
+      
+      VStack {
+        if appModel.appState == .menu {
+          Button(action: {
+            appModel.startLoad()
+          }, label: {
+            Text("Game Start")
+              .font(.system(size: 32, weight: .bold))
+              .padding(.vertical, 15)
+              .padding(.horizontal, 10)
+          })
+        } else if appModel.appState == .loading {
+          ProgressView()
         }
-        .padding(.top, 400)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+      }
+      .padding(.top, 400)
+      .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     .sheet(isPresented: $showLicenses) {
       LicensesView()
@@ -63,6 +55,7 @@ struct MainThemeView: View {
     }
   }
 }
+
 #Preview {
   MainThemeView()
     .environment(AppModel())

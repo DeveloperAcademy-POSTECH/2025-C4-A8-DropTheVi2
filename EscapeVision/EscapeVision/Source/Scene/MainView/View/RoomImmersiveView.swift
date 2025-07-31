@@ -266,7 +266,6 @@ struct RoomImmersiveView: View {
         attachModel.showFileModal = false
         
         print("✅ [완전 정리] 새 게임 준비 완료!")
-      
     }
   }
   
