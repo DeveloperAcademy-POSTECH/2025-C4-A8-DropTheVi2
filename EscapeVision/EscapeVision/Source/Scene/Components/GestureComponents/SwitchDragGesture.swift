@@ -23,7 +23,7 @@ struct SwitchDragGesture: Gesture {
   @State private var originalHandlePosition: SIMD3<Float>?
   @State private var originalHandleOrientation: simd_quatf?
   
-  // HandleDetached 손 추적 시스템용 간단한 상태
+  // 제스처 추적용 공통 상태 (HandleDetached 및 일반 스위치 핸들 모두 사용)
   @State private var lastGestureTranslation: CGSize = .zero  // 이전 제스처 (델타 계산용)
   @State private var accumulatedPinchMovement: SIMD3<Float> = .zero  // 핀치 모드 누적 이동
   
@@ -107,7 +107,10 @@ struct SwitchDragGesture: Gesture {
       
       // 새 시스템에서는 별도 상태 체크 불필요
     } else {
-      // Switch handle: 위치 고정
+      // Switch handle: 핀치 제스처 감지 및 처리
+      handleNormalSwitchPinchGesture(value, draggableEntity)
+      
+      // 위치 고정 (스위치 핸들은 물리적으로 이동하지 않음)
       if let originalPos = originalHandlePosition,
          let originalOrient = originalHandleOrientation {
         draggableEntity.position = originalPos
@@ -116,7 +119,7 @@ struct SwitchDragGesture: Gesture {
     }
   }
   
-      private func handleDetachedDragInWorld(_ value: EntityTargetValue<DragGesture.Value>, _ entity: Entity) {
+  private func handleDetachedDragInWorld(_ value: EntityTargetValue<DragGesture.Value>, _ entity: Entity) {
     guard let anchor = viewModel.getAnchor() else { return }
     
     // 현재 제스처
@@ -217,9 +220,6 @@ struct SwitchDragGesture: Gesture {
     lastGestureTranslation = currentTranslation
   }
   
-
-
-  
   private func handleDragEnded(_ value: EntityTargetValue<DragGesture.Value>) {
     defer {
       isDraggingHandle = false
@@ -242,25 +242,12 @@ struct SwitchDragGesture: Gesture {
       // HandleDetached 드래그 종료
       endHandleDetachedDrag(draggableEntity)
     } else {
-      // Switch handle 토글
-      if let switchParent = findSwitchParent(for: draggableEntity) {
-        print("🔄 스위치 토글: \(draggableEntity.name)")
-        
-        // 직관적 제스처: 손 방향과 핸들 방향 일치 (기존 로직 반전)
-        let isUpward = value.translation.height > 0  // 기존 로직 반전: 직관적 제스처 구현
-        print("📏 [토글 방향] 드래그 Y: \(value.translation.height), isUpward: \(isUpward)")
-        print("🤲 [직관적 제스처 적용] 손 \(value.translation.height < 0 ? "위로 올림" : "아래로 내림") → 핸들 \(value.translation.height < 0 ? "위로 움직임" : "아래로 움직임")")
-        
-        viewModel.toggleSwitchState(
-          switchEntity: switchParent,
-          handleEntity: draggableEntity,
-          isUpward: isUpward
-        )
-      }
+      // 일반 스위치 핸들 (Switch1~5) 토글 처리
+      handleNormalSwitchToggle(draggableEntity, value)
     }
   }
   
-  private func endHandleDetachedDrag(_ entity: Entity) {
+  func endHandleDetachedDrag(_ entity: Entity) {
     guard let anchor = viewModel.getAnchor() else { return }
     
     // 드래그 상태 해제
@@ -284,7 +271,7 @@ struct SwitchDragGesture: Gesture {
     print("🎯 [HandleDetached 종료] 바닥으로 떨어뜨림")
   }
   
-  private func findSwitchParent(for entity: Entity) -> Entity? {
+  func findSwitchParent(for entity: Entity) -> Entity? {
     // 먼저 일반적인 부모 검색으로 실제 Switch 찾기
     var currentEntity: Entity? = entity
     while let current = currentEntity {
@@ -322,7 +309,7 @@ struct SwitchDragGesture: Gesture {
   }
   
   /// Room 엔티티 찾기 헬퍼 함수
-  private func findRoomEntity(from entity: Entity) -> Entity? {
+  func findRoomEntity(from entity: Entity) -> Entity? {
     var currentEntity: Entity? = entity
     while let current = currentEntity {
       if current.name.lowercased().contains("room") {
@@ -331,5 +318,88 @@ struct SwitchDragGesture: Gesture {
       currentEntity = current.parent
     }
     return nil
+  }
+  
+  /// 일반 스위치 핸들 토글 처리 (Switch1~5)
+  func handleNormalSwitchToggle(_ draggableEntity: Entity, _ value: EntityTargetValue<DragGesture.Value>) {
+    print("🎮 [일반 스위치 토글] 드래그 종료 - 토글 처리 시작")
+    
+    // 스위치 부모 엔티티 찾기
+    guard let switchParent = findSwitchParent(for: draggableEntity) else {
+      print("❌ [토글 실패] 스위치 부모를 찾을 수 없음")
+      return
+    }
+    
+    // 드래그 방향 및 거리 계산
+    let dragTranslation = value.translation
+    let dragDistance = sqrt(dragTranslation.width * dragTranslation.width + dragTranslation.height * dragTranslation.height)
+    let isUpwardDrag = dragTranslation.height > 0  // 화면에서 위로 드래그하면 height가 양수 (방향 수정)
+    
+    print("🔍 [드래그 방향 감지]")
+    print("  - 드래그 거리: (\(String(format: "%.1f", dragTranslation.width)), \(String(format: "%.1f", dragTranslation.height)))")
+    print("  - 총 드래그 거리: \(String(format: "%.1f", dragDistance))px")
+    print("  - 감지된 방향: \(isUpwardDrag ? "위로" : "아래로")")
+    print("  - Switch: \(switchParent.name)")
+    print("  - Handle: \(draggableEntity.name)")
+    
+    // 최소 드래그 거리 확인 (의도하지 않은 토글 방지)
+    let minimumDragDistance: CGFloat = 20.0  // 20픽셀 이상 드래그해야 토글
+    
+    if dragDistance < minimumDragDistance {
+      print("⚠️ [토글 스킵] 드래그 거리가 너무 짧음 (\(String(format: "%.1f", dragDistance))px < \(minimumDragDistance)px)")
+      return
+    }
+    
+    // 스위치 토글 실행
+    viewModel.toggleSwitchState(switchEntity: switchParent, handleEntity: draggableEntity, isUpward: isUpwardDrag)
+    
+    print("✅ [일반 스위치 토글] 토글 처리 완료")
+  }
+  
+  /// 일반 스위치 핸들에 대한 핀치 제스처 처리
+  private func handleNormalSwitchPinchGesture(_ value: EntityTargetValue<DragGesture.Value>, _ draggableEntity: Entity) {
+    let realHandTrackingManager = RealHandTrackingManager.shared
+    let isCurrentlyPinching = realHandTrackingManager.isAnyHandPinching()
+    
+    // 핀치 제스처가 감지된 경우에만 처리
+    if isCurrentlyPinching {
+      // 현재 제스처 위치와 이전 위치의 차이 계산
+      let currentTranslation = value.translation
+      let deltaTranslation = CGSize(
+        width: currentTranslation.width - lastGestureTranslation.width,
+        height: currentTranslation.height - lastGestureTranslation.height
+      )
+      
+      // Y축 움직임이 충분한 경우에만 스위치 상태 변경
+      let verticalThreshold: CGFloat = 15.0  // 15픽셀 이상 움직여야 반응
+      
+      if abs(deltaTranslation.height) > verticalThreshold {
+        // 스위치 부모 엔티티 찾기
+        guard let switchParent = findSwitchParent(for: draggableEntity) else {
+          print("❌ [핀치 토글 실패] 스위치 부모를 찾을 수 없음")
+          return
+        }
+        
+        // 핀치 제스처 방향 결정 (손을 위로 올리면 스위치 올리기)
+        let isUpwardPinch = deltaTranslation.height < 0  // 화면 좌표계에서 위로 움직이면 음수
+        
+        print("🤏 [핀치 스위치 토글] 핀치 제스처 감지")
+        print("  - 제스처 델타: (\(String(format: "%.1f", deltaTranslation.width)), \(String(format: "%.1f", deltaTranslation.height)))")
+        print("  - 감지된 방향: \(isUpwardPinch ? "위로" : "아래로")")
+        print("  - Switch: \(switchParent.name)")
+        print("  - Handle: \(draggableEntity.name)")
+        
+        // 스위치 토글 실행
+        viewModel.toggleSwitchState(switchEntity: switchParent, handleEntity: draggableEntity, isUpward: isUpwardPinch)
+        
+        // 중복 토글 방지를 위해 이전 제스처 위치 업데이트
+        lastGestureTranslation = currentTranslation
+        
+        print("✅ [핀치 스위치 토글] 핀치 토글 처리 완료")
+      }
+    }
+    
+    // 일반 드래그 제스처용 이전 위치 업데이트
+    lastGestureTranslation = value.translation
   }
 }

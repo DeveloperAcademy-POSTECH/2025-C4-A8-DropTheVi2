@@ -554,13 +554,7 @@ final class HandleManager {
     // Handle1을 Joint1과 동일한 위치에 배치 (옆이 아니라 정확히 중심에)
     let handlePosition = jointWorldPosition // 오프셋 제거
     
-    // Switch2와 반대 모양으로 y축 +15도 회전 설정
-    let yAxisRotation = simd_quatf(angle: 0.262, axis: [0, 1, 0]) // y축 +15도 (0.262 라디안)
-    handle1.position = handlePosition
-    handle1.orientation = yAxisRotation
-    
     print("📍 [Handle 생성] 정확한 Joint1 중심 위치 설정: \(String(format: "%.3f,%.3f,%.3f", handlePosition.x, handlePosition.y, handlePosition.z))")
-    print("🔄 [Handle 회전] Switch2와 반대 모양 - y축 +15도 회전 적용: \(yAxisRotation)")
     
     // Handle1을 Switch1에 부착
     switchEntity.addChild(handle1)

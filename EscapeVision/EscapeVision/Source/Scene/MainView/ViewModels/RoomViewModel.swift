@@ -35,6 +35,8 @@ struct HandleComponent: Component {
   }
 }
 
+// swiftlint:disable type_body_length
+
 @MainActor
 @Observable
 final class RoomViewModel {
@@ -230,6 +232,23 @@ final class RoomViewModel {
       print("환풍구 찾기 성공")
     } else {
       print("환풍구 찾기 실패")
+    }
+    
+    if let blackDomeEntity = roomEntity.findEntity(named: "SkyDome") {
+      print("✅ SkyDome 엔티티 발견 - 3초 후 제거 예정")
+      
+      // 🔧 개선: 이미 @MainActor 컨텍스트이므로 Task 불필요
+      DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { [weak blackDomeEntity] in
+        guard let entity = blackDomeEntity else {
+          print("⚠️ SkyDome 엔티티가 이미 해제됨")
+          return
+        }
+        
+        entity.removeFromParent()
+        print("✅ SkyDome 제거 완료")
+      }
+    } else {
+      print("❌ SkyDome 엔티티를 찾을 수 없음")
     }
 
     
@@ -469,6 +488,35 @@ final class RoomViewModel {
     } else {
       print("서랍 손잡이 못찾음")
     }
+  }
+  
+  func fadeSkyDome(duration: Float = 3.0, completion: (() -> Void)? = nil) {
+    guard let skyDome = rootEntity.children.first?.findEntity(named: "SkyDome"),
+            var opacityComponent = skyDome.components[OpacityComponent.self] else {
+          print("❌ SkyDome 또는 OpacityComponent를 찾을 수 없습니다.")
+          return
+      }
+      
+      let startTime = Date()
+      let targetDuration = TimeInterval(duration)
+      let startOpacity = opacityComponent.opacity
+      
+      let timer = Timer.scheduledTimer(withTimeInterval: 0.016, repeats: true) { timer in
+          let elapsed = Date().timeIntervalSince(startTime)
+          let progress = min(elapsed / targetDuration, 1.0)
+          
+          let currentOpacity = startOpacity * (1.0 - Float(progress))
+          opacityComponent.opacity = currentOpacity
+          skyDome.components.set(opacityComponent)
+          
+          if progress >= 1.0 {
+              timer.invalidate()
+              print("✅ SkyDome 페이드아웃 완료!")
+              completion?()
+          }
+      }
+      
+      RunLoop.current.add(timer, forMode: .common)
   }
 }
 

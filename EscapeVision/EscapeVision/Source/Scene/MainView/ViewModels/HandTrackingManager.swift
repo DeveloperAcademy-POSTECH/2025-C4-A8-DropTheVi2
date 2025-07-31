@@ -87,7 +87,7 @@ final class HandTrackingManager {
     
     // 손 움직임 변화량 계산
     let handDeltaX = deltaWidth * sensitivity
-    let handDeltaY = -deltaHeight * sensitivity  // Y축 반전
+    let handDeltaY = deltaHeight * sensitivity  // Y축 방향 수정: 손을 위로 올리면 객체도 위로
     
     // 누적 움직임 업데이트
     accumulatedMovement.x += handDeltaX
@@ -459,6 +459,13 @@ final class HandTrackingManager {
     // 자연스러운 바운스 효과를 위한 다단계 애니메이션
     Task { @MainActor in
       try? await Task.sleep(nanoseconds: 100_000_000) // 0.1초 대기
+      
+      // 첫 번째 바닥 접촉 시점에 드롭 사운드 재생 (별도 태스크로 실행)
+      Task { @MainActor in
+        try? await Task.sleep(nanoseconds: 800_000_000) // 0.8초 후 (첫 번째 낙하 완료 시점)
+        SwitchDropSoundManager.shared.playSwitchDropSound()
+        print("🔊 [드롭 타이밍] HandleDetached 첫 번째 바닥 접촉 시점에 사운드 재생")
+      }
       
       try await HandleBounceAnimator.shared.performBounceAnimation(
         handleDetached: handleDetached, 
