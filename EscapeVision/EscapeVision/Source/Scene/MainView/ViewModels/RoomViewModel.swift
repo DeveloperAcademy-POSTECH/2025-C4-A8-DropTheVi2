@@ -159,7 +159,6 @@ final class RoomViewModel {
       }
     }
   }
-
   // MARK: - Scene Loading
   
   private func loadRoom(into anchor: AnchorEntity) async {
