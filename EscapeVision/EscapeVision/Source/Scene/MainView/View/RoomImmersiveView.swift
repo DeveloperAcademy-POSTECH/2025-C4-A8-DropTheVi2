@@ -265,6 +265,8 @@ struct RoomImmersiveView: View {
         attachModel.showPasswordModal = false
         attachModel.showFileModal = false
         
+        appModel.exitGame()
+        
         print("✅ [완전 정리] 새 게임 준비 완료!")
     }
   }
