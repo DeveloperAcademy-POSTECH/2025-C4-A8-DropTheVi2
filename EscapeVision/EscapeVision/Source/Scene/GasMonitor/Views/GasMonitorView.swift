@@ -54,7 +54,7 @@ struct GasMonitorView: View {
             height: geo.size.height * 0.18
           )
           .position(
-            x: geo.size.width * 0.7148,
+            x: geo.size.width * 0.68,
             y: geo.size.height * item.yRatio
           )
         }
