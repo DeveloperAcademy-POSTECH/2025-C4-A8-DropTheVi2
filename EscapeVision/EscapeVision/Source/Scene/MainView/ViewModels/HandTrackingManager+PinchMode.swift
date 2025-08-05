@@ -11,6 +11,10 @@ import RealityKit
 // MARK: - 핀치 모드 제어
 extension HandTrackingManager {
   
+  // 핀치 모드 활성화 시간 추적 (바닥 착지 감지 유예 기간용)
+  private static var pinchModeActivationTime: Date?
+  private static let floorDetectionGracePeriod: TimeInterval = 2.0  // 2초 유예 기간
+  
   /// 핀치 모드 활성화 (HandleDetached를 지정된 위치로 부름)
   func activatePinchMode(handWorldPosition: SIMD3<Float>, cameraForward: SIMD3<Float>, handleDetached: Entity) {
     guard isTracking else {
@@ -31,6 +35,9 @@ extension HandTrackingManager {
     }
     
     isPinchMode = true
+    // 핀치 모드 활성화 시간 기록 (바닥 착지 감지 유예 기간용)
+    HandTrackingManager.pinchModeActivationTime = Date()
+    
     // 전달받은 위치를 그대로 목표 위치로 사용 (중복 계산 방지)
     targetHandPosition = handWorldPosition
     pinchBasePosition = handWorldPosition  // 드래그 기준 위치 저장
@@ -81,23 +88,34 @@ extension HandTrackingManager {
       }
     }
     
-    // 추가 안전장치: HandleDetached가 바닥 근처에 있고 속도가 거의 0이면 움직이지 않음
-    let currentY = handleDetached.position.y
-    if currentY < 0.5 { // 바닥에서 50cm 이내
-      // PhysicsMotionComponent에서 속도 정보 확인
-      if let physicsMotion = handleDetached.components[PhysicsMotionComponent.self] {
-        let velocity = physicsMotion.linearVelocity
-        let speed = length(velocity)
-        if speed < 0.1 { // 속도가 매우 느리면 바닥에 안착한 것으로 간주
-          print("🛡️ [바닥 안착 감지] HandleDetached가 바닥에 안착 - 손 움직임 차단 (Y: \(String(format: "%.3f", currentY)), 속도: \(String(format: "%.3f", speed)))")
-          deactivatePinchMode() // 핀치 모드 해제
-          return
-        }
+    // 핀치 모드 활성화 직후 유예 기간 체크 (바닥에서 집을 때 즉시 떨어지는 현상 방지)
+    if let activationTime = HandTrackingManager.pinchModeActivationTime {
+      let timeSinceActivation = Date().timeIntervalSince(activationTime)
+      if timeSinceActivation < HandTrackingManager.floorDetectionGracePeriod {
+        // 핀치 모드 활성화 후 2초 내에는 바닥 착지 감지 건너뛰기
+        print("🤏 [핀치 유예 기간] 활성화 후 \(String(format: "%.1f", timeSinceActivation))초 - 바닥 착지 감지 건너뛰기")
       } else {
-        // PhysicsMotionComponent가 없으면 속도를 0으로 간주하여 바닥 안착 상태로 처리
-        print("🛡️ [바닥 안착 감지] PhysicsMotionComponent 없음 - 바닥 안착으로 간주 (Y: \(String(format: "%.3f", currentY)))")
-        deactivatePinchMode() // 핀치 모드 해제
-        return
+        // 유예 기간 후 바닥 착지 감지 실행
+        let currentY = handleDetached.position.y
+        if currentY < 0.3 { // 바닥에서 30cm 이내 (기존 50cm에서 줄임)
+          // PhysicsMotionComponent에서 속도 정보 확인
+          if let physicsMotion = handleDetached.components[PhysicsMotionComponent.self] {
+            let velocity = physicsMotion.linearVelocity
+            let speed = length(velocity)
+            if speed < 0.05 { // 속도 임계값을 더 엄격하게 설정 (0.1 → 0.05)
+              print("🛡️ [바닥 안착 감지] HandleDetached가 바닥에 안착 - 손 움직임 차단 (Y: \(String(format: "%.3f", currentY)), 속도: \(String(format: "%.3f", speed)))")
+              deactivatePinchMode() // 핀치 모드 해제
+              return
+            }
+          } else {
+            // PhysicsMotionComponent가 없고 매우 낮은 위치에 있는 경우만 바닥 안착으로 간주
+            if currentY < 0.1 { // 10cm 이하일 때만
+              print("🛡️ [바닥 안착 감지] PhysicsMotionComponent 없음 + 매우 낮은 위치 - 바닥 안착으로 간주 (Y: \(String(format: "%.3f", currentY)))")
+              deactivatePinchMode() // 핀치 모드 해제
+              return
+            }
+          }
+        }
       }
     }
     
@@ -140,6 +158,7 @@ extension HandTrackingManager {
     isPinchMode = false
     pinchBasePosition = .zero  // 핀치 기준 위치 초기화
     targetHandPosition = .zero  // 목표 위치 초기화
+    HandTrackingManager.pinchModeActivationTime = nil  // 활성화 시간 초기화
   }
   
   /// 현재 핀치 모드 상태 확인
