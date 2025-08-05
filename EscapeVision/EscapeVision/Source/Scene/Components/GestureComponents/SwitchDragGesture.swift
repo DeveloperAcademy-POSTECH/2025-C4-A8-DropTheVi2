@@ -81,7 +81,7 @@ struct SwitchDragGesture: Gesture {
         isDetachedHandle = !handleComponent.isAttached
         
         if isDetachedHandle {
-          // 바닥에 고정된 HandleDetached를 다시 집을 때 강화된 활성화
+          // 바닥에 고정된 HandleDetached를 다시 집을 때 활성화
           if draggableEntity.components.has(PhysicsBodyComponent.self) {
             let physicsBody = draggableEntity.components[PhysicsBodyComponent.self]!
             if physicsBody.mode == .kinematic && !physicsBody.isAffectedByGravity {
@@ -91,18 +91,6 @@ struct SwitchDragGesture: Gesture {
               newPhysicsBody.isAffectedByGravity = true
               draggableEntity.components.set(newPhysicsBody)
               print("🔓 [바닥 고정 해제] HandleDetached를 다시 집기 위해 dynamic 모드로 변경")
-              
-              // PhysicsMotionComponent 추가하여 즉시 반응하도록 설정
-              if !draggableEntity.components.has(PhysicsMotionComponent.self) {
-                let physicsMotion = PhysicsMotionComponent()
-                draggableEntity.components.set(physicsMotion)
-                print("🚀 [물리 모션 추가] PhysicsMotionComponent 설정으로 즉시 반응 향상")
-              }
-              
-              // 살짝 위로 올려서 바닥 착지 감지 회피
-              let currentPos = draggableEntity.position
-              draggableEntity.position = SIMD3<Float>(currentPos.x, currentPos.y + 0.05, currentPos.z)
-              print("📈 [위치 조정] 바닥 착지 감지 회피를 위해 5cm 상승")
             }
           }
           

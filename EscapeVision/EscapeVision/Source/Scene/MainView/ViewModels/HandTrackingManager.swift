@@ -26,6 +26,7 @@ final class HandTrackingManager {
   var smoothingSpeed: Float = 8.0  // 부드러운 이동 속도
   private let pinchDistance: Float = 0.2  // 손에서 HandleDetached까지의 거리 (20cm)
   var pinchBasePosition: SIMD3<Float> = .zero  // 핀치 시작 기준 위치
+  var pinchModeActivationTime: Date?  // 핀치 모드 활성화 시간 (바닥 감지 유예용)
   
   // 감도 설정
   private let sensitivity: Float = 0.003  // 손 움직임 감도 (0.005 → 0.003으로 감소)
@@ -149,6 +150,7 @@ final class HandTrackingManager {
     accumulatedMovement = .zero
     targetHandPosition = .zero
     pinchBasePosition = .zero  // 핀치 기준 위치 초기화
+    pinchModeActivationTime = nil  // 핀치 활성화 시간 초기화
   }
   
   /// 현재 추적 상태 확인
