@@ -200,6 +200,19 @@ extension HandTrackingManager {
     
     // 바닥 착지 후 완전히 손 추적에서 격리
     setHandleAsGrounded(handleDetached)
+    
+    // 바닥 착지 후 손 추적 완전 중단 (바닥 아래 가라앉기 방지)
+    Task { @MainActor in
+      try? await Task.sleep(nanoseconds: 500_000_000) // 0.5초 후
+      if handleDetached.components.has(PhysicsBodyComponent.self) {
+        let physicsBody = handleDetached.components[PhysicsBodyComponent.self]!
+        if physicsBody.mode == .kinematic && !physicsBody.isAffectedByGravity {
+          // 여전히 바닥에 고정된 상태라면 손 추적 완전 중단
+          stopHandTracking()
+          print("🛡️ [바닥 보호 완료] 손 추적 완전 중단 - 바닥 가라앉기 방지")
+        }
+      }
+    }
   }
   
   /// HandleDetached를 바닥 착지 상태로 설정 (손 추적으로부터 격리)

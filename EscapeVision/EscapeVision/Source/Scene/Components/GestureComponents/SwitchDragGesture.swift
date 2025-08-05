@@ -81,16 +81,31 @@ struct SwitchDragGesture: Gesture {
         isDetachedHandle = !handleComponent.isAttached
         
         if isDetachedHandle {
-          // 바닥에 고정된 HandleDetached를 다시 집을 때 활성화
+          // HandleDetached가 바닥에 고정된 상태인지 확인
+          var isHandleGrounded = false
           if draggableEntity.components.has(PhysicsBodyComponent.self) {
             let physicsBody = draggableEntity.components[PhysicsBodyComponent.self]!
-            if physicsBody.mode == .kinematic && !physicsBody.isAffectedByGravity {
-              // 바닥 고정 상태 해제하여 다시 집을 수 있도록 함
-              var newPhysicsBody = physicsBody
+            isHandleGrounded = (physicsBody.mode == .kinematic && !physicsBody.isAffectedByGravity)
+          }
+          
+          // 바닥에 고정된 상태라면 실제 핀치 의도가 있는지 확인
+          if isHandleGrounded {
+            let realHandTrackingManager = RealHandTrackingManager.shared
+            let isActuallyPinching = realHandTrackingManager.isAnyHandPinchingForFloorPickup()
+            
+            if isActuallyPinching {
+              // 실제 핀치 의도가 있을 때만 바닥 고정 해제
+              var newPhysicsBody = draggableEntity.components[PhysicsBodyComponent.self]!
               newPhysicsBody.mode = .dynamic
               newPhysicsBody.isAffectedByGravity = true
               draggableEntity.components.set(newPhysicsBody)
-              print("🔓 [바닥 고정 해제] HandleDetached를 다시 집기 위해 dynamic 모드로 변경")
+              print("🔓 [핀치 의도 감지] 실제 핀치로 바닥 고정 해제")
+            } else {
+              // 핀치 의도가 없으면 바닥 고정 상태 유지
+              print("🛡️ [바닥 보호] 핀치 의도 없음 - 바닥 고정 상태 유지")
+              isDraggingHandle = false
+              draggedHandle = nil
+              return
             }
           }
           
@@ -240,8 +255,12 @@ struct SwitchDragGesture: Gesture {
         }
       }
     } else {
-      // 일반 손 추적 모드
-      handTrackingManager.updateHandMovement(deltaTranslation: deltaTranslation, handleDetached: entity)
+      // 일반 손 추적 모드 - 바닥 고정 상태에서는 실행하지 않음
+      if !isHandleOnFloor {
+        handTrackingManager.updateHandMovement(deltaTranslation: deltaTranslation, handleDetached: entity)
+      } else {
+        print("🛡️ [바닥 보호] HandleDetached가 바닥에 고정된 상태 - 일반 손 추적 차단")
+      }
     }
     
     // lastGestureTranslation 업데이트
