@@ -84,14 +84,20 @@ extension HandTrackingManager {
     // 추가 안전장치: HandleDetached가 바닥 근처에 있고 속도가 거의 0이면 움직이지 않음
     let currentY = handleDetached.position.y
     if currentY < 0.5 { // 바닥에서 50cm 이내
-      if let physicsBody = handleDetached.components[PhysicsBodyComponent.self] {
-        let velocity = physicsBody.linearVelocity
+      // PhysicsMotionComponent에서 속도 정보 확인
+      if let physicsMotion = handleDetached.components[PhysicsMotionComponent.self] {
+        let velocity = physicsMotion.linearVelocity
         let speed = length(velocity)
         if speed < 0.1 { // 속도가 매우 느리면 바닥에 안착한 것으로 간주
           print("🛡️ [바닥 안착 감지] HandleDetached가 바닥에 안착 - 손 움직임 차단 (Y: \(String(format: "%.3f", currentY)), 속도: \(String(format: "%.3f", speed)))")
           deactivatePinchMode() // 핀치 모드 해제
           return
         }
+      } else {
+        // PhysicsMotionComponent가 없으면 속도를 0으로 간주하여 바닥 안착 상태로 처리
+        print("🛡️ [바닥 안착 감지] PhysicsMotionComponent 없음 - 바닥 안착으로 간주 (Y: \(String(format: "%.3f", currentY)))")
+        deactivatePinchMode() // 핀치 모드 해제
+        return
       }
     }
     
