@@ -210,9 +210,6 @@ extension HandTrackingManager {
           // 여전히 바닥에 고정된 상태라면 손 추적 완전 중단
           stopHandTracking()
           print("🛡️ [바닥 보호 완료] 손 추적 완전 중단 - 바닥 가라앉기 방지")
-          
-          // 적극적인 바닥 보호 시스템 시작
-          startContinuousFloorProtection(for: handleDetached)
         }
       }
     }
@@ -281,76 +278,5 @@ extension HandTrackingManager {
     }
     
     print("✅ [컴포넌트 복원] HandleDetached 상호작용 준비 완료")
-  }
-  
-  /// 적극적인 바닥 보호 시스템 - 실시간 모니터링 및 즉시 복원
-  private func startContinuousFloorProtection(for handleDetached: Entity) {
-    // 바닥 보호를 위한 지속적인 모니터링 시작
-    Task { @MainActor in
-      var protectionCount = 0
-      let maxProtectionTime: Int = 300 // 30초간 보호 (0.1초마다 체크)
-      
-      while protectionCount < maxProtectionTime {
-        try? await Task.sleep(nanoseconds: 100_000_000) // 0.1초마다 체크
-        protectionCount += 1
-        
-        // HandleDetached가 여전히 존재하는지 확인
-        guard handleDetached.parent != nil else {
-          print("🛡️ [바닥 보호 종료] HandleDetached가 씬에서 제거됨")
-          break
-        }
-        
-        // 바닥 아래로 떨어졌는지 체크
-        let currentY = handleDetached.position.y
-        if currentY < (floorY - 0.1) { // 바닥에서 10cm 아래로 떨어진 경우
-          
-          // 즉시 바닥 위로 복원 (튀어오르는 효과)
-          let safeY = floorY + 0.15 // 바닥에서 15cm 위로 설정
-          let currentPos = handleDetached.position
-          let restoredPosition = SIMD3<Float>(currentPos.x, safeY, currentPos.z)
-          
-          handleDetached.position = restoredPosition
-          
-          // 약간의 위쪽 속도 부여 (튀어오르는 효과)
-          if var physicsBody = handleDetached.components[PhysicsBodyComponent.self] {
-            // 일시적으로 dynamic 모드로 변경하여 물리 효과 적용
-            physicsBody.mode = .dynamic
-            physicsBody.isAffectedByGravity = true
-            handleDetached.components.set(physicsBody)
-            
-            // 위쪽으로 힘 추가 (튀어오르기)
-            if let entity = handleDetached as? ModelEntity {
-              entity.addForce(SIMD3<Float>(0, 0.5, 0), relativeTo: nil)
-            }
-            
-            print("🚀 [바닥 보호 발동] Y=\(String(format: "%.3f", currentY)) → Y=\(String(format: "%.3f", safeY)) 위로 튀어오름!")
-            
-            // 0.5초 후 다시 kinematic 모드로 고정
-            Task { @MainActor in
-              try? await Task.sleep(nanoseconds: 500_000_000)
-              if var finalPhysicsBody = handleDetached.components[PhysicsBodyComponent.self] {
-                finalPhysicsBody.mode = .kinematic
-                finalPhysicsBody.isAffectedByGravity = false
-                handleDetached.components.set(finalPhysicsBody)
-                print("🔒 [바닥 재고정] HandleDetached 다시 바닥에 안정적으로 고정")
-              }
-            }
-          }
-        }
-        
-        // 바닥에 고정된 상태가 해제되었으면 보호 종료
-        if handleDetached.components.has(PhysicsBodyComponent.self) {
-          let physicsBody = handleDetached.components[PhysicsBodyComponent.self]!
-          if physicsBody.mode == .dynamic && physicsBody.isAffectedByGravity {
-            print("🛡️ [바닥 보호 종료] HandleDetached가 다시 활성화됨 (집기 감지)")
-            break
-          }
-        }
-      }
-      
-      if protectionCount >= maxProtectionTime {
-        print("🛡️ [바닥 보호 완료] 30초 보호 기간 만료")
-      }
-    }
   }
 } 

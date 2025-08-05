@@ -28,6 +28,10 @@ final class HandTrackingManager {
   var pinchBasePosition: SIMD3<Float> = .zero  // 핀치 시작 기준 위치
   var pinchModeActivationTime: Date?  // 핀치 모드 활성화 시간 (바닥 감지 유예용)
   
+  // 바닥 상호작용 관련
+  private var lastHandPushTime: Date?  // 마지막 손바닥 누르기 시간
+  private let handPushCooldown: TimeInterval = 1.0  // 손바닥 누르기 쿨다운 (1초)
+  
   // 감도 설정
   private let sensitivity: Float = 0.003  // 손 움직임 감도 (0.005 → 0.003으로 감소)
   private let maxMovementRange: Float = 5.0  // 최대 이동 거리 (1.5 → 5.0미터로 확대)
@@ -63,8 +67,8 @@ final class HandTrackingManager {
     if handleDetached.components.has(PhysicsBodyComponent.self) {
       let physicsBody = handleDetached.components[PhysicsBodyComponent.self]!
       if physicsBody.mode == .kinematic && !physicsBody.isAffectedByGravity {
-        // 바닥에 착지하여 고정된 상태 - 손 움직임에 반응하지 않음
-        print("🛡️ [손 추적 차단] HandleDetached가 바닥에 고정된 상태 - 손 움직임 무시")
+        // 바닥에 착지하여 고정된 상태 - 특별 처리
+        handleGroundedInteraction(handleDetached: handleDetached, deltaTranslation: deltaTranslation)
         return
       }
     }
@@ -115,9 +119,8 @@ final class HandTrackingManager {
       print("✅ [Switch1 근접] Switch1 방향 이동 허용 - 거리: \(String(format: "%.3f", distanceToSwitch1))m")
     }
     
-    // 바닥 보호 검사 후 위치 업데이트
-    let safePosition = enforceFloorProtection(newPosition, for: handleDetached)
-    handleDetached.position = safePosition
+    // HandleDetached 위치 업데이트
+    handleDetached.position = newPosition
     
     // 로그 출력 (변화가 있을 때만)
     if abs(handDeltaX) > 0.001 || abs(handDeltaY) > 0.001 {
@@ -152,6 +155,7 @@ final class HandTrackingManager {
     targetHandPosition = .zero
     pinchBasePosition = .zero  // 핀치 기준 위치 초기화
     pinchModeActivationTime = nil  // 핀치 활성화 시간 초기화
+    lastHandPushTime = nil  // 손바닥 누르기 시간 초기화
   }
   
   /// 현재 추적 상태 확인
@@ -241,37 +245,5 @@ final class HandTrackingManager {
   /// Switch 연결 거리 임계값
   var switchAttachDistanceThreshold: Float {
     return switchAttachDistance
-  }
-  
-  /// 바닥 보호 강제 적용 - 절대 바닥 아래로 떨어지지 않도록 함
-  private func enforceFloorProtection(_ targetPosition: SIMD3<Float>, for handleDetached: Entity) -> SIMD3<Float> {
-    var safePosition = targetPosition
-    
-    // 바닥 Y 좌표보다 아래로 떨어지는 것을 방지
-    let minimumY = floorY + 0.05  // 바닥에서 최소 5cm 위
-    
-    if safePosition.y < minimumY {
-      // 바닥 아래로 떨어지려 하면 강제로 바닥 위로 조정
-      let originalY = safePosition.y
-      safePosition.y = minimumY
-      
-      print("🛡️ [즉시 바닥 보호] Y=\(String(format: "%.3f", originalY)) → Y=\(String(format: "%.3f", safePosition.y)) (바닥 침투 방지)")
-      
-      // 바닥 침투 시도 시 약간 위로 튀어오르는 효과
-      if handleDetached.components.has(PhysicsBodyComponent.self) {
-        let physicsBody = handleDetached.components[PhysicsBodyComponent.self]!
-        if physicsBody.mode == .dynamic {
-          // 위쪽으로 약간의 힘 가하기
-          Task { @MainActor in
-            if let entity = handleDetached as? ModelEntity {
-              entity.addForce(SIMD3<Float>(0, 0.3, 0), relativeTo: nil)
-              print("🚀 [바닥 반발] 위쪽으로 튀어오름 효과 적용")
-            }
-          }
-        }
-      }
-    }
-    
-    return safePosition
   }
 } 

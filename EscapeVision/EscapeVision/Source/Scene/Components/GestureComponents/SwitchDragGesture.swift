@@ -255,12 +255,8 @@ struct SwitchDragGesture: Gesture {
         }
       }
     } else {
-      // 일반 손 추적 모드 - 바닥 고정 상태에서는 실행하지 않음
-      if !isHandleOnFloor {
-        handTrackingManager.updateHandMovement(deltaTranslation: deltaTranslation, handleDetached: entity)
-      } else {
-        print("🛡️ [바닥 보호] HandleDetached가 바닥에 고정된 상태 - 일반 손 추적 차단")
-      }
+      // 일반 손 추적 모드 (바닥 고정 상태 포함하여 처리)
+      handTrackingManager.updateHandMovement(deltaTranslation: deltaTranslation, handleDetached: entity)
     }
     
     // lastGestureTranslation 업데이트
