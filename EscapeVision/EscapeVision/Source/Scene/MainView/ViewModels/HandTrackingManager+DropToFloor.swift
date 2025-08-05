@@ -285,8 +285,13 @@ extension HandTrackingManager {
             newPhysicsBody.isAffectedByGravity = true
             handleDetached.components.set(newPhysicsBody)
             
-            // 위로 임펄스 적용
-            handleDetached.applyLinearImpulse(SIMD3<Float>(0, 2.0, 0), relativeTo: nil)
+            // PhysicsMotionComponent를 사용하여 위로 속도 적용
+            if !handleDetached.components.has(PhysicsMotionComponent.self) {
+              handleDetached.components.set(PhysicsMotionComponent())
+            }
+            var motionComponent = handleDetached.components[PhysicsMotionComponent.self]!
+            motionComponent.linearVelocity = SIMD3<Float>(0, 3.0, 0)  // 위로 3m/s 속도
+            handleDetached.components.set(motionComponent)
             
             print("🦘 [바닥 보호 튀어오르기] 손 감지로 HandleDetached 위로 튀어오름 (거리: \(String(format: "%.3f", distanceToHand))m)")
             
