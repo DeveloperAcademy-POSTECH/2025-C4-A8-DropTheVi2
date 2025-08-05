@@ -70,10 +70,10 @@ extension HandTrackingManager {
   func updatePinchMode(handleDetached: Entity, deltaTime: Float = 0.016) {
     guard isPinchMode else { return }
     
-    // HandleDetached가 바닥에 고정된 상태인지 강화된 검사
+    // HandleDetached가 바닥에 고정된 상태인지 강화된 검사 (kinematic 또는 static 모드)
     if handleDetached.components.has(PhysicsBodyComponent.self) {
       let physicsBody = handleDetached.components[PhysicsBodyComponent.self]!
-      if physicsBody.mode == .kinematic && !physicsBody.isAffectedByGravity {
+      if (physicsBody.mode == .kinematic || physicsBody.mode == .static) && !physicsBody.isAffectedByGravity {
         // 바닥에 착지하여 고정된 상태 - 손 움직임에 반응하지 않음
         print("🛡️ [핀치 모드 차단] HandleDetached가 바닥에 고정된 상태 - 손 움직임 무시")
         // 핀치 모드 자동 해제하여 더 이상 업데이트되지 않도록 함

@@ -59,10 +59,10 @@ final class HandTrackingManager {
       return 
     }
     
-    // HandleDetached가 kinematic 모드(바닥 착지 후 고정 상태)인지 확인
+    // HandleDetached가 바닥 착지 후 고정 상태인지 확인 (kinematic 또는 static 모드)
     if handleDetached.components.has(PhysicsBodyComponent.self) {
       let physicsBody = handleDetached.components[PhysicsBodyComponent.self]!
-      if physicsBody.mode == .kinematic && !physicsBody.isAffectedByGravity {
+      if (physicsBody.mode == .kinematic || physicsBody.mode == .static) && !physicsBody.isAffectedByGravity {
         // 바닥에 착지하여 고정된 상태 - 손 움직임에 반응하지 않음
         print("🛡️ [손 추적 차단] HandleDetached가 바닥에 고정된 상태 - 손 움직임 무시")
         return

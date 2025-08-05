@@ -81,11 +81,11 @@ struct SwitchDragGesture: Gesture {
         isDetachedHandle = !handleComponent.isAttached
         
         if isDetachedHandle {
-          // HandleDetached가 바닥에 고정된 상태인지 확인
+          // HandleDetached가 바닥에 고정된 상태인지 확인 (kinematic 또는 static 모드)
           var isHandleGrounded = false
           if draggableEntity.components.has(PhysicsBodyComponent.self) {
             let physicsBody = draggableEntity.components[PhysicsBodyComponent.self]!
-            isHandleGrounded = (physicsBody.mode == .kinematic && !physicsBody.isAffectedByGravity)
+            isHandleGrounded = ((physicsBody.mode == .kinematic || physicsBody.mode == .static) && !physicsBody.isAffectedByGravity)
           }
           
           // 바닥에 고정된 상태라면 실제 핀치 의도가 있는지 확인
@@ -100,20 +100,10 @@ struct SwitchDragGesture: Gesture {
               newPhysicsBody.isAffectedByGravity = true
               draggableEntity.components.set(newPhysicsBody)
               
-              // 바닥 마커 제거 및 상호작용 컴포넌트 복원
-              // GroundedMarkerComponent는 HandTrackingManager+DropToFloor.swift에서 정의됨
-              struct GroundedMarkerComponent: Component {}
+              // GroundedMarkerComponent 제거하여 보호 시스템 중단
               draggableEntity.components.remove(GroundedMarkerComponent.self)
               
-              // DraggableComponent와 InputTargetComponent 복원
-              if !draggableEntity.components.has(DraggableComponent.self) {
-                draggableEntity.components.set(DraggableComponent())
-              }
-              if !draggableEntity.components.has(InputTargetComponent.self) {
-                draggableEntity.components.set(InputTargetComponent())
-              }
-              
-              print("🔓 [핀치 의도 감지] 실제 핀치로 바닥 고정 해제 및 상호작용 복원")
+              print("🔓 [핀치 의도 감지] 실제 핀치로 바닥 고정 해제 (보호 시스템 중단)")
             } else {
               // 핀치 의도가 없으면 바닥 고정 상태 유지
               print("🛡️ [바닥 보호] 핀치 의도 없음 - 바닥 고정 상태 유지")
@@ -178,11 +168,11 @@ struct SwitchDragGesture: Gesture {
     let handTrackingManager = HandTrackingManager.shared
     let realHandTrackingManager = RealHandTrackingManager.shared
     
-    // HandleDetached가 바닥에 고정된 상태인지 확인
+    // HandleDetached가 바닥에 고정된 상태인지 확인 (kinematic 또는 static 모드)
     var isHandleOnFloor = false
     if entity.components.has(PhysicsBodyComponent.self) {
       let physicsBody = entity.components[PhysicsBodyComponent.self]!
-      isHandleOnFloor = (physicsBody.mode == .kinematic && !physicsBody.isAffectedByGravity)
+      isHandleOnFloor = ((physicsBody.mode == .kinematic || physicsBody.mode == .static) && !physicsBody.isAffectedByGravity)
     }
     
     // 실제 핀치 상태 확인 (바닥에 있을 때는 더 관대한 감지)
