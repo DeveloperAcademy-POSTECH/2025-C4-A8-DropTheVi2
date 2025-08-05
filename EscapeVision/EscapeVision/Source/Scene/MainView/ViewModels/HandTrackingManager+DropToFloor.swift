@@ -8,9 +8,6 @@
 import SwiftUI
 import RealityKit
 
-// MARK: - 바닥 착지 마킹 컴포넌트
-struct GroundedMarkerComponent: Component {}
-
 // MARK: - 바닥 떨어뜨리기 및 관련 기능
 extension HandTrackingManager {
   
@@ -105,7 +102,7 @@ extension HandTrackingManager {
     // HandleDetached의 현재 상태 확인
     let handleCurrentWorldPos = handleDetached.convert(position: SIMD3<Float>(0, 0, 0), to: nil)
     let handleLocalBounds = handleDetached.visualBounds(relativeTo: handleDetached)
-    _ = handleDetached.visualBounds(relativeTo: nil)  // 사용하지 않는 변수 처리
+    let handleWorldBounds = handleDetached.visualBounds(relativeTo: nil)
     
     // 절대적으로 안전한 높이 계산
     // 1. 바닥 위치와 관계없이 최소 10cm 위에 배치
@@ -221,7 +218,7 @@ extension HandTrackingManager {
   /// HandleDetached를 바닥 착지 상태로 설정 (손 추적으로부터 격리)
   private func setHandleAsGrounded(_ handleDetached: Entity) {
     // HandleComponent에 바닥 착지 상태 마킹
-    if let handleComponent = handleDetached.components[HandleComponent.self] {
+    if var handleComponent = handleDetached.components[HandleComponent.self] {
       // 기존 HandleComponent 정보 유지하면서 바닥 착지 상태만 추가 표시
       handleDetached.components.set(HandleComponent(
         switchIndex: handleComponent.switchIndex, 
@@ -239,100 +236,7 @@ extension HandTrackingManager {
       print("🔒 [바닥 고정] HandleDetached를 kinematic 모드로 설정 - 손 추적 격리")
     }
     
-    // 바닥 착지 마킹을 위한 특별한 컴포넌트 추가 (바닥 보호 시스템용)
-    handleDetached.components.set(GroundedMarkerComponent())
-    
-    // 손 휘저음 감지 시 위로 튀어오르는 보호 시스템 활성화
-    setupBounceProtection(for: handleDetached)
-    
     print("🏠 [바닥 착지 완료] HandleDetached가 바닥에 안정적으로 고정됨")
-  }
-  
-  /// 바닥에서 손 휘저음 감지 시 위로 튀어오르는 보호 시스템
-  private func setupBounceProtection(for handleDetached: Entity) {
-    // 백그라운드에서 지속적으로 손 위치 모니터링
-    Task {
-      while handleDetached.components.has(GroundedMarkerComponent.self) {
-        try? await Task.sleep(nanoseconds: 500_000_000) // 0.5초마다 체크
-        
-        // 바닥 고정 상태인지 확인
-        guard handleDetached.components.has(PhysicsBodyComponent.self) else { break }
-        let physicsBody = handleDetached.components[PhysicsBodyComponent.self]!
-        guard physicsBody.mode == .kinematic && !physicsBody.isAffectedByGravity else { break }
-        
-        // 현재 위치 확인
-        let currentPosition = handleDetached.position
-        
-        // RealHandTrackingManager로 손 위치 확인
-        if let handPosition = RealHandTrackingManager.shared.getCurrentHandPosition() {
-          let distanceToHand = length(handPosition - currentPosition)
-          
-          // 손이 40cm 이내에 있고 핀치 상태가 아닐 때 (일반 손 휘저음)
-          if distanceToHand < 0.4 && !RealHandTrackingManager.shared.isAnyHandPinching() {
-            print("🚨 [바닥 보호] 손 휘저음 감지 - HandleDetached 보호 튀어오르기 시작 (거리: \(String(format: "%.3f", distanceToHand))m)")
-            
-            // MainActor에서 UI 업데이트 실행
-            await MainActor.run {
-              self.performProtectiveBounce(handleDetached: handleDetached)
-            }
-            
-            // 튀어오르기 후 3초간 대기 (너무 자주 튀지 않도록)
-            try? await Task.sleep(nanoseconds: 3_000_000_000)
-          }
-        }
-      }
-    }
-  }
-  
-  /// 보호용 튀어오르기 실행
-  private func performProtectiveBounce(handleDetached: Entity) {
-    // 1. 현재 위치에서 위로 15cm 상승
-    let bounceHeight: Float = 0.15
-    let currentPosition = handleDetached.position
-    let targetY = max(currentPosition.y + bounceHeight, floorY + bounceHeight)
-    
-    // 2. 일시적으로 dynamic 모드로 변경하여 튀어오르기
-    if let physicsBody = handleDetached.components[PhysicsBodyComponent.self] {
-      var bouncePhysicsBody = physicsBody
-      bouncePhysicsBody.mode = .dynamic
-      bouncePhysicsBody.isAffectedByGravity = true
-      handleDetached.components.set(bouncePhysicsBody)
-    }
-    
-    // 3. 위로 속도 적용
-    if !handleDetached.components.has(PhysicsMotionComponent.self) {
-      handleDetached.components.set(PhysicsMotionComponent())
-    }
-    if var motionComponent = handleDetached.components[PhysicsMotionComponent.self] {
-      motionComponent.linearVelocity = SIMD3<Float>(0, 2.5, 0)  // 위로 2.5m/s
-      handleDetached.components.set(motionComponent)
-    }
-    
-    print("🦘 [보호 튀어오르기] HandleDetached 위로 튀어오름 (목표 높이: \(String(format: "%.3f", targetY))m)")
-    
-    // 4. 1초 후 static 모드로 고정
-    Task { @MainActor in
-      try? await Task.sleep(nanoseconds: 1_000_000_000) // 1초 대기
-      
-      // static 모드로 설정하여 완전히 고정
-      if let currentPhysicsBody = handleDetached.components[PhysicsBodyComponent.self] {
-        var staticPhysicsBody = currentPhysicsBody
-        staticPhysicsBody.mode = .static  // 완전히 움직이지 않는 static 모드
-        staticPhysicsBody.isAffectedByGravity = false
-        handleDetached.components.set(staticPhysicsBody)
-        
-        // 위치를 안전한 높이로 고정
-        let finalY = max(floorY + 0.08, 0.08) // 바닥에서 8cm 위
-        handleDetached.position.y = finalY
-        
-        print("🔒 [static 고정] HandleDetached를 static 모드로 완전 고정 (Y: \(String(format: "%.3f", finalY))m)")
-      }
-      
-      // 속도 컴포넌트 제거
-      handleDetached.components.remove(PhysicsMotionComponent.self)
-      
-      print("✅ [보호 완료] HandleDetached 바닥 보호 시스템 재활성화")
-    }
   }
   
   /// 바닥 착지 후 HandleDetached의 상호작용 컴포넌트들 복원
