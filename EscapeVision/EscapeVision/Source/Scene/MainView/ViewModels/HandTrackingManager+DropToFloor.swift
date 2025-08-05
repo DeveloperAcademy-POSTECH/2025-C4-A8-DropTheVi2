@@ -286,7 +286,7 @@ extension HandTrackingManager {
             handleDetached.components.set(newPhysicsBody)
             
             // 위로 임펄스 적용
-            handleDetached.addForce([0, 2.0, 0], relativeTo: nil)
+            handleDetached.applyLinearImpulse(SIMD3<Float>(0, 2.0, 0), relativeTo: nil)
             
             print("🦘 [바닥 보호 튀어오르기] 손 감지로 HandleDetached 위로 튀어오름 (거리: \(String(format: "%.3f", distanceToHand))m)")
             
