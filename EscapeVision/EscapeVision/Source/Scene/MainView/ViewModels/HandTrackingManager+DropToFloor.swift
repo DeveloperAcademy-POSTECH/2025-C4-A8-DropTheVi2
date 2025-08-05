@@ -215,7 +215,7 @@ extension HandTrackingManager {
     }
   }
   
-  /// HandleDetached를 바닥 착지 상태로 설정 (손 추적으로부터 완전 격리)
+  /// HandleDetached를 바닥 착지 상태로 설정 (손 추적으로부터 격리)
   private func setHandleAsGrounded(_ handleDetached: Entity) {
     // HandleComponent에 바닥 착지 상태 마킹
     if var handleComponent = handleDetached.components[HandleComponent.self] {
@@ -236,16 +236,7 @@ extension HandTrackingManager {
       print("🔒 [바닥 고정] HandleDetached를 kinematic 모드로 설정 - 손 추적 격리")
     }
     
-    // ⭐ 핵심: 터치 및 드래그 상호작용 컴포넌트 완전 제거 (바닥 가라앉기 근본 차단)
-    handleDetached.components.remove(DraggableComponent.self)
-    handleDetached.components.remove(InputTargetComponent.self)
-    print("🚫 [터치 차단] DraggableComponent 및 InputTargetComponent 제거 - 터치 불가능")
-    
-    // 바닥 착지 마킹을 위한 특별한 컴포넌트 추가 (식별용)
-    struct GroundedMarkerComponent: Component {}
-    handleDetached.components.set(GroundedMarkerComponent())
-    
-    print("🏠 [바닥 착지 완료] HandleDetached가 바닥에 완전히 격리되어 고정됨")
+    print("🏠 [바닥 착지 완료] HandleDetached가 바닥에 안정적으로 고정됨")
   }
   
   /// 바닥 착지 후 HandleDetached의 상호작용 컴포넌트들 복원

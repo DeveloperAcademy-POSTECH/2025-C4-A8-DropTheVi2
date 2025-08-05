@@ -31,6 +31,10 @@ struct SwitchDragGesture: Gesture {
   @State private var pinchReleaseTime: Date?
   private let pinchReleaseGracePeriod: TimeInterval = 1.5  // 1.5초 유예 시간
   
+  // 바닥 튀어오름 효과 쿨다운 관련
+  @State private var lastBounceTime: Date?
+  private let bounceCooldown: TimeInterval = 2.0  // 2초 쿨다운
+  
   var body: some Gesture {
     DragGesture()
       .targetedToAnyEntity()
@@ -40,6 +44,56 @@ struct SwitchDragGesture: Gesture {
       .onEnded { value in
         handleDragEnded(value)
       }
+  }
+  
+  /// 바닥에 고정된 HandleDetached에 손이 닿았을 때 살짝 튀어오르는 효과
+  private func applyGroundBounceEffect(to entity: Entity) {
+    guard entity.components.has(PhysicsBodyComponent.self) else { return }
+    
+    let physicsBody = entity.components[PhysicsBodyComponent.self]!
+    guard physicsBody.mode == .kinematic && !physicsBody.isAffectedByGravity else { return }
+    
+    // 쿨다운 시간 체크 (연속적인 튀어오름 방지)
+    if let lastBounce = lastBounceTime {
+      let timeSinceLastBounce = Date().timeIntervalSince(lastBounce)
+      if timeSinceLastBounce < bounceCooldown {
+        print("⏰ [튀어오름 쿨다운] \(String(format: "%.1f", bounceCooldown - timeSinceLastBounce))초 남음")
+        return
+      }
+    }
+    
+    lastBounceTime = Date()
+    let currentPosition = entity.position
+    
+    // 짧은 순간만 dynamic 모드로 변경하여 튀어오르게 한 후 즉시 복원
+    Task { @MainActor in
+      // 1. Dynamic 모드로 임시 변경
+      var tempPhysicsBody = physicsBody
+      tempPhysicsBody.mode = .dynamic
+      tempPhysicsBody.isAffectedByGravity = true
+      entity.components.set(tempPhysicsBody)
+      
+      // 2. 위쪽으로 작은 힘을 가해서 튀어오르게 함
+      let bounceForce = SIMD3<Float>(0, 0.3, 0) // 위쪽으로 가벼운 힘
+      entity.addForce(bounceForce, relativeTo: nil)
+      
+      print("⬆️ [바닥 튀어오름] HandleDetached가 살짝 튀어오름")
+      
+      // 3. 0.5초 후 다시 kinematic 모드로 복원
+      try? await Task.sleep(nanoseconds: 500_000_000) // 0.5초
+      
+      // 4. 다시 바닥 고정 상태로 복원
+      var restoredPhysicsBody = physicsBody
+      restoredPhysicsBody.mode = .kinematic
+      restoredPhysicsBody.isAffectedByGravity = false
+      entity.components.set(restoredPhysicsBody)
+      
+      // 5. 바닥 위치로 안전하게 복원
+      let safeFloorHeight: Float = 0.05 // 바닥에서 5cm 위
+      entity.position = SIMD3<Float>(currentPosition.x, safeFloorHeight, currentPosition.z)
+      
+      print("🏠 [바닥 복원] HandleDetached가 바닥 위치로 안전하게 복원됨")
+    }
   }
   
   private func handleDragChanged(_ value: EntityTargetValue<DragGesture.Value>) {
@@ -81,10 +135,6 @@ struct SwitchDragGesture: Gesture {
         isDetachedHandle = !handleComponent.isAttached
         
         if isDetachedHandle {
-          // GroundedMarkerComponent로 바닥 착지 상태 확인 (더 확실한 방법)
-          struct GroundedMarkerComponent: Component {}
-          let isMarkedAsGrounded = draggableEntity.components.has(GroundedMarkerComponent.self)
-          
           // HandleDetached가 바닥에 고정된 상태인지 확인
           var isHandleGrounded = false
           if draggableEntity.components.has(PhysicsBodyComponent.self) {
@@ -92,27 +142,22 @@ struct SwitchDragGesture: Gesture {
             isHandleGrounded = (physicsBody.mode == .kinematic && !physicsBody.isAffectedByGravity)
           }
           
-          // 바닥 착지 마커가 있거나 물리적으로 고정된 상태라면 핀치 의도 확인
-          if isMarkedAsGrounded || isHandleGrounded {
+          // 바닥에 고정된 상태라면 실제 핀치 의도가 있는지 확인
+          if isHandleGrounded {
             let realHandTrackingManager = RealHandTrackingManager.shared
             let isActuallyPinching = realHandTrackingManager.isAnyHandPinchingForFloorPickup()
             
             if isActuallyPinching {
-              // 실제 핀치 의도가 있을 때만 바닥 고정 해제 및 컴포넌트 복원
+              // 실제 핀치 의도가 있을 때만 바닥 고정 해제
               var newPhysicsBody = draggableEntity.components[PhysicsBodyComponent.self]!
               newPhysicsBody.mode = .dynamic
               newPhysicsBody.isAffectedByGravity = true
               draggableEntity.components.set(newPhysicsBody)
-              
-              // 바닥 착지 마커 제거 및 상호작용 컴포넌트 복원
-              draggableEntity.components.remove(GroundedMarkerComponent.self)
-              draggableEntity.components.set(DraggableComponent())
-              draggableEntity.components.set(InputTargetComponent())
-              
-              print("🔓 [핀치 의도 감지] 실제 핀치로 바닥 고정 해제 및 컴포넌트 복원")
+              print("🔓 [핀치 의도 감지] 실제 핀치로 바닥 고정 해제")
             } else {
-              // 핀치 의도가 없으면 바닥 고정 상태 유지
-              print("🛡️ [바닥 보호] 핀치 의도 없음 - 바닥 고정 상태 유지")
+              // 핀치 의도가 없으면 바닥 고정 상태 유지하면서 살짝 튀어오르게 함
+              print("🛡️ [바닥 보호] 핀치 의도 없음 - 바닥에서 살짝 튀어오름")
+              applyGroundBounceEffect(to: draggableEntity)
               isDraggingHandle = false
               draggedHandle = nil
               return
@@ -270,6 +315,8 @@ struct SwitchDragGesture: Gesture {
         handTrackingManager.updateHandMovement(deltaTranslation: deltaTranslation, handleDetached: entity)
       } else {
         print("🛡️ [바닥 보호] HandleDetached가 바닥에 고정된 상태 - 일반 손 추적 차단")
+        // 바닥에 고정된 상태에서 손이 닿으면 살짝 튀어오르게 함
+        applyGroundBounceEffect(to: entity)
       }
     }
     
