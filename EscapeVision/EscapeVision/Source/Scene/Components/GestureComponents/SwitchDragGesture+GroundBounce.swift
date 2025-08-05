@@ -38,9 +38,9 @@ extension SwitchDragGesture {
       tempPhysicsBody.isAffectedByGravity = true
       entity.components.set(tempPhysicsBody)
       
-      // 2. 위쪽으로 작은 힘을 가해서 튀어오르게 함
-      let bounceForce = SIMD3<Float>(0, 0.3, 0) // 위쪽으로 가벼운 힘
-      entity.addForce(bounceForce, relativeTo: nil)
+      // 2. 위쪽으로 작은 위치 이동으로 튀어오르게 함 (addForce 대신 직접 위치 조정)
+      let bounceHeight: Float = 0.1 // 10cm 위로 튀어오름
+      entity.position.y += bounceHeight
       
       print("⬆️ [바닥 튀어오름] HandleDetached가 살짝 튀어오름")
       

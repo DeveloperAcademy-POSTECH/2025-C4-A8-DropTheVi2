@@ -15,25 +15,25 @@ import RealityKit
 /// - 좌우 이동: 주로 Vision Pro 머리 회전, 핸드 제스처는 미세 조정
 struct SwitchDragGesture: Gesture {
   let viewModel: RoomViewModel
-  @State private var isDraggingHandle = false
-  @State private var draggedHandle: Entity?
-  @State private var isDetachedHandle = false
+  @State var isDraggingHandle = false  // extension에서 접근 가능하도록 internal로 변경
+  @State var draggedHandle: Entity?    // extension에서 접근 가능하도록 internal로 변경
+  @State var isDetachedHandle = false  // extension에서 접근 가능하도록 internal로 변경
   
   // Switch Handle 전용
   @State private var originalHandlePosition: SIMD3<Float>?
   @State private var originalHandleOrientation: simd_quatf?
   
   // 제스처 추적용 공통 상태 (HandleDetached 및 일반 스위치 핸들 모두 사용)
-  @State private var lastGestureTranslation: CGSize = .zero  // 이전 제스처 (델타 계산용)
-  @State private var accumulatedPinchMovement: SIMD3<Float> = .zero  // 핀치 모드 누적 이동
+  @State var lastGestureTranslation: CGSize = .zero  // 이전 제스처 (델타 계산용)
+  @State var accumulatedPinchMovement: SIMD3<Float> = .zero  // 핀치 모드 누적 이동
   
   // 핀치 해제 지연 관련 (바닥에서 줍기 편의성 향상)
-  @State private var pinchReleaseTime: Date?
-  private let pinchReleaseGracePeriod: TimeInterval = 1.5  // 1.5초 유예 시간
+  @State var pinchReleaseTime: Date?  // extension에서 접근 가능하도록 internal로 변경
+  let pinchReleaseGracePeriod: TimeInterval = 1.5  // 1.5초 유예 시간
   
   // 바닥 튀어오름 효과 쿨다운 관련
-  @State private var lastBounceTime: Date?
-  private let bounceCooldown: TimeInterval = 2.0  // 2초 쿨다운
+  @State var lastBounceTime: Date?  // extension에서 접근 가능하도록 internal로 변경
+  let bounceCooldown: TimeInterval = 2.0  // 2초 쿨다운
   
   var body: some Gesture {
     DragGesture()
