@@ -81,6 +81,10 @@ struct SwitchDragGesture: Gesture {
         isDetachedHandle = !handleComponent.isAttached
         
         if isDetachedHandle {
+          // GroundedMarkerComponent로 바닥 착지 상태 확인 (더 확실한 방법)
+          struct GroundedMarkerComponent: Component {}
+          let isMarkedAsGrounded = draggableEntity.components.has(GroundedMarkerComponent.self)
+          
           // HandleDetached가 바닥에 고정된 상태인지 확인
           var isHandleGrounded = false
           if draggableEntity.components.has(PhysicsBodyComponent.self) {
@@ -88,18 +92,24 @@ struct SwitchDragGesture: Gesture {
             isHandleGrounded = (physicsBody.mode == .kinematic && !physicsBody.isAffectedByGravity)
           }
           
-          // 바닥에 고정된 상태라면 실제 핀치 의도가 있는지 확인
-          if isHandleGrounded {
+          // 바닥 착지 마커가 있거나 물리적으로 고정된 상태라면 핀치 의도 확인
+          if isMarkedAsGrounded || isHandleGrounded {
             let realHandTrackingManager = RealHandTrackingManager.shared
             let isActuallyPinching = realHandTrackingManager.isAnyHandPinchingForFloorPickup()
             
             if isActuallyPinching {
-              // 실제 핀치 의도가 있을 때만 바닥 고정 해제
+              // 실제 핀치 의도가 있을 때만 바닥 고정 해제 및 컴포넌트 복원
               var newPhysicsBody = draggableEntity.components[PhysicsBodyComponent.self]!
               newPhysicsBody.mode = .dynamic
               newPhysicsBody.isAffectedByGravity = true
               draggableEntity.components.set(newPhysicsBody)
-              print("🔓 [핀치 의도 감지] 실제 핀치로 바닥 고정 해제")
+              
+              // 바닥 착지 마커 제거 및 상호작용 컴포넌트 복원
+              draggableEntity.components.remove(GroundedMarkerComponent.self)
+              draggableEntity.components.set(DraggableComponent())
+              draggableEntity.components.set(InputTargetComponent())
+              
+              print("🔓 [핀치 의도 감지] 실제 핀치로 바닥 고정 해제 및 컴포넌트 복원")
             } else {
               // 핀치 의도가 없으면 바닥 고정 상태 유지
               print("🛡️ [바닥 보호] 핀치 의도 없음 - 바닥 고정 상태 유지")
