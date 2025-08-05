@@ -350,6 +350,11 @@ struct SwitchDragGesture: Gesture {
     print("🎯 [HandleDetached 종료] 바닥으로 떨어뜨림")
   }
   
+}
+
+// MARK: - Switch Helper Functions Extension
+extension SwitchDragGesture {
+  
   func findSwitchParent(for entity: Entity) -> Entity? {
     // 먼저 일반적인 부모 검색으로 실제 Switch 찾기
     var currentEntity: Entity? = entity
@@ -398,6 +403,10 @@ struct SwitchDragGesture: Gesture {
     }
     return nil
   }
+}
+
+// MARK: - Switch Toggle Extension  
+extension SwitchDragGesture {
   
   /// 일반 스위치 핸들 토글 처리 (Switch1~5)
   func handleNormalSwitchToggle(_ draggableEntity: Entity, _ value: EntityTargetValue<DragGesture.Value>) {
@@ -478,83 +487,86 @@ struct SwitchDragGesture: Gesture {
       }
     }
     
-      // 일반 드래그 제스처용 이전 위치 업데이트
-  lastGestureTranslation = value.translation
+    // 일반 드래그 제스처용 이전 위치 업데이트
+    lastGestureTranslation = value.translation
+  }
 }
 
-/// 바닥 고정 상태에서 손 접촉 시 튀어오르기 보호 동작
-private func performFloorBounceProtection(for entity: Entity) {
-  // 이미 튀어오르는 중이면 중복 실행 방지
-  guard entity.components.has(PhysicsBodyComponent.self) else { return }
+// MARK: - Floor Bounce Protection Extension
+extension SwitchDragGesture {
   
-  let physicsBody = entity.components[PhysicsBodyComponent.self]!
-  
-  // static 모드인 경우 이미 보호 중이므로 중복 실행 방지
-  if physicsBody.mode == .static {
-    print("⚡ [튀어오르기 스킵] 이미 static 모드 보호 중")
-    return
+  /// 바닥 고정 상태에서 손 접촉 시 튀어오르기 보호 동작
+  private func performFloorBounceProtection(for entity: Entity) {
+    // 이미 튀어오르는 중이면 중복 실행 방지
+    guard entity.components.has(PhysicsBodyComponent.self) else { return }
+    
+    let physicsBody = entity.components[PhysicsBodyComponent.self]!
+    
+    // static 모드인 경우 이미 보호 중이므로 중복 실행 방지
+    if physicsBody.mode == .static {
+      print("⚡ [튀어오르기 스킵] 이미 static 모드 보호 중")
+      return
+    }
+    
+    guard physicsBody.mode == .kinematic && !physicsBody.isAffectedByGravity else { return }
+    
+    print("⚡ [튀어오르기 보호] HandleDetached 바닥 보호 동작 시작")
+    
+    // 현재 위치 저장
+    let currentPosition = entity.position
+    let bounceHeight: Float = 0.15  // 15cm 위로 튀어오르기
+    
+    // 일시적으로 dynamic 모드로 변경하여 튀어오르기 효과 적용
+    var tempPhysicsBody = physicsBody
+    tempPhysicsBody.mode = .dynamic
+    tempPhysicsBody.isAffectedByGravity = true
+    entity.components.set(tempPhysicsBody)
+    
+    // 즉시 위로 위치 이동 (물리 임펄스 대신 직접 위치 설정)
+    let newPosition = SIMD3<Float>(currentPosition.x, currentPosition.y + bounceHeight, currentPosition.z)
+    entity.position = newPosition
+    
+    print("⚡ [튀어오르기] 위치 이동: \(newPosition), 높이: +\(bounceHeight)m")
+    
+    // 0.3초 후 static 모드로 변경하여 완전 고정
+    Task { @MainActor in
+      try? await Task.sleep(nanoseconds: 300_000_000) // 0.3초 대기
+      
+      // static 모드로 변경하여 완전히 움직이지 않도록 고정
+      var staticPhysicsBody = PhysicsBodyComponent(
+        massProperties: PhysicsMassProperties(mass: 0.1),
+        material: PhysicsMaterialResource.generate(
+          staticFriction: 1.0,
+          dynamicFriction: 1.0,
+          restitution: 0.0
+        ),
+        mode: .static  // static 모드로 완전 고정
+      )
+      staticPhysicsBody.isAffectedByGravity = false
+      entity.components.set(staticPhysicsBody)
+      
+      // 위치를 약간 위쪽으로 고정 (바닥 침투 방지)
+      let finalPosition = SIMD3<Float>(currentPosition.x, currentPosition.y + 0.05, currentPosition.z)
+      entity.position = finalPosition
+      
+      print("🔒 [완전 고정] HandleDetached를 static 모드로 고정 (Y: \(String(format: "%.3f", finalPosition.y)))")
+      
+      // 1초 후 다시 kinematic 모드로 변경 (집을 수 있도록)
+      try? await Task.sleep(nanoseconds: 1_000_000_000) // 1초 대기
+      
+      var finalPhysicsBody = PhysicsBodyComponent(
+        massProperties: PhysicsMassProperties(mass: 0.1),
+        material: PhysicsMaterialResource.generate(
+          staticFriction: 0.8,
+          dynamicFriction: 0.6,
+          restitution: 0.1
+        ),
+        mode: .kinematic  // kinematic 모드로 복원
+      )
+      finalPhysicsBody.isAffectedByGravity = false
+      entity.components.set(finalPhysicsBody)
+      
+      print("🔄 [모드 복원] HandleDetached를 kinematic 모드로 복원 - 집기 가능 상태")
+    }
   }
-  
-  guard physicsBody.mode == .kinematic && !physicsBody.isAffectedByGravity else { return }
-  
-  print("⚡ [튀어오르기 보호] HandleDetached 바닥 보호 동작 시작")
-  
-  // 현재 위치 저장
-  let currentPosition = entity.position
-  let bounceHeight: Float = 0.15  // 15cm 위로 튀어오르기
-  let targetPosition = SIMD3<Float>(currentPosition.x, currentPosition.y + bounceHeight, currentPosition.z)
-  
-  // 일시적으로 dynamic 모드로 변경하여 튀어오르기 효과 적용
-  var tempPhysicsBody = physicsBody
-  tempPhysicsBody.mode = .dynamic
-  tempPhysicsBody.isAffectedByGravity = true
-  entity.components.set(tempPhysicsBody)
-  
-  // 즉시 위쪽으로 임펄스 적용
-  let bounceImpulse = SIMD3<Float>(0, 2.0, 0)  // 위쪽으로 강한 임펄스
-  entity.applyLinearImpulse(bounceImpulse, relativeTo: nil)
-  
-  print("⚡ [튀어오르기] 임펄스 적용: \(bounceImpulse), 목표 높이: +\(bounceHeight)m")
-  
-  // 0.3초 후 static 모드로 변경하여 완전 고정
-  Task { @MainActor in
-    try? await Task.sleep(nanoseconds: 300_000_000) // 0.3초 대기
-    
-    // static 모드로 변경하여 완전히 움직이지 않도록 고정
-    var staticPhysicsBody = PhysicsBodyComponent(
-      massProperties: PhysicsMassProperties(mass: 0.1),
-      material: PhysicsMaterialResource.generate(
-        staticFriction: 1.0,
-        dynamicFriction: 1.0,
-        restitution: 0.0
-      ),
-      mode: .static  // static 모드로 완전 고정
-    )
-    staticPhysicsBody.isAffectedByGravity = false
-    entity.components.set(staticPhysicsBody)
-    
-    // 위치를 약간 위쪽으로 고정 (바닥 침투 방지)
-    let finalPosition = SIMD3<Float>(currentPosition.x, currentPosition.y + 0.05, currentPosition.z)
-    entity.position = finalPosition
-    
-    print("🔒 [완전 고정] HandleDetached를 static 모드로 고정 (Y: \(String(format: "%.3f", finalPosition.y)))")
-    
-    // 1초 후 다시 kinematic 모드로 변경 (집을 수 있도록)
-    try? await Task.sleep(nanoseconds: 1_000_000_000) // 1초 대기
-    
-    var finalPhysicsBody = PhysicsBodyComponent(
-      massProperties: PhysicsMassProperties(mass: 0.1),
-      material: PhysicsMaterialResource.generate(
-        staticFriction: 0.8,
-        dynamicFriction: 0.6,
-        restitution: 0.1
-      ),
-      mode: .kinematic  // kinematic 모드로 복원
-    )
-    finalPhysicsBody.isAffectedByGravity = false
-    entity.components.set(finalPhysicsBody)
-    
-    print("🔄 [모드 복원] HandleDetached를 kinematic 모드로 복원 - 집기 가능 상태")
-  }
-}
 }
