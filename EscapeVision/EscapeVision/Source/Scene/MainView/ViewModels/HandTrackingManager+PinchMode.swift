@@ -136,7 +136,9 @@ extension HandTrackingManager {
       return
     }
     
-    handleDetached.position = newPosition
+    // 바닥 보호 적용 후 위치 설정
+    let safePosition = enforceFloorProtectionInPinchMode(newPosition, for: handleDetached)
+    handleDetached.position = safePosition
     
     if distance > 0.1 {  // 10cm 이상 차이날 때만 로그
       print("🤏 [핀치 추적] 거리: \(String(format: "%.3f", distance))m, 새 위치: \(String(format: "%.3f,%.3f,%.3f", newPosition.x, newPosition.y, newPosition.z))")
@@ -157,5 +159,29 @@ extension HandTrackingManager {
   /// 현재 핀치 모드 상태 확인
   var isPinchModeActive: Bool {
     return isPinchMode
+  }
+  
+  /// 핀치 모드에서의 바닥 보호 - 절대 바닥 아래로 떨어지지 않도록 함
+  private func enforceFloorProtectionInPinchMode(_ targetPosition: SIMD3<Float>, for handleDetached: Entity) -> SIMD3<Float> {
+    var safePosition = targetPosition
+    
+    // 바닥 Y 좌표보다 아래로 떨어지는 것을 방지
+    let minimumY = floorY + 0.05  // 바닥에서 최소 5cm 위
+    
+    if safePosition.y < minimumY {
+      // 바닥 아래로 떨어지려 하면 강제로 바닥 위로 조정
+      let originalY = safePosition.y
+      safePosition.y = minimumY
+      
+      print("🛡️ [핀치 모드 바닥 보호] Y=\(String(format: "%.3f", originalY)) → Y=\(String(format: "%.3f", safePosition.y)) (바닥 침투 방지)")
+      
+      // 핀치 모드에서 바닥 침투 시도 시 손 목표 위치도 조정
+      if targetHandPosition.y < minimumY {
+        targetHandPosition.y = minimumY + 0.1  // 손 목표 위치를 바닥에서 10cm 위로
+        print("🤏 [핀치 목표 조정] 손 목표 위치를 바닥 위로 조정")
+      }
+    }
+    
+    return safePosition
   }
 } 
