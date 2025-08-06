@@ -82,8 +82,8 @@ extension HandTrackingManager {
       handleDetached.components.set(physicsMotion)
     }
     
-    // 반발 사운드 재생
-    SoundManager.shared.playSound(named: "switchdrop", volume: 0.3)
+    // 반발 사운드 재생 (SwitchDropSoundManager 사용)
+    SwitchDropSoundManager.shared.playSwitchDropSound()
     
     print("🚀 [반발 효과] HandleDetached를 \(String(format: "%.2f", bounceHeight))m 위로 튀어올림")
     

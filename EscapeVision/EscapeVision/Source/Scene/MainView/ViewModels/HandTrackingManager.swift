@@ -28,9 +28,9 @@ final class HandTrackingManager {
   var pinchBasePosition: SIMD3<Float> = .zero  // 핀치 시작 기준 위치
   var pinchModeActivationTime: Date?  // 핀치 모드 활성화 시간 (바닥 감지 유예용)
   
-  // 바닥 상호작용 관련
-  private var lastHandPushTime: Date?  // 마지막 손바닥 누르기 시간
-  private let handPushCooldown: TimeInterval = 1.0  // 손바닥 누르기 쿨다운 (1초)
+  // 바닥 상호작용 관련 (extensions에서 접근하기 위해 internal)
+  var lastHandPushTime: Date?  // 마지막 손바닥 누르기 시간
+  let handPushCooldown: TimeInterval = 1.0  // 손바닥 누르기 쿨다운 (1초)
   
   // 감도 설정
   private let sensitivity: Float = 0.003  // 손 움직임 감도 (0.005 → 0.003으로 감소)
