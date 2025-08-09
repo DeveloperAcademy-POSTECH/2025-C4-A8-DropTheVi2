@@ -8,9 +8,7 @@
 import SwiftUI
 import ARKit
 import AVFoundation
-import CoreLocation
 import CoreMotion
-import Photos
 
 @MainActor
 final class PermissionsManager: NSObject, ObservableObject {
@@ -19,39 +17,23 @@ final class PermissionsManager: NSObject, ObservableObject {
   @Published var permissionsGranted = false
   @Published var permissionStatuses: [String: String] = [:]
   
-  private let locationManager = CLLocationManager()
-  
-  override init() {
-    super.init()
-    locationManager.delegate = self
-  }
-  
-  /// 모든 필요한 권한을 요청합니다
+  /// 필요한 권한들을 요청합니다
   func requestAllPermissions() async {
-    print("🔐 [권한 요청] 모든 권한 요청 시작")
+    print("🔐 [권한 요청] 필요한 권한 요청 시작")
     
     // 1. 카메라 권한 요청
     await requestCameraPermission()
     
-    // 2. 마이크 권한 요청
-    await requestMicrophonePermission()
-    
-    // 3. 사진 라이브러리 권한 요청
-    await requestPhotosPermission()
-    
-    // 4. 위치 권한 요청
-    await requestLocationPermission()
-    
-    // 5. 모션 권한 요청 (iOS 17+, visionOS)
+    // 2. 모션 권한 요청 (iOS 17+, visionOS)
     await requestMotionPermission()
     
-    // 6. ARKit 권한 요청
+    // 3. ARKit 권한 요청
     await requestARKitPermissions()
     
     // 권한 상태 업데이트
     await updatePermissionStatuses()
     
-    print("🔐 [권한 요청] 모든 권한 요청 완료")
+    print("🔐 [권한 요청] 필요한 권한 요청 완료")
     print("📊 [권한 상태] \(permissionStatuses)")
   }
   
@@ -105,88 +87,7 @@ final class PermissionsManager: NSObject, ObservableObject {
     }
   }
   
-  private func requestMicrophonePermission() async {
-    print("🎤 [마이크 권한] 요청 중...")
-    
-    let status = AVCaptureDevice.authorizationStatus(for: .audio)
-    
-    switch status {
-    case .notDetermined:
-      let granted = await AVCaptureDevice.requestAccess(for: .audio)
-      if granted {
-        print("🎤 [마이크 권한] 결과: 허용")
-        // 실제 사용을 시도하여 확실히 권한 팝업 표시
-        await tryUsingMicrophone()
-      } else {
-        print("🎤 [마이크 권한] 결과: 거부")
-      }
-    case .authorized:
-      print("🎤 [마이크 권한] 이미 허용됨")
-    case .denied, .restricted:
-      print("🎤 [마이크 권한] 거부됨 또는 제한됨")
-    @unknown default:
-      print("🎤 [마이크 권한] 알 수 없는 상태")
-    }
-  }
-  
-  private func tryUsingMicrophone() async {
-    do {
-      let captureSession = AVCaptureSession()
-      guard let microphone = AVCaptureDevice.default(for: .audio) else {
-        print("🎤 [마이크] 기본 마이크 기기를 찾을 수 없음")
-        return
-      }
-      
-      let input = try AVCaptureDeviceInput(device: microphone)
-      if captureSession.canAddInput(input) {
-        captureSession.addInput(input)
-        print("🎤 [마이크] 임시 캡처 세션 생성 성공")
-        
-        // 잠시 후 세션 정리
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-          captureSession.stopRunning()
-        }
-      }
-    } catch {
-      print("🎤 [마이크] 캡처 세션 생성 실패: \(error)")
-    }
-  }
-  
-  private func requestPhotosPermission() async {
-    print("📸 [사진 권한] 요청 중...")
-    
-    let status = PHPhotoLibrary.authorizationStatus(for: .addOnly)
-    
-    switch status {
-    case .notDetermined:
-      let newStatus = await PHPhotoLibrary.requestAuthorization(for: .addOnly)
-      print("📸 [사진 권한] 결과: \(newStatus)")
-    case .authorized, .limited:
-      print("📸 [사진 권한] 이미 허용됨")
-    case .denied, .restricted:
-      print("📸 [사진 권한] 거부됨 또는 제한됨")
-    @unknown default:
-      print("📸 [사진 권한] 알 수 없는 상태")
-    }
-  }
-  
-  private func requestLocationPermission() async {
-    print("📍 [위치 권한] 요청 중...")
-    
-    let status = locationManager.authorizationStatus
-    
-    switch status {
-    case .notDetermined:
-      locationManager.requestWhenInUseAuthorization()
-      print("📍 [위치 권한] 요청됨")
-    case .authorizedWhenInUse, .authorizedAlways:
-      print("📍 [위치 권한] 이미 허용됨")
-    case .denied, .restricted:
-      print("📍 [위치 권한] 거부됨 또는 제한됨")
-    @unknown default:
-      print("📍 [위치 권한] 알 수 없는 상태")
-    }
-  }
+
   
   private func requestMotionPermission() async {
     print("🏃 [모션 권한] 요청 중...")
@@ -250,21 +151,9 @@ final class PermissionsManager: NSObject, ObservableObject {
     let cameraStatus = AVCaptureDevice.authorizationStatus(for: .video)
     statuses["카메라"] = authorizationStatusString(cameraStatus)
     
-    // 마이크
-    let micStatus = AVCaptureDevice.authorizationStatus(for: .audio)
-    statuses["마이크"] = authorizationStatusString(micStatus)
-    
-    // 사진
-    let photosStatus = PHPhotoLibrary.authorizationStatus(for: .addOnly)
-    statuses["사진"] = photoAuthorizationStatusString(photosStatus)
-    
-    // 위치
-    let locationStatus = locationManager.authorizationStatus
-    statuses["위치"] = locationAuthorizationStatusString(locationStatus)
-    
     permissionStatuses = statuses
     
-    // 모든 권한이 허용되었는지 확인
+    // 필요한 권한이 허용되었는지 확인
     let allGranted = statuses.values.allSatisfy { $0.contains("허용") }
     permissionsGranted = allGranted
   }
@@ -278,38 +167,6 @@ final class PermissionsManager: NSObject, ObservableObject {
     case .restricted: return "⚠️ 제한됨"
     case .notDetermined: return "❓ 미결정"
     @unknown default: return "❓ 알 수 없음"
-    }
-  }
-  
-  private func photoAuthorizationStatusString(_ status: PHAuthorizationStatus) -> String {
-    switch status {
-    case .authorized: return "✅ 허용됨"
-    case .limited: return "⚠️ 제한적 허용"
-    case .denied: return "❌ 거부됨"
-    case .restricted: return "⚠️ 제한됨"
-    case .notDetermined: return "❓ 미결정"
-    @unknown default: return "❓ 알 수 없음"
-    }
-  }
-  
-  private func locationAuthorizationStatusString(_ status: CLAuthorizationStatus) -> String {
-    switch status {
-    case .authorizedWhenInUse: return "✅ 앱 사용 중 허용"
-    case .authorizedAlways: return "✅ 항상 허용"
-    case .denied: return "❌ 거부됨"
-    case .restricted: return "⚠️ 제한됨"
-    case .notDetermined: return "❓ 미결정"
-    @unknown default: return "❓ 알 수 없음"
-    }
-  }
-}
-
-// MARK: - CLLocationManagerDelegate
-
-extension PermissionsManager: CLLocationManagerDelegate {
-  func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-    Task {
-      await updatePermissionStatuses()
     }
   }
 } 
