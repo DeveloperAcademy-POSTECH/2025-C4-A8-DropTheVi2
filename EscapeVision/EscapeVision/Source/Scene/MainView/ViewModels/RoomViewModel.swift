@@ -150,6 +150,7 @@ final class RoomViewModel {
     NotificationCenter.default.addObserver(forName: Notification.Name("openDrawer"), object: nil, queue: .main) { _ in
       print("서랍 알림 수신")
       self.openDrawer()
+      self.soundManager.playSound(.openDesk, volume: 1.0)
     }
     NotificationCenter.default.addObserver(forName: Notification.Name("openVent"), object: nil, queue: .main) { _ in
       print("환풍구 오픈 알림 수신")
@@ -160,7 +161,6 @@ final class RoomViewModel {
       }
     }
   }
-
   // MARK: - Scene Loading
   
   private func loadRoom(into anchor: AnchorEntity) async {
