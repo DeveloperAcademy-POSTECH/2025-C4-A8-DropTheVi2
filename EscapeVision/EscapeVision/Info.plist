@@ -2,66 +2,35 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<!-- Vision Pro ARKit 및 카메라 권한 설정 -->
-	<key>NSCameraUsageDescription</key>
-	<string>이 앱은 몰입형 AR 경험과 방탈출 게임에서 객체 추적을 위해 카메라를 사용합니다. (This app uses the camera for immersive AR experiences and object tracking in the escape room game.)</string>
+	<!-- 앱 표시 이름 -->
+	<key>CFBundleDisplayName</key>
+	<string>Escapple</string>
 	
-	<!-- 모션 및 센서 권한 -->
-	<key>NSMotionUsageDescription</key>
-	<string>이 앱은 가상 객체와의 향상된 상호작용을 위해 머리 움직임을 추적하고 정확한 공간 인식을 제공하는데 모션 센서를 사용합니다. (This app uses motion sensors to track head movement for enhanced interaction with virtual objects and provide accurate spatial awareness.)</string>
+	<!-- 앱 아이콘 설정 (visionOS용) -->
+	<key>CFBundleIcons</key>
+	<dict>
+		<key>CFBundlePrimaryIcon</key>
+		<string>AppIcon</string>
+	</dict>
 	
-	<!-- 월드 센싱 권한 (ARKit 핵심) -->
-	<key>NSWorldSensingUsageDescription</key>
-	<string>이 앱은 방탈출 환경에서 정확한 공간 추적과 가상 객체 상호작용을 제공하기 위해 월드 센싱을 사용합니다. (This app uses world sensing to provide accurate spatial tracking and interaction with virtual objects in the escape room environment.)</string>
-	
-	<!-- 핸드 트래킹 권한 -->
-	<key>NSHandsTrackingUsageDescription</key>
-	<string>이 앱은 방탈출 게임에서 핸드 제스처를 통한 자연스러운 객체 조작을 위해 핸드 트래킹을 사용합니다. (This app uses hand tracking for natural object manipulation through hand gestures in the escape room game.)</string>
-	
-	<!-- 엔터프라이즈 MCAM 권한 -->
-	<key>NSEnterpriseMCAMUsageDescription</key>
-	<string>이 앱은 향상된 AR 경험과 정확한 환경 추적을 위해 엔터프라이즈 카메라 기능을 사용합니다. (This app uses enterprise camera features for enhanced AR experiences and accurate environment tracking.)</string>
-	
-	<!-- 얼굴 추적 권한 -->
-	<key>NSFaceTrackingUsageDescription</key>
-	<string>이 앱은 향상된 몰입 경험과 정확한 시점 추적을 위해 얼굴 추적을 사용합니다. (This app uses face tracking for enhanced immersive experience and accurate viewpoint tracking.)</string>
-	
-	<!-- 위치 서비스 권한 (ARKit 정확도 향상) -->
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>이 앱은 AR 추적의 정확도를 향상시키고 더 나은 공간 인식을 제공하기 위해 위치 정보를 사용합니다. (This app uses location services to improve AR tracking accuracy and provide better spatial awareness.)</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>이 앱은 AR 추적의 정확도를 향상시키고 더 나은 공간 인식을 제공하기 위해 위치 정보를 사용합니다. (This app uses location services to improve AR tracking accuracy and provide better spatial awareness.)</string>
-	
-	<!-- 마이크 권한 (음성 명령 또는 사운드 기반 상호작용) -->
-	<key>NSMicrophoneUsageDescription</key>
-	<string>이 앱은 음성 명령이나 소리 기반 상호작용을 제공하기 위해 마이크를 사용할 수 있습니다. (This app may use the microphone for voice commands or sound-based interactions.)</string>
-	
-	<!-- 사진 라이브러리 권한 (스크린샷 저장 등) -->
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>이 앱은 게임 진행 상황이나 AR 경험을 기록하기 위해 사진을 저장할 수 있습니다. (This app may save photos to record game progress or AR experiences.)</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>이 앱은 게임 스크린샷이나 AR 경험을 사진 라이브러리에 저장할 수 있습니다. (This app may save game screenshots or AR experiences to your photo library.)</string>
-	
-	<!-- Vision Pro 필수 기능 및 ARKit 지원 -->
-	<key>UIRequiredDeviceCapabilities</key>
-	<array>
-		<string>arkit</string>
-		<string>world-sensing</string>
-		<string>hand-tracking</string>
-		<string>gyroscope</string>
-		<string>accelerometer</string>
-		<string>magnetometer</string>
-	</array>
-	
-	<!-- ARKit 설정 -->
 	<key>ARKitSupportedConfigurations</key>
 	<array>
 		<string>WorldTracking</string>
-		<string>FaceTracking</string>
 		<string>HandTracking</string>
 	</array>
-	
-	<!-- 앱 씬 구성 (몰입형 공간 지원) -->
+	<key>LSMinimumSystemVersion</key>
+	<string>2.0</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<false/>
+	</dict>
+	<key>NSEnterpriseMCAMUsageDescription</key>
+	<string>Escapple은 향상된 AR 경험과 정확한 환경 추적을 위해 엔터프라이즈 카메라 기능을 사용합니다. (Escapple uses enterprise camera features for enhanced AR experiences and accurate environment tracking.)</string>
+	<key>NSHandsTrackingUsageDescription</key>
+	<string>Escapple은 방탈출 게임에서 핸드 제스처를 통한 자연스러운 객체 조작을 위해 핸드 트래킹을 사용합니다. (Escapple uses hand tracking for natural object manipulation through hand gestures in the escape room game.)</string>
+	<key>NSWorldSensingUsageDescription</key>
+	<string>Escapple은 방탈출 환경에서 정확한 공간 추적과 가상 객체 상호작용을 제공하기 위해 월드 센싱을 사용합니다. (Escapple uses world sensing to provide accurate spatial tracking and interaction with virtual objects in the escape room environment.)</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationPreferredDefaultSceneSessionRole</key>
@@ -79,30 +48,8 @@
 			</array>
 		</dict>
 	</dict>
-	
-	<!-- 지원 플랫폼 -->
-	<key>LSMinimumSystemVersion</key>
-	<string>1.0</string>
-	
-	<!-- 멀티윈도우 지원 활성화 -->
 	<key>UIApplicationSupportsMultipleScenes</key>
 	<true/>
-	
-	<!-- ARKit 백그라운드 처리 허용 -->
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>processing</string>
-		<string>background-fetch</string>
-	</array>
-	
-	<!-- 앱 전송 보안 설정 (필요시) -->
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<false/>
-	</dict>
-	
-	<!-- visionOS 특화 설정 -->
 	<key>UILaunchScreen</key>
 	<dict>
 		<key>UIImageName</key>
