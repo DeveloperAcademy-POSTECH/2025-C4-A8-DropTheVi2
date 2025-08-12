@@ -19,17 +19,15 @@ struct GuidelineImmersiveView2: View {
     @State private var deviceAnchor: AnchorEntity?
     @State private var updateTimer: Timer?
     
-    // 위치 추적을 위한 변수들
-    @State private var currentUserPosition = SIMD3<Float>(0, 0, 0)
-    @State private var targetPosition = SIMD3<Float>(0, 0, 0)
-    
     // 사용자 높이 설정
-    private let userHeight: Float = 1.7
-    private let smoothingFactor: Float = 0.35
+    private let userHeight: Float = 1.7 // 머리에서 바닥까지의 대략적인 높이
+    
+    // 스케일 보정 계수
+    private let scaleCorrection: Float = 32.5
     
     var body: some View {
         RealityView { content in
-            // 월드 앵커 생성
+            // 월드 앵커 생성 (고정 기준점)
             let anchor = AnchorEntity(world: matrix_identity_float4x4)
             rootAnchor = anchor
             content.add(anchor)
@@ -48,22 +46,15 @@ struct GuidelineImmersiveView2: View {
                 return
             }
             
-            // 초기 위치 설정 (사용자 현재 위치 기준)
-            if let deviceTracker = deviceAnchor {
-                let initialTransform = deviceTracker.transformMatrix(relativeTo: nil)
-                let initialHeadPosition = SIMD3<Float>(
-                    initialTransform.columns.3.x,
-                    initialTransform.columns.3.y - userHeight,
-                    initialTransform.columns.3.z
-                )
-                guideLineEntity.position = initialHeadPosition + SIMD3<Float>(0, 0, -0.5)
-                currentUserPosition = guideLineEntity.position
-            } else {
-                guideLineEntity.position = SIMD3<Float>(0, -userHeight, -0.5)
-            }
+            // 초기 위치 설정
+            guideLineEntity.position = SIMD3<Float>(0, -userHeight, 0)
             
             self.guidelineEntity = guideLineEntity
-            anchor.addChild(guideLineEntity)
+            
+            // world 좌표계를 직접 사용
+            let worldAnchor = AnchorEntity(world: matrix_identity_float4x4)
+            worldAnchor.addChild(guideLineEntity)
+            content.add(worldAnchor)
             
             // 위치 업데이트 타이머 시작
             startPositionTracking()
@@ -74,7 +65,7 @@ struct GuidelineImmersiveView2: View {
         }
     }
     
-    // MARK: - Position Tracking Methods
+    // MARK: - Position Tracking Methods (실시간 위치 동기화)
     private func startPositionTracking() {
         // 60Hz로 업데이트 (약 16ms마다)
         updateTimer = Timer.scheduledTimer(withTimeInterval: 1.0/60.0, repeats: true) { _ in
@@ -91,64 +82,53 @@ struct GuidelineImmersiveView2: View {
         guard let deviceAnchor = deviceAnchor,
               let guidelineEntity = guidelineEntity else { return }
         
-        // 헤드셋의 현재 월드 위치 가져오기
+        // World 좌표계 직접 사용
         let headWorldTransform = deviceAnchor.transformMatrix(relativeTo: nil)
+        
+        // 헤드셋의 world 좌표 추출
         let headWorldPosition = SIMD3<Float>(
             headWorldTransform.columns.3.x,
             headWorldTransform.columns.3.y,
             headWorldTransform.columns.3.z
         )
         
-        // Transform matrix에서 forward 방향 벡터 추출 (z축)
+        // Transform matrix에서 forward 방향 벡터 추출
         let forward = SIMD3<Float>(
             -headWorldTransform.columns.2.x,
-            0, // Y축 회전은 무시 (바닥 평면에만 관심)
+            0,
             -headWorldTransform.columns.2.z
         )
         let normalizedForward = normalize(forward)
         
-        // 발 위치 계산 (머리 위치에서 아래로)
-        let footPosition = SIMD3<Float>(
+        // 발 위치 계산 - World 좌표계에서 직접 계산
+        let exactFootPosition = SIMD3<Float>(
             headWorldPosition.x,
-            headWorldPosition.y - userHeight, // 바닥 높이로 조정
+            headWorldPosition.y - userHeight,
             headWorldPosition.z
         )
         
-        // 거리 기반 적응형 보간
-        let distance = length(targetPosition - currentUserPosition)
-        let adaptiveSmoothingFactor: Float
-        
-        if distance > 0.3 {
-            // 거리가 멀면 빠르게 따라옴
-            adaptiveSmoothingFactor = min(0.4, smoothingFactor * 2)
-        } else if distance < 0.1 {
-            // 매우 가까우면 즉시 위치 고정
-            adaptiveSmoothingFactor = 1.0
-        } else {
-            // 중간 거리에서는 부드럽게
-            adaptiveSmoothingFactor = smoothingFactor
-        }
-        
-        // 부드러운 움직임을 위한 선형 보간 (Lerp)
-        currentUserPosition = lerp(
-            start: currentUserPosition,
-            end: targetPosition,
-            t: adaptiveSmoothingFactor
+        // 스케일 보정 적용
+        let correctedPosition = SIMD3<Float>(
+            exactFootPosition.x * scaleCorrection,
+            exactFootPosition.y,
+            exactFootPosition.z * scaleCorrection
         )
         
-        // 가이드라인 엔티티 위치 업데이트
-        guidelineEntity.position = currentUserPosition
+        // World Transform 직접 설정 (position 대신)
+        var newTransform = matrix_identity_float4x4
+        newTransform.columns.3.x = correctedPosition.x  // 보정된 X 위치
+        newTransform.columns.3.y = correctedPosition.y  // Y는 그대로
+        newTransform.columns.3.z = correctedPosition.z  // 보정된 Z 위치
+        newTransform.columns.3.w = 1.0
         
-        // 사용자가 바라보는 방향으로 회전 (Y축 회전만)
+        // Y축 회전 적용
         let yaw = atan2(normalizedForward.x, normalizedForward.z)
-        guidelineEntity.orientation = simd_quatf(angle: yaw, axis: SIMD3<Float>(0, 1, 0))
-    }
-    
-    // MARK: - Helper Methods
-    
-    /// 선형 보간 함수
-    private func lerp(start: SIMD3<Float>, end: SIMD3<Float>, t: Float) -> SIMD3<Float> {
-        return start + (end - start) * t
+        let rotation = simd_quatf(angle: yaw, axis: SIMD3<Float>(0, 1, 0))
+        let rotationMatrix = float4x4(rotation)
+        newTransform *= rotationMatrix
+        
+        // Transform 직접 설정
+        guidelineEntity.transform = Transform(matrix: newTransform)
     }
     
     private func cleanupGuidelineEntities() {
