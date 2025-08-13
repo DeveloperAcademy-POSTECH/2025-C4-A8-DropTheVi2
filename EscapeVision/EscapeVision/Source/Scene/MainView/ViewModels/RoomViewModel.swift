@@ -86,6 +86,14 @@ final class RoomViewModel {
     // ARKit 세션 시작 (카메라 추적용)
     await cameraTrackingManager.setupARKitSession()
     
+    NotificationCenter.default.addObserver(forName: Notification.Name("startWarning"), object: nil, queue: .main) { _ in
+      print("게임 시작 알림 수신")
+      DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+        self.soundManager
+          .playSound(.gasAlert, volume: 1.0)
+      }
+    }
+    
     await loadRoom(into: anchor)
     await loadObject(into: anchor)
     
@@ -142,10 +150,6 @@ final class RoomViewModel {
     NotificationCenter.default.addObserver(forName: Notification.Name("openBox"), object: nil, queue: .main) { _ in
       print("박스 알림 수신")
       self.openBox()
-      DispatchQueue.main.asyncAfter(deadline: .now() + 8) {
-        self.soundManager
-          .playSound(.gasAlert, volume: 1.0)
-      }
     }
     NotificationCenter.default.addObserver(forName: Notification.Name("openDrawer"), object: nil, queue: .main) { _ in
       print("서랍 알림 수신")
@@ -165,6 +169,8 @@ final class RoomViewModel {
   
   private func loadRoom(into anchor: AnchorEntity) async {
     // 전체 씬 불러오기
+    
+    
     guard
       let roomEntity = try? await Entity(
         named: "Final",
@@ -253,6 +259,8 @@ final class RoomViewModel {
 
     
     anchor.addChild(roomEntity)
+    
+    NotificationCenter.default.post(name: NSNotification.Name("startWarning"), object: nil)
   }
   
   // MARK: - Test Objects
