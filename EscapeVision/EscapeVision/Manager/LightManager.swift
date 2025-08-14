@@ -221,9 +221,9 @@ final class LightManager {
     onCompletion: (() -> Void)? = nil
   ) {
     let startTime = Date()
-    let totalDuration: TimeInterval = 7.0
-    let slowPhase: TimeInterval = 5.0  // 처음 5초는 천천히
-    let fastPhase: TimeInterval = 2.0  // 마지막 2초는 급격히
+    let totalDuration: TimeInterval = 4.0
+    let slowPhase: TimeInterval = 1.0  // 처음 5초는 천천히
+    let fastPhase: TimeInterval = 3.0  // 마지막 2초는 급격히
     
     currentTimer = Timer.scheduledTimer(withTimeInterval: 0.016, repeats: true) { [weak self] timer in
       guard let self = self else {
