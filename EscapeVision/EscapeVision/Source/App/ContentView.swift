@@ -44,7 +44,7 @@ struct ContentView: View {
             if [.splash, .guideline, .menu].contains(newState) {
                 soundManager.playSound(.maintheme, volume: 1.0)
             } else if [.loading ].contains(newState) {
-                soundManager.playSound(.gamestart, volume: 1.0)
+                soundManager.playSound(.gamestart, volume: 2.0)
             }
         }
         // ✨ 앱 시작 시 초기 음악
