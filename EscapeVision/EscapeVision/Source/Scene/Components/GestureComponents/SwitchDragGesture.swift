@@ -27,6 +27,10 @@ struct SwitchDragGesture: Gesture {
   @State private var lastGestureTranslation: CGSize = .zero  // 이전 제스처 (델타 계산용)
   @State private var accumulatedPinchMovement: SIMD3<Float> = .zero  // 핀치 모드 누적 이동
   
+  // 핀치 해제 지연 관련 (바닥에서 줍기 편의성 향상)
+  @State private var pinchReleaseTime: Date?
+  private let pinchReleaseGracePeriod: TimeInterval = 1.5  // 1.5초 유예 시간
+  
   var body: some Gesture {
     DragGesture()
       .targetedToAnyEntity()
@@ -77,6 +81,34 @@ struct SwitchDragGesture: Gesture {
         isDetachedHandle = !handleComponent.isAttached
         
         if isDetachedHandle {
+          // HandleDetached가 바닥에 고정된 상태인지 확인
+          var isHandleGrounded = false
+          if draggableEntity.components.has(PhysicsBodyComponent.self) {
+            let physicsBody = draggableEntity.components[PhysicsBodyComponent.self]!
+            isHandleGrounded = (physicsBody.mode == .kinematic && !physicsBody.isAffectedByGravity)
+          }
+          
+          // 바닥에 고정된 상태라면 실제 핀치 의도가 있는지 확인
+          if isHandleGrounded {
+            let realHandTrackingManager = RealHandTrackingManager.shared
+            let isActuallyPinching = realHandTrackingManager.isAnyHandPinchingForFloorPickup()
+            
+            if isActuallyPinching {
+              // 실제 핀치 의도가 있을 때만 바닥 고정 해제
+              var newPhysicsBody = draggableEntity.components[PhysicsBodyComponent.self]!
+              newPhysicsBody.mode = .dynamic
+              newPhysicsBody.isAffectedByGravity = true
+              draggableEntity.components.set(newPhysicsBody)
+              print("🔓 [핀치 의도 감지] 실제 핀치로 바닥 고정 해제")
+            } else {
+              // 핀치 의도가 없으면 바닥 고정 상태 유지
+              print("🛡️ [바닥 보호] 핀치 의도 없음 - 바닥 고정 상태 유지")
+              isDraggingHandle = false
+              draggedHandle = nil
+              return
+            }
+          }
+          
           // 손 추적 시스템 시작
           let handTrackingManager = HandTrackingManager.shared
           handTrackingManager.startHandTracking(for: draggableEntity)
@@ -132,12 +164,25 @@ struct SwitchDragGesture: Gesture {
     let handTrackingManager = HandTrackingManager.shared
     let realHandTrackingManager = RealHandTrackingManager.shared
     
-    // 실제 핀치 상태 확인 및 핀치 모드 활성화/비활성화
-    let isCurrentlyPinching = realHandTrackingManager.isAnyHandPinching()
+    // HandleDetached가 바닥에 고정된 상태인지 확인
+    var isHandleOnFloor = false
+    if entity.components.has(PhysicsBodyComponent.self) {
+      let physicsBody = entity.components[PhysicsBodyComponent.self]!
+      isHandleOnFloor = (physicsBody.mode == .kinematic && !physicsBody.isAffectedByGravity)
+    }
+    
+    // 실제 핀치 상태 확인 (바닥에 있을 때는 더 관대한 감지)
+    let isCurrentlyPinching = if isHandleOnFloor {
+      realHandTrackingManager.isAnyHandPinchingForFloorPickup()  // 더 관대한 핀치 감지
+    } else {
+      realHandTrackingManager.isAnyHandPinching()  // 일반 핀치 감지
+    }
     
     // 핀치 상태 변화 감지 및 핀치 모드 전환
     if isCurrentlyPinching && !handTrackingManager.isPinchModeActive {
-      // 핀치 모드 시작
+      // 핀치 모드 시작 - 유예 시간 리셋
+      pinchReleaseTime = nil
+      
       let realHandPosition = realHandTrackingManager.getCurrentHandPosition()
       let cameraPosition = viewModel.currentCameraPosition
       let cameraForward = viewModel.currentCameraForward
@@ -162,15 +207,30 @@ struct SwitchDragGesture: Gesture {
       
       print("🖐️ [핸드 트래킹] 상태: \(realHandTrackingManager.handTrackingActiveStatus ? "✅활성" : "❌비활성")")
     } else if !isCurrentlyPinching && handTrackingManager.isPinchModeActive {
-      // 핀치가 해제되면 바닥으로 떨어뜨리기
-      print("🤏 [핀치 해제] HandleDetached를 바닥으로 떨어뜨립니다")
-      handTrackingManager.dropToFloor(handleDetached: entity)
-      accumulatedPinchMovement = .zero
+      // 핀치가 해제되면 유예 시간 시작 (즉시 떨어뜨리지 않음)
+      if pinchReleaseTime == nil {
+        pinchReleaseTime = Date()
+        print("🤏 [핀치 해제 감지] \(pinchReleaseGracePeriod)초 유예 시간 시작 (다시 핀치하면 계속 잡기 가능)")
+      }
+      
+      // 유예 시간이 지났는지 확인
+      if let releaseTime = pinchReleaseTime {
+        let timeElapsed = Date().timeIntervalSince(releaseTime)
+        if timeElapsed >= pinchReleaseGracePeriod {
+          print("🤏 [유예 시간 만료] HandleDetached를 바닥으로 떨어뜨립니다")
+          handTrackingManager.dropToFloor(handleDetached: entity)
+          accumulatedPinchMovement = .zero
+          pinchReleaseTime = nil  // 리셋
+        }
+      }
     }
     
     // 핀치 모드인 경우 실제 손 위치로 업데이트
     if handTrackingManager.isPinchModeActive {
       if isCurrentlyPinching {
+        // 핀치 중일 때는 유예 시간 리셋 (연속 핀치 허용)
+        pinchReleaseTime = nil
+        
         // 핀치 모드 중에는 실제 손 위치로 실시간 업데이트
         let realHandPosition = realHandTrackingManager.getCurrentHandPosition()
         let cameraPosition = viewModel.currentCameraPosition
@@ -195,7 +255,7 @@ struct SwitchDragGesture: Gesture {
         }
       }
     } else {
-      // 일반 손 추적 모드
+      // 일반 손 추적 모드 (바닥 고정 상태 포함하여 처리)
       handTrackingManager.updateHandMovement(deltaTranslation: deltaTranslation, handleDetached: entity)
     }
     
@@ -208,8 +268,21 @@ struct SwitchDragGesture: Gesture {
       anchor.addChild(entity)
     }
     
-    entity.components.remove(PhysicsBodyComponent.self)
-    entity.components.remove(CollisionComponent.self)
+    // HandleDetached가 바닥에 고정된 상태인지 확인
+    var isFloorFixed = false
+    if entity.components.has(PhysicsBodyComponent.self) {
+      let physicsBody = entity.components[PhysicsBodyComponent.self]!
+      isFloorFixed = (physicsBody.mode == .kinematic && !physicsBody.isAffectedByGravity)
+    }
+    
+    // 바닥에 고정된 상태가 아닐 때만 물리 컴포넌트 제거 (바닥 뚫림 방지)
+    if !isFloorFixed {
+      entity.components.remove(PhysicsBodyComponent.self)
+      entity.components.remove(CollisionComponent.self)
+      print("🔧 [물리 컴포넌트] 드래그 중 제거 (일반 상태)")
+    } else {
+      print("🛡️ [물리 컴포넌트] 바닥 고정 상태이므로 제거하지 않음 (바닥 뚫림 방지)")
+    }
     
     // 손 추적 상태 확인용 로그 (큰 변화가 있을 때만)
     if abs(Float(deltaTranslation.width)) > 10 || abs(Float(deltaTranslation.height)) > 10 {

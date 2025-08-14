@@ -20,7 +20,7 @@ final class GasMonitorViewModel: ObservableObject {
   private func checkAnswer() {
     if value1 == 4 && value2 == 7 && value3 == 9 {
       isActive = true
-      soundManager.pausedSound(.gasAlert)
+      soundManager.pauseLocalizedWarningSound()
     }
   }
   

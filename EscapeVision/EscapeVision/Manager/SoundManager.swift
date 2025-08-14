@@ -6,11 +6,13 @@
 //
 
 import AVFoundation
+import Foundation
 
 @Observable
 final class SoundManager {
   static let shared = SoundManager()
   private var audioPlayers: [String: AVAudioPlayer] = [:]
+  
   private init() {
     setupAudioSession()
     preloadSounds()
@@ -65,6 +67,52 @@ final class SoundManager {
     player.volume = volume
     player.currentTime = 0
     player.play()
+  }
+  
+  // MARK: - 언어별 알림 사운드 재생
+  func playLocalizedWarningSound(volume: Float = 2.0) {
+    let soundFileName = NSLocalizedString("warningSound", comment: "Warning sound file name")
+    playLocalizedSound(fileName: soundFileName, volume: volume)
+  }
+  
+  func playLocalizedProblemSolvedSound(volume: Float = 2.0) {
+    let soundFileName = NSLocalizedString("problemSolvedSound", comment: "Problem solved sound file name")
+    playLocalizedSound(fileName: soundFileName, volume: volume)
+  }
+  
+  // MARK: - 언어별 알림 사운드 정지
+  func pauseLocalizedWarningSound() {
+    let soundFileName = NSLocalizedString("warningSound", comment: "Warning sound file name")
+    pauseLocalizedSound(fileName: soundFileName)
+  }
+  
+  // MARK: - 헬퍼 메서드
+  private func playLocalizedSound(fileName: String, volume: Float) {
+    guard let url = Bundle.main.url(forResource: fileName, withExtension: "mp3") else {
+      print("로컬라이즈된 사운드 파일을 찾을 수 없음: \(fileName)")
+      return
+    }
+    
+    do {
+      let player = try AVAudioPlayer(contentsOf: url)
+      player.volume = volume
+      player.prepareToPlay()
+      player.play()
+      
+      // 임시로 플레이어 저장 (정지 기능을 위해)
+      audioPlayers[fileName] = player
+    } catch {
+      print("로컬라이즈된 사운드 재생 실패: \(fileName), 오류: \(error)")
+    }
+  }
+  
+  private func pauseLocalizedSound(fileName: String) {
+    if let player = audioPlayers[fileName] {
+      player.stop()
+      player.currentTime = 0
+    } else {
+      print("정지할 로컬라이즈된 사운드 플레이어를 찾을 수 없음: \(fileName)")
+    }
   }
   
   func pausedSound(_ effect: Sound) {
