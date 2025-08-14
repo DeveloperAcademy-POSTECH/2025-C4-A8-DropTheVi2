@@ -8,6 +8,7 @@
     "RealityKitContent\/Sources\/RealityKitContent\/RealityKitContent.rkassets\/Final.usda" : "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5",
     "RealityKitContent\/Sources\/RealityKitContent\/RealityKitContent.rkassets\/Fog_Particle.usda" : "310D260F-E53C-4433-84AB-CF5F8A86C95B",
     "RealityKitContent\/Sources\/RealityKitContent\/RealityKitContent.rkassets\/GridMaterial.usda" : "66168B71-AB05-424E-8B6C-D33D6E61B08F",
+    "RealityKitContent\/Sources\/RealityKitContent\/RealityKitContent.rkassets\/GuidelineScene.usda" : "DA4FE5A6-414C-4DAD-8BF6-5C461E6FB633",
     "RealityKitContent\/Sources\/RealityKitContent\/RealityKitContent.rkassets\/Immersive.usda" : "AF09ED6F-1707-48FD-8720-65B998362C09",
     "RealityKitContent\/Sources\/RealityKitContent\/RealityKitContent.rkassets\/Room.usda" : "06EB4DCB-A810-4020-8552-469D54D9458B",
     "RealityKitContent\/Sources\/RealityKitContent\/RealityKitContent.rkassets\/Scene.usda" : "D66134B1-3681-4A8E-AFE5-29F257229F3B",
@@ -16,16 +17,11 @@
     "RealityKitContent\/Sources\/RealityKitContent\/RealityKitContent.rkassets\/TestScene.usda" : "BC411585-85AB-4E63-A88A-07376BBF70CC",
     "RealityKitContent\/Sources\/RealityKitContent\/RealityKitContent.rkassets\/Untitled%20Scene.usda" : "2FAB345A-AAC9-4F97-9CD1-E416C8254E6C"
   },
-  "projectID" : 6744657196370827432,
+  "projectID" : 2529854537161800532,
   "uuidToIntID" : {
-    "06EB4DCB-A810-4020-8552-469D54D9458B" : -7556623086195950680,
-    "2FAB345A-AAC9-4F97-9CD1-E416C8254E6C" : 4229087024484120505,
-    "310D260F-E53C-4433-84AB-CF5F8A86C95B" : -1436501566236272889,
-    "926CBAEE-7897-4E19-9CD5-852E7FC57A07" : -5734019725801216074,
-    "962C490F-809E-4FE7-95BB-F1AF3EAE8A75" : 618160567375823629,
-    "A39E327F-E57A-4074-B435-02B781D6FD25" : -6842312774626898210,
-    "AF09ED6F-1707-48FD-8720-65B998362C09" : -8045588930193989089,
-    "BC411585-85AB-4E63-A88A-07376BBF70CC" : -6396190330796864021,
-    "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5" : 7897268806195994613
+    "310D260F-E53C-4433-84AB-CF5F8A86C95B" : -1694046123261794722,
+    "A39E327F-E57A-4074-B435-02B781D6FD25" : -270804674586256571,
+    "DA4FE5A6-414C-4DAD-8BF6-5C461E6FB633" : -6102646685409756048,
+    "DD59DCC3-F0CE-4E41-AEE3-9EEC941D03E5" : -5073175658753538374
   }
 }
