@@ -82,16 +82,6 @@ struct LicensesView: View {
       }
       .navigationTitle("Licenses")
       .navigationBarTitleDisplayMode(.large)
-      .toolbar {
-        ToolbarItem(placement: .navigationBarTrailing) {
-          Button {
-            dismiss()
-          } label: {
-            Image(systemName: "xmark.circle")
-              .font(.system(size: 22, weight: .regular))
-          }
-        }
-      }
     }
     .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 16))
     .glassBackgroundEffect()
