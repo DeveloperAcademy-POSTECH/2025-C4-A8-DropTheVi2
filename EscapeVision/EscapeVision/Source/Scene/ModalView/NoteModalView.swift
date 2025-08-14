@@ -10,11 +10,14 @@ import SwiftUI
 struct NoteModalView: View {
   @State private var glowOpacity: Double = 0.3
   @State private var floatOffset: CGFloat = 0
-  
   @State private var isVisible = false
   
+  private var boxNoteImageName: String {
+    return NSLocalizedString("boxNoteImage", comment: "Box note image name")
+  }
+  
   var body: some View {
-    Image("BoxNote")
+    Image(boxNoteImageName)
       .scaleEffect(isVisible ? 1 : 0.2, anchor: .bottom)
     // 2) 박스 위치보다 아래(200 포인트)에서 시작 → 제자리로 슬라이드 업
       .offset(y: isVisible ? 0 : 200)

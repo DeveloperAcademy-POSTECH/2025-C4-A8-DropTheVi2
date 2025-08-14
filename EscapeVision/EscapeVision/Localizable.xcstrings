@@ -8,23 +8,11 @@
             "state" : "translated",
             "value" : "*"
           }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "*"
-          }
         }
       }
     },
     "%@ %@" : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$@ %2$@"
-          }
-        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -33,7 +21,26 @@
         }
       }
     },
+    "boxNoteImage" : {
+      "comment" : "Box note image name",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BoxNote_eng"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BoxNote"
+          }
+        }
+      }
+    },
     "Exit Game" : {
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -49,7 +56,26 @@
         }
       }
     },
+    "fileImage" : {
+      "comment" : "File image name",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "File_eng"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "File"
+          }
+        }
+      }
+    },
     "Game Start" : {
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -66,6 +92,7 @@
       }
     },
     "Licenses" : {
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -81,7 +108,44 @@
         }
       }
     },
+    "problemSolvedSound" : {
+      "comment" : "Problem solved sound file name",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "10. announcement_problemsolved_eng"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "09. announcement_problemsolved_kor"
+          }
+        }
+      }
+    },
+    "warningSound" : {
+      "comment" : "Warning sound file name",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "07. announcement_warning_eng"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "06. announcement_warning_kor"
+          }
+        }
+      }
+    },
     "가구나 장애물이 있다면 치워주세요" : {
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -98,11 +162,12 @@
       }
     },
     "강한 소리에 주의하세요" : {
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Be careful of loud sounds"
+            "value" : "Beware of loud sounds"
           }
         },
         "ko" : {
@@ -114,6 +179,7 @@
       }
     },
     "공간을 확보하세요" : {
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -130,6 +196,7 @@
       }
     },
     "볼륨을 확인해주세요" : {
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -146,11 +213,12 @@
       }
     },
     "시작하기" : {
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Start"
+            "value" : "Get Started"
           }
         },
         "ko" : {
@@ -162,11 +230,12 @@
       }
     },
     "이 앱은 강한 사운드를 포함합니다" : {
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This app includes loud sounds"
+            "value" : "This app contains loud sounds"
           }
         },
         "ko" : {
@@ -178,11 +247,12 @@
       }
     },
     "화면의 빨간 선 안에" : {
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Inside the red line on screen"
+            "value" : "Within the red lines on screen"
           }
         },
         "ko" : {
@@ -194,11 +264,12 @@
       }
     },
     "확인했어요" : {
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Got it"
+            "value" : "I understand"
           }
         },
         "ko" : {

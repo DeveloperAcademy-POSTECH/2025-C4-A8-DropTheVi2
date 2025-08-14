@@ -142,10 +142,10 @@ final class RoomViewModel {
     NotificationCenter.default.addObserver(forName: Notification.Name("openBox"), object: nil, queue: .main) { _ in
       print("박스 알림 수신")
       self.openBox()
-      DispatchQueue.main.asyncAfter(deadline: .now() + 8) {
-        self.soundManager
-          .playSound(.gasAlert, volume: 1.0)
-      }
+              DispatchQueue.main.asyncAfter(deadline: .now() + 8) {
+          self.soundManager
+            .playLocalizedWarningSound()
+        }
     }
     NotificationCenter.default.addObserver(forName: Notification.Name("openDrawer"), object: nil, queue: .main) { _ in
       print("서랍 알림 수신")

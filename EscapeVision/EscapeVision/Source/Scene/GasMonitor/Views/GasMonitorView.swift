@@ -54,7 +54,7 @@ struct GasMonitorView: View {
             height: geo.size.height * 0.18
           )
           .position(
-            x: geo.size.width * 0.7148,
+            x: geo.size.width * 0.68,
             y: geo.size.height * item.yRatio
           )
         }
@@ -77,7 +77,7 @@ struct GasMonitorView: View {
     .onChange(of: viewModel.isActive) { oldValue, newValue in
       print("GasMonitorView: isActive 변경됨 - \(oldValue) → \(newValue)")
       onParticleStateChanged?(newValue)
-        soundManager.playSound(.monitorsuccess, volume: 3.0)
+        soundManager.playLocalizedProblemSolvedSound()
     }
   }
 }
