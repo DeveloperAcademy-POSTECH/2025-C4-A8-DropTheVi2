@@ -51,6 +51,7 @@ final class SoundManager {
     }
     do {
       let player = try AVAudioPlayer(contentsOf: url)
+      player.numberOfLoops = 0  // 반복 재생 방지
       player.prepareToPlay()
       audioPlayers[soundName] = player
     } catch {
@@ -65,18 +66,24 @@ final class SoundManager {
       return
     }
     player.volume = volume
+    player.numberOfLoops = 0  // 반복 재생 방지
     player.currentTime = 0
     player.play()
+    
+    print("🎵 [기존 사운드] \(effect.rawValue) 재생 시작 (볼륨: \(volume))")
   }
   
   // MARK: - 언어별 알림 사운드 재생
   func playLocalizedWarningSound(volume: Float = 2.0) {
     let soundFileName = NSLocalizedString("warningSound", comment: "Warning sound file name")
+    print("🔊 [언어 감지] 현재 언어: \(Locale.preferredLanguages.first ?? "unknown")")
+    print("🔊 [경고음] 재생할 파일: \(soundFileName)")
     playLocalizedSound(fileName: soundFileName, volume: volume)
   }
   
   func playLocalizedProblemSolvedSound(volume: Float = 2.0) {
     let soundFileName = NSLocalizedString("problemSolvedSound", comment: "Problem solved sound file name")
+    print("🎯 [문제해결음] 재생할 파일: \(soundFileName)")
     playLocalizedSound(fileName: soundFileName, volume: volume)
   }
   
@@ -96,8 +103,11 @@ final class SoundManager {
     do {
       let player = try AVAudioPlayer(contentsOf: url)
       player.volume = volume
+      player.numberOfLoops = 0  // 반복 재생 방지
       player.prepareToPlay()
       player.play()
+      
+      print("🎵 [사운드 재생] \(fileName) 재생 시작 (볼륨: \(volume))")
       
       // 임시로 플레이어 저장 (정지 기능을 위해)
       audioPlayers[fileName] = player
@@ -110,8 +120,9 @@ final class SoundManager {
     if let player = audioPlayers[fileName] {
       player.stop()
       player.currentTime = 0
+      print("⏹️ [사운드 정지] \(fileName) 정지됨")
     } else {
-      print("정지할 로컬라이즈된 사운드 플레이어를 찾을 수 없음: \(fileName)")
+      print("⚠️ [사운드 정지] 정지할 로컬라이즈된 사운드 플레이어를 찾을 수 없음: \(fileName)")
     }
   }
   

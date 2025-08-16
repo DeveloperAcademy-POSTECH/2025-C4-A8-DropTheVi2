@@ -8,11 +8,29 @@
             "state" : "translated",
             "value" : "*"
           }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "*"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "*"
+          }
         }
       }
     },
     "%@ %@" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ %@"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -31,6 +49,12 @@
             "value" : "BoxNote_eng"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BoxNote_esp"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -46,6 +70,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Exit Game"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Salir del Juego"
           }
         },
         "ko" : {
@@ -66,6 +96,12 @@
             "value" : "File_eng"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "File_esp"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -83,6 +119,12 @@
             "value" : "Game Start"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Iniciar Juego"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -98,6 +140,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Licenses"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Licencias"
           }
         },
         "ko" : {
@@ -118,6 +166,12 @@
             "value" : "10. announcement_problemsolved_eng"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "10. announcement_problemsolved_esp"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -134,6 +188,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "07. announcement_warning_eng"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "07. announcement_warning_esp"
           }
         },
         "ko" : {
@@ -153,6 +213,12 @@
             "value" : "Please remove any furniture or obstacles"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Por favor, retire cualquier mueble u obstáculo"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -168,6 +234,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Beware of loud sounds"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cuidado con los sonidos fuertes"
           }
         },
         "ko" : {
@@ -187,6 +259,12 @@
             "value" : "Secure your space"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Asegure su espacio"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -202,6 +280,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Please check your volume"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Por favor, verifique su volumen"
           }
         },
         "ko" : {
@@ -221,6 +305,12 @@
             "value" : "Get Started"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comenzar"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -236,6 +326,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "This app contains loud sounds"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta aplicación contiene sonidos fuertes"
           }
         },
         "ko" : {
@@ -255,6 +351,12 @@
             "value" : "Within the red lines on screen"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dentro de las líneas rojas en pantalla"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -270,6 +372,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "I understand"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entiendo"
           }
         },
         "ko" : {

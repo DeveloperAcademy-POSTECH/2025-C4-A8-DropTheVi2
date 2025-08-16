@@ -3,11 +3,16 @@
   "strings" : {
     "CFBundleDisplayName" : {
       "comment" : "Bundle display name",
-      "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
+            "value" : "Escapple"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "Escapple"
           }
         },
@@ -21,11 +26,16 @@
     },
     "CFBundleName" : {
       "comment" : "Bundle name",
-      "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
+            "value" : "Escapple"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "Escapple"
           }
         },
@@ -39,17 +49,22 @@
     },
     "NSCameraUsageDescription" : {
       "comment" : "Privacy - Camera Usage Description",
-      "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Escapple은 몰입형 AR 경험과 방탈출 게임에서 객체 추적을 위해 카메라를 사용합니다. (Escapple uses the camera for immersive AR experiences and object tracking in the escape room game.)"
+            "state" : "translated",
+            "value" : "Escapple uses the camera for immersive AR experiences and object tracking in the escape room game."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escapple utiliza la cámara para experiencias de AR inmersivas y seguimiento de objetos en el juego de escape room."
           }
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Escapple은 몰입형 AR 경험과 방탈출 게임에서 객체 추적을 위해 카메라를 사용합니다."
           }
         }
@@ -57,17 +72,22 @@
     },
     "NSMotionUsageDescription" : {
       "comment" : "Privacy - Motion Usage Description",
-      "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Escapple은 가상 객체와의 향상된 상호작용을 위해 머리 움직임을 추적하고 정확한 공간 인식을 제공하는데 모션 센서를 사용합니다. (Escapple uses motion sensors to track head movement for enhanced interaction with virtual objects and provide accurate spatial awareness.)"
+            "state" : "translated",
+            "value" : "Escapple uses motion sensors to track head movement for enhanced interaction with virtual objects and provide accurate spatial awareness."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escapple utiliza sensores de movimiento para rastrear el movimiento de la cabeza para una interacción mejorada con objetos virtuales y proporcionar conciencia espacial precisa."
           }
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Escapple은 가상 객체와의 향상된 상호작용을 위해 머리 움직임을 추적하고 정확한 공간 인식을 제공하는데 모션 센서를 사용합니다."
           }
         }
