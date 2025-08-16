@@ -11,31 +11,8 @@ import RealityKitContent
 import ARKit
 import SwiftUI
 
-// SwitchComponent 정의 (스코프 문제 해결)
-struct SwitchComponent: Component {
-  let switchIndex: Int
-  let handleCount: Int
-  
-  init(switchIndex: Int, handleCount: Int = 1) {
-    self.switchIndex = switchIndex
-    self.handleCount = handleCount
-  }
-}
-
-// 핸들 상태 관리를 위한 컴포넌트
-struct HandleComponent: Component {
-  let switchIndex: Int
-  var isAttached: Bool
-  var isBeingDragged: Bool
-  
-  init(switchIndex: Int, isAttached: Bool = false, isBeingDragged: Bool = false) {
-    self.switchIndex = switchIndex
-    self.isAttached = isAttached
-    self.isBeingDragged = isBeingDragged
-  }
-}
-
 // swiftlint:disable type_body_length
+// Note: SwitchComponent와 HandleComponent는 SwitchComponents.swift 파일로 이동됨
 
 @MainActor
 @Observable
@@ -58,6 +35,7 @@ final class RoomViewModel {
   private let handleManager = HandleManager.shared
   private let collisionManager = CollisionManager.shared
   private var particleManager = ParticleManager.shared
+  private let localizationManager = LocalizationManager.shared
   
   // 카메라 정보 접근을 위한 계산 속성들
   var currentCameraTransform: simd_float4x4 {
@@ -259,6 +237,88 @@ final class RoomViewModel {
 
     
     anchor.addChild(roomEntity)
+    
+    // 언어별 엔티티 설정
+    localizationManager.configureLocalizedEntities(in: roomEntity)
+    
+    // Board 엔티티 디버깅
+    print("🔍 === Board 엔티티 검색 디버깅 ===")
+    if let board1 = roomEntity.findEntity(named: "Board1") {
+      print("✅ Board1 엔티티 발견")
+      print("  - 위치: \(board1.position)")
+      print("  - ModelEntity 여부: \(board1 is ModelEntity)")
+    }
+    if let board = roomEntity.findEntity(named: "Board") {
+      print("✅ Board 엔티티 발견")
+      print("  - 위치: \(board.position)")
+      print("  - ModelEntity 여부: \(board is ModelEntity)")
+    }
+    
+    // A06 카드 경로 디버깅
+    print("🔍 === A06 카드 경로 디버깅 ===")
+    if let roomScene = roomEntity.findEntity(named: "RoomScene") {
+      print("✅ RoomScene 발견")
+      if let a06 = roomScene.findEntity(named: "A06") {
+        print("✅ A06 발견")
+        if let a06Card = a06.findEntity(named: "A06Card") {
+          print("✅ A06Card 발견")
+          if let cube010 = a06Card.findEntity(named: "Cube_010") {
+            print("✅ Cube_010 발견 - 전체 경로: /Root/RoomScene/A06/A06Card/Cube_010")
+            print("  - ModelEntity 여부: \(cube010 is ModelEntity)")
+          } else {
+            print("⚠️ Cube_010을 찾을 수 없음")
+            // A06Card의 자식들 출력
+            print("  A06Card의 자식들:")
+            for (idx, child) in a06Card.children.enumerated() {
+              print("    [\(idx)]: \(child.name)")
+            }
+          }
+        } else {
+          print("⚠️ A06Card를 찾을 수 없음")
+          // A06의 자식들 출력
+          print("  A06의 자식들:")
+          for (idx, child) in a06.children.enumerated() {
+            print("    [\(idx)]: \(child.name)")
+          }
+        }
+      } else {
+        print("⚠️ A06을 찾을 수 없음")
+      }
+    } else {
+      print("⚠️ RoomScene을 찾을 수 없음")
+    }
+    
+    // A07 카드 경로 디버깅
+    print("🔍 === A07 카드 경로 디버깅 ===")
+    if let roomScene = roomEntity.findEntity(named: "RoomScene") {
+      print("✅ RoomScene 발견")
+      if let a07 = roomScene.findEntity(named: "A07") {
+        print("✅ A07 발견")
+        if let a07Card = a07.findEntity(named: "A07Card") {
+          print("✅ A07Card 발견")
+          if let cube007 = a07Card.findEntity(named: "Cube_007") {
+            print("✅ Cube_007 발견 - 전체 경로: /Root/RoomScene/A07/A07Card/Cube_007")
+            print("  - ModelEntity 여부: \(cube007 is ModelEntity)")
+          } else {
+            print("⚠️ Cube_007을 찾을 수 없음")
+            // A07Card의 자식들 출력
+            print("  A07Card의 자식들:")
+            for (idx, child) in a07Card.children.enumerated() {
+              print("    [\(idx)]: \(child.name)")
+            }
+          }
+        } else {
+          print("⚠️ A07Card를 찾을 수 없음")
+          // A07의 자식들 출력
+          print("  A07의 자식들:")
+          for (idx, child) in a07.children.enumerated() {
+            print("    [\(idx)]: \(child.name)")
+          }
+        }
+      } else {
+        print("⚠️ A07을 찾을 수 없음")
+      }
+    }
     
     NotificationCenter.default.post(name: NSNotification.Name("startWarning"), object: nil)
   }
